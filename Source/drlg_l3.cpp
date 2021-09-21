@@ -1786,7 +1786,7 @@ bool FenceVerticalUp(int i, int y)
 {
 	if ((dungeon[i + 1][y] > 152 || dungeon[i + 1][y] < 130)
 	    && (dungeon[i - 1][y] > 152 || dungeon[i - 1][y] < 130)) {
-		if (IsAnyOf(dungeon[i][y], 7, 10, 126, 129, 134, 136)) {
+		if (dungeon[i][y] == AnyOf(7, 10, 126, 129, 134, 136)) {
 			return true;
 		}
 	}
@@ -1798,7 +1798,7 @@ bool FenceVerticalDown(int i, int y)
 {
 	if ((dungeon[i + 1][y] > 152 || dungeon[i + 1][y] < 130)
 	    && (dungeon[i - 1][y] > 152 || dungeon[i - 1][y] < 130)) {
-		if (IsAnyOf(dungeon[i][y], 2, 7, 134, 136)) {
+		if (dungeon[i][y] == AnyOf(2, 7, 134, 136)) {
 			return true;
 		}
 	}
@@ -1810,7 +1810,7 @@ bool FenceHorizontalLeft(int x, int j)
 {
 	if ((dungeon[x][j + 1] > 152 || dungeon[x][j + 1] < 130)
 	    && (dungeon[x][j - 1] > 152 || dungeon[x][j - 1] < 130)) {
-		if (IsAnyOf(dungeon[x][j], 7, 9, 121, 124, 135, 137)) {
+		if (dungeon[x][j] == AnyOf(7, 9, 121, 124, 135, 137)) {
 			return true;
 		}
 	}
@@ -1822,7 +1822,7 @@ bool FenceHorizontalRight(int x, int j)
 {
 	if ((dungeon[x][j + 1] > 152 || dungeon[x][j + 1] < 130)
 	    && (dungeon[x][j - 1] > 152 || dungeon[x][j - 1] < 130)) {
-		if (IsAnyOf(dungeon[x][j], 4, 7, 135, 137)) {
+		if (dungeon[x][j] == AnyOf(4, 7, 135, 137)) {
 			return true;
 		}
 	}
@@ -1864,7 +1864,7 @@ void FenceDoorFix()
 				}
 			}
 			if (dungeon[i][j] == 146) {
-				if (IsNoneOf(dungeon[i + 1][j], 130, 132, 133, 134, 136, 138, 140) && IsNoneOf(dungeon[i - 1][j], 130, 132, 133, 134, 136, 138, 140)) {
+				if (dungeon[i + 1][j] != AnyOf(130, 132, 133, 134, 136, 138, 140) && dungeon[i - 1][j] != AnyOf(130, 132, 133, 134, 136, 138, 140)) {
 					dungeon[i][j] = 7;
 					continue;
 				}
@@ -1877,7 +1877,7 @@ void FenceDoorFix()
 				}
 			}
 			if (dungeon[i][j] == 147) {
-				if (IsNoneOf(dungeon[i][j + 1], 131, 132, 133, 135, 137, 138, 139) && IsNoneOf(dungeon[i][j - 1], 131, 132, 133, 135, 137, 138, 139)) {
+				if (dungeon[i][j + 1] != AnyOf(131, 132, 133, 135, 137, 138, 139) && dungeon[i][j - 1] != AnyOf(131, 132, 133, 135, 137, 138, 139)) {
 					dungeon[i][j] = 7;
 					continue;
 				}
@@ -2496,7 +2496,7 @@ void CreateL3Dungeon(uint32_t rseed, lvl_entry entry)
 					DoLighting({ i, j }, 7, -1);
 				} else if (dPiece[i][j] >= 154 && dPiece[i][j] <= 161) {
 					DoLighting({ i, j }, 7, -1);
-				} else if (IsAnyOf(dPiece[i][j], 150, 152)) {
+				} else if (dPiece[i][j] == AnyOf(150, 152)) {
 					DoLighting({ i, j }, 7, -1);
 				}
 			}
@@ -2558,7 +2558,7 @@ void LoadL3Dungeon(const char *path, int vx, int vy)
 				DoLighting({ i, j }, 7, -1);
 			} else if (dPiece[i][j] >= 154 && dPiece[i][j] <= 161) {
 				DoLighting({ i, j }, 7, -1);
-			} else if (IsAnyOf(dPiece[i][j], 150, 152)) {
+			} else if (dPiece[i][j] == AnyOf(150, 152)) {
 				DoLighting({ i, j }, 7, -1);
 			}
 		}

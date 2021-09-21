@@ -40,28 +40,59 @@
 
 namespace devilution {
 
-template <typename V, typename X>
-bool IsAnyOf(const V &v, X x)
-{
-	return v == x;
-}
+namespace {
 
-template <typename V, typename X, typename... Xs>
-bool IsAnyOf(const V &v, X x, Xs... xs)
-{
-	return IsAnyOf(v, x) || IsAnyOf(v, xs...);
-}
+template <typename... Args>
+struct AnyOfHelper {
+	std::tuple<Args...> values;
 
-template <typename V, typename X>
-bool IsNoneOf(const V &v, X x)
-{
-	return v != x;
-}
+	constexpr AnyOfHelper(Args... values)
+	    : values(std::move(values)...)
+	{
+	}
 
-template <typename V, typename X, typename... Xs>
-bool IsNoneOf(const V &v, X x, Xs... xs)
+	template <typename T>
+	[[nodiscard]] friend constexpr bool operator==(T lhs, AnyOfHelper const &rhs) noexcept
+	{
+		return std::apply(
+		    [&](auto... vals) { return ((lhs == vals) || ...); },
+		    rhs.values);
+	}
+
+	template <typename T>
+	[[nodiscard]] friend constexpr bool operator!=(T lhs, AnyOfHelper const &rhs) noexcept
+	{
+		return std::apply(
+		    [&](auto... vals) { return ((lhs != vals) && ...); },
+		    rhs.values);
+	}
+};
+
+} // namespace
+
+/**
+ * @brief Wraps a series of constant values for allowing multiple comparisons with a single target using the form
+ * 
+ * 'if (x == AnyOf(a, b, c))'
+ * or
+ * 'if (x != AnyOf(a, b, c))'
+ * 
+ * as a shorthand for
+ * 
+ * 'if (x == a || x == b || x == c)'
+ * and
+ * 'if (x != a && x != b && x != c)'
+ * respectively.
+ *
+ * Based on the implementation shared here:
+ * https://stackoverflow.com/a/60131309/1946412
+ * 
+ * @param values The values which will be used to compare to a target value.
+ */
+template <typename... Args>
+[[nodiscard]] constexpr auto AnyOf(Args &&...values)
 {
-	return IsNoneOf(v, x) && IsNoneOf(v, xs...);
+	return AnyOfHelper(std::forward<Args>(values)...);
 }
 
 /**
