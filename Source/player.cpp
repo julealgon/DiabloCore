@@ -916,12 +916,10 @@ bool PlrHitMonst(int pnum, int m)
 	}
 
 	if ((player._pIFlags & ISPL_FIREDAM) != 0 && (player._pIFlags & ISPL_LIGHTDAM) != 0) {
-		int midam = player._pIFMinDam + GenerateRnd(player._pIFMaxDam - player._pIFMinDam);
+		int midam = player._pIFDamage.GetValue();
 		AddMissile(player.position.tile, player.position.temp, player._pdir, MIS_SPECARROW, TARGET_MONSTERS, pnum, midam, 0);
 	}
-	int mind = player._pIMinDam;
-	int maxd = player._pIMaxDam;
-	int dam = GenerateRnd(maxd - mind + 1) + mind;
+	int dam = player._pIDamage.GetValue();
 	dam += dam * player._pIBonusDam / 100;
 	dam += player._pIBonusDamMod;
 	int dam2 = dam << 6;
@@ -1112,9 +1110,7 @@ bool PlrHitPlr(int pnum, int8_t p)
 		return true;
 	}
 
-	int mind = attacker._pIMinDam;
-	int maxd = attacker._pIMaxDam;
-	int dam = GenerateRnd(maxd - mind + 1) + mind;
+	int dam = attacker._pIDamage.GetValue();
 	dam += (dam * attacker._pIBonusDam) / 100;
 	dam += attacker._pIBonusDamMod + attacker._pDamageMod;
 
@@ -1304,7 +1300,7 @@ bool DoRangeAttack(int pnum)
 			mistype = MIS_LARROW;
 		}
 		if ((player._pIFlags & ISPL_FIRE_ARROWS) != 0 && (player._pIFlags & ISPL_LIGHT_ARROWS) != 0) {
-			dmg = player._pIFMinDam + GenerateRnd(player._pIFMaxDam - player._pIFMinDam);
+			dmg = player._pIFDamage.GetValue();
 			mistype = MIS_SPECARROW;
 		}
 

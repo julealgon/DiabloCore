@@ -7,6 +7,7 @@
 
 #include <cstdint>
 
+#include "damage.hpp"
 #include "DiabloUI/ui_item.h"
 #include "engine/animationinfo.h"
 #include "engine/point.hpp"
@@ -194,8 +195,7 @@ struct Item {
 	uint8_t _iCurs;
 	int _ivalue;
 	int _iIvalue;
-	uint8_t _iMinDam;
-	uint8_t _iMaxDam;
+	Damage _iDamage;
 	int16_t _iAC;
 	uint32_t _iFlags; // item_special_effect
 	enum item_misc_id _iMiscId;
@@ -223,10 +223,8 @@ struct Item {
 	bool _iRequest;
 	/** Unique item ID, used as an index into UniqueItemList */
 	int _iUid;
-	int16_t _iFMinDam;
-	int16_t _iFMaxDam;
-	int16_t _iLMinDam;
-	int16_t _iLMaxDam;
+	Damage _iFDamage;
+	Damage _iLDamage;
 	int16_t _iPLEnAc;
 	enum item_effect_type _iPrePower;
 	enum item_effect_type _iSufPower;

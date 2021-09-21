@@ -7,6 +7,7 @@
 
 #include <cstdint>
 
+#include "damage.hpp"
 #include "textdat.h"
 
 namespace devilution {
@@ -105,12 +106,10 @@ struct MonsterData {
 	uint8_t mInt;
 	uint8_t mHit;
 	uint8_t mAFNum;
-	uint8_t mMinDamage;
-	uint8_t mMaxDamage;
+	Damage mDamage;
 	uint8_t mHit2;
 	uint8_t mAFNum2;
-	uint8_t mMinDamage2;
-	uint8_t mMaxDamage2;
+	Damage mDamage2;
 	uint8_t mArmorClass;
 	MonsterClass mMonstClass;
 	/** Using monster_resistance as bitflags */
@@ -298,8 +297,7 @@ struct UniqueMonsterData {
 	uint16_t mmaxhp;
 	_mai_id mAi;
 	uint8_t mint;
-	uint8_t mMinDamage;
-	uint8_t mMaxDamage;
+	Damage mDamage;
 	/** Using monster_resistance as bitflags */
 	uint16_t mMagicRes;
 	/**

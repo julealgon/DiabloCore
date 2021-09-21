@@ -8,6 +8,7 @@
 #include <array>
 #include <cstdint>
 
+#include "damage.hpp"
 #include "diablo.h"
 #include "engine.h"
 #include "engine/actor_position.hpp"
@@ -267,8 +268,7 @@ struct Player {
 	int8_t InvGrid[NUM_INV_GRID_ELEM];
 	Item SpdList[MAXBELTITEMS];
 	Item HoldItem;
-	int _pIMinDam;
-	int _pIMaxDam;
+	Damage _pIDamage;
 	int _pIAC;
 	int _pIBonusDam;
 	int _pIBonusToHit;
@@ -282,10 +282,8 @@ struct Player {
 	int8_t _pISplLvlAdd;
 	int _pISplDur;
 	int _pIEnAc;
-	int _pIFMinDam;
-	int _pIFMaxDam;
-	int _pILMinDam;
-	int _pILMaxDam;
+	Damage _pIFDamage;
+	Damage _pILDamage;
 	item_misc_id _pOilType;
 	uint8_t pTownWarps;
 	uint8_t pDungMsgs;

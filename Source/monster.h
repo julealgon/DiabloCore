@@ -9,6 +9,7 @@
 #include <array>
 #include <functional>
 
+#include "damage.hpp"
 #include "engine.h"
 #include "engine/actor_position.hpp"
 #include "engine/animationinfo.h"
@@ -204,11 +205,9 @@ struct Monster { // note: missing field _mAFNum
 	int8_t mLevel;
 	uint16_t mExp;
 	uint16_t mHit;
-	uint8_t mMinDamage;
-	uint8_t mMaxDamage;
+	Damage mDamage;
 	uint16_t mHit2;
-	uint8_t mMinDamage2;
-	uint8_t mMaxDamage2;
+	Damage mDamage2;
 	uint8_t mArmorClass;
 	uint16_t mMagicRes;
 	_speech_id mtalkmsg;
