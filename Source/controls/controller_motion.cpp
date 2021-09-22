@@ -7,7 +7,6 @@
 #include "controls/devices/joystick.h"
 #include "controls/devices/kbcontroller.h"
 #include "controls/game_controls.h"
-#include "controls/touch/gamepad.h"
 #include "options.h"
 
 namespace devilution {
@@ -158,13 +157,6 @@ AxisDirection GetLeftStickOrDpadDirection(bool allowDpad)
 	bool isDownPressed = stickY <= -0.5 || (allowDpad && IsControllerButtonPressed(ControllerButton_BUTTON_DPAD_DOWN));
 	bool isLeftPressed = stickX <= -0.5 || (allowDpad && IsControllerButtonPressed(ControllerButton_BUTTON_DPAD_LEFT));
 	bool isRightPressed = stickX >= 0.5 || (allowDpad && IsControllerButtonPressed(ControllerButton_BUTTON_DPAD_RIGHT));
-
-#if defined(VIRTUAL_GAMEPAD)
-	isUpPressed |= VirtualGamepadState.directionPad.isUpPressed;
-	isDownPressed |= VirtualGamepadState.directionPad.isDownPressed;
-	isLeftPressed |= VirtualGamepadState.directionPad.isLeftPressed;
-	isRightPressed |= VirtualGamepadState.directionPad.isRightPressed;
-#endif
 
 	if (isUpPressed) {
 		result.y = AxisDirectionY_UP;

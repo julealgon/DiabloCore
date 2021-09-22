@@ -430,13 +430,6 @@ if(NOT NONET)
   endif()
 endif()
 
-if (VIRTUAL_GAMEPAD)
-  list(APPEND libdevilutionx_SRCS
-    Source/controls/touch/event_handlers.cpp
-    Source/controls/touch/gamepad.cpp
-    Source/controls/touch/renderers.cpp)
-endif()
-
 set(BIN_TARGET devilutionx)
 
 add_library(libdevilutionx OBJECT ${libdevilutionx_SRCS})
@@ -530,7 +523,6 @@ foreach(
   GPERF_HEAP_MAIN
   GPERF_HEAP_FIRST_GAME_ITERATION
   STREAM_ALL_AUDIO
-  VIRTUAL_GAMEPAD
 )
 if(${def_name})
   list(APPEND def_list ${def_name})
