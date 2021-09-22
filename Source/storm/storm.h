@@ -67,11 +67,7 @@ struct _SNETEVENT {
 
 // We declare the StormLib methods we use here.
 // StormLib uses the Windows calling convention on Windows for these methods.
-#ifdef _WIN32
 #define WINAPI __stdcall
-#else
-#define WINAPI
-#endif
 
 // Game states
 #define GAMESTATE_PRIVATE 0x01
@@ -198,14 +194,9 @@ bool WINAPI SFileCloseFile(HANDLE hFile);
 
 // These error codes are used and returned by StormLib.
 // See StormLib/src/StormPort.h
-#if defined(_WIN32)
 // https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-
 #define STORM_ERROR_FILE_NOT_FOUND 2
 #define STORM_ERROR_HANDLE_EOF 38
-#else // !defined(_WIN32)
-#define STORM_ERROR_FILE_NOT_FOUND ENOENT
-#define STORM_ERROR_HANDLE_EOF 1002
-#endif
 
 /*  SErrGetLastError @ 463
  *
