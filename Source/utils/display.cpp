@@ -69,11 +69,9 @@ void CalculatePreferdWindowSize(int &width, int &height)
 
 bool SpawnWindow(const char *lpWindowName)
 {
-#ifdef _WIN32
 	// The default WASAPI backend causes distortions
 	// https://github.com/diasurgical/devilutionX/issues/1434
 	SDL_setenv("SDL_AUDIODRIVER", "winmm", /*overwrite=*/false);
-#endif
 
 	int initFlags = SDL_INIT_VIDEO | SDL_INIT_JOYSTICK;
 #ifndef NOSOUND

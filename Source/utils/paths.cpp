@@ -34,13 +34,8 @@ std::optional<std::string> ttfName;
 
 void AddTrailingSlash(std::string &path)
 {
-#ifdef _WIN32
 	if (!path.empty() && path.back() != '\\')
 		path += '\\';
-#else
-	if (!path.empty() && path.back() != '/')
-		path += '/';
-#endif
 }
 
 std::string FromSDL(char *s)
