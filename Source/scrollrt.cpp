@@ -70,9 +70,6 @@ bool cel_foliage_active = false;
  */
 int level_piece_id;
 
-// DevilutionX extension.
-extern void DrawControllerModifierHints(const Surface &out);
-
 namespace {
 /**
  * @brief Hash algorithm for point
@@ -250,7 +247,7 @@ void UndrawCursor(const Surface &out)
 
 bool ShouldShowCursor()
 {
-	return !(sgbControllerActive && !IsMovingMouseCursorWithController() && pcurs != CURSOR_TELEPORT && !invflag && (!chrflag || Players[MyPlayerId]._pStatPts <= 0));
+	return true;
 }
 
 /**
@@ -1283,7 +1280,6 @@ void DrawView(const Surface &out, Point startPosition)
 		gmenu_draw_pause(out);
 	}
 
-	DrawControllerModifierHints(out);
 	DrawPlrMsg(out);
 	gmenu_draw(out);
 	doom_draw(out);

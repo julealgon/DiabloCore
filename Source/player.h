@@ -126,7 +126,6 @@ enum PLR_MODE : uint8_t {
 
 enum action_id : int8_t {
 	// clang-format off
-	ACTION_WALK        = -2, // Automatic walk when using gamepad
 	ACTION_NONE        = -1,
 	ACTION_ATTACK      = 9,
 	ACTION_RATTACK     = 10,

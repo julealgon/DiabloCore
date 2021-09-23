@@ -335,16 +335,7 @@ set(libdevilutionx_SRCS
   Source/towners.cpp
   Source/track.cpp
   Source/trigs.cpp
-  Source/controls/axis_direction.cpp
-  Source/controls/controller.cpp
-  Source/controls/controller_motion.cpp
-  Source/controls/devices/game_controller.cpp
-  Source/controls/devices/joystick.cpp
-  Source/controls/devices/kbcontroller.cpp
-  Source/controls/game_controls.cpp
   Source/controls/menu_controls.cpp
-  Source/controls/modifier_hints.cpp
-  Source/controls/plrctrls.cpp
   Source/controls/keymapper.cpp
   Source/engine/animationinfo.cpp
   Source/engine/demomode.cpp
@@ -541,7 +532,6 @@ foreach(
   MO_LANG_DIR
   TTF_FONT_DIR
   TTF_FONT_NAME
-  HAS_KBCTRL
   KBCTRL_BUTTON_DPAD_LEFT
   KBCTRL_BUTTON_DPAD_RIGHT
   KBCTRL_BUTTON_DPAD_UP

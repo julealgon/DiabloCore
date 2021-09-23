@@ -2454,8 +2454,6 @@ void AddHealOther(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	UseMana(missile._misource, SPL_HEALOTHER);
 	if (missile._misource == MyPlayerId) {
 		NewCursor(CURSOR_HEALOTHER);
-		if (sgbControllerActive)
-			TryIconCurs();
 	}
 }
 
@@ -2479,8 +2477,6 @@ void AddElement(Missile &missile, Point dst, Direction midir)
 	UseMana(missile._misource, SPL_ELEMENT);
 }
 
-extern void FocusOnInventory();
-
 void AddIdentify(Missile &missile, Point /*dst*/, Direction /*midir*/)
 {
 	missile._miDelFlag = true;
@@ -2490,8 +2486,6 @@ void AddIdentify(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			sbookflag = false;
 		if (!invflag) {
 			invflag = true;
-			if (sgbControllerActive)
-				FocusOnInventory();
 		}
 		NewCursor(CURSOR_IDENTIFY);
 	}
@@ -2596,8 +2590,6 @@ void AddRepair(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			sbookflag = false;
 		if (!invflag) {
 			invflag = true;
-			if (sgbControllerActive)
-				FocusOnInventory();
 		}
 		NewCursor(CURSOR_REPAIR);
 	}
@@ -2612,8 +2604,6 @@ void AddRecharge(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			sbookflag = false;
 		if (!invflag) {
 			invflag = true;
-			if (sgbControllerActive)
-				FocusOnInventory();
 		}
 		NewCursor(CURSOR_RECHARGE);
 	}
@@ -2625,12 +2615,6 @@ void AddDisarm(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	UseMana(missile._misource, SPL_DISARM);
 	if (missile._misource == MyPlayerId) {
 		NewCursor(CURSOR_DISARM);
-		if (sgbControllerActive) {
-			if (pcursobj != -1)
-				NetSendCmdLocParam1(true, CMD_DISARMXY, cursPosition, pcursobj);
-			else
-				NewCursor(CURSOR_HAND);
-		}
 	}
 }
 
@@ -2722,8 +2706,6 @@ void AddResurrect(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	UseMana(missile._misource, SPL_RESURRECT);
 	if (missile._misource == MyPlayerId) {
 		NewCursor(CURSOR_RESURRECT);
-		if (sgbControllerActive)
-			TryIconCurs();
 	}
 	missile._miDelFlag = true;
 }

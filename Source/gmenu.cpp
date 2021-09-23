@@ -6,8 +6,6 @@
 #include "gmenu.h"
 
 #include "control.h"
-#include "controls/axis_direction.h"
-#include "controls/controller_motion.h"
 #include "engine.h"
 #include "engine/cel_sprite.hpp"
 #include "engine/load_cel.hpp"
@@ -121,16 +119,6 @@ void GmenuDrawMenuItem(const Surface &out, TMenuItem *pItem, int y)
 	}
 }
 
-void GameMenuMove()
-{
-	static AxisDirectionRepeater repeater;
-	const AxisDirection moveDir = repeater.Get(GetLeftStickOrDpadDirection());
-	if (moveDir.x != AxisDirectionX_NONE)
-		GmenuLeftRight(moveDir.x == AxisDirectionX_RIGHT);
-	if (moveDir.y != AxisDirectionY_NONE)
-		GmenuUpDown(moveDir.y == AxisDirectionY_DOWN);
-}
-
 bool GmenuMouseNavigation()
 {
 	if (MousePosition.x < 282 + PANEL_LEFT) {
@@ -220,7 +208,6 @@ void gmenu_set_items(TMenuItem *pItem, void (*gmFunc)())
 void gmenu_draw(const Surface &out)
 {
 	if (sgpCurrentMenu != nullptr) {
-		GameMenuMove();
 		if (gmenu_current_option != nullptr)
 			gmenu_current_option();
 		if (gbIsHellfire) {

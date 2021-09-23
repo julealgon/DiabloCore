@@ -2,11 +2,6 @@
 
 #include "DiabloUI/diabloui.h"
 #include "control.h"
-#include "controls/controller.h"
-#include "controls/devices/game_controller.h"
-#include "controls/devices/joystick.h"
-#include "controls/devices/kbcontroller.h"
-#include "controls/game_controls.h"
 #include "options.h"
 #include "utils/log.hpp"
 #include "utils/sdl_wrap.h"
@@ -82,10 +77,6 @@ bool SpawnWindow(const char *lpWindowName)
 	SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
 	if (SDL_Init(initFlags) <= -1) {
 		ErrSdl();
-	}
-
-	if (sgOptions.Controller.szMapping[0] != '\0') {
-		SDL_GameControllerAddMapping(sgOptions.Controller.szMapping);
 	}
 
 	int width = sgOptions.Graphics.nWidth;

@@ -116,17 +116,6 @@ struct GameplayOptions {
 	bool bDisableCripplingShrines;
 };
 
-struct ControllerOptions {
-	/** @brief SDL Controller mapping, see SDL_GameControllerDB. */
-	char szMapping[1024];
-	/** @brief Use dpad for spell hotkeys without holding "start" */
-	bool bDpadHotkeys;
-	/** @brief Shoulder gamepad shoulder buttons act as potions by default */
-	bool bSwapShoulderButtonMode;
-	/** @brief Configure gamepad joysticks deadzone */
-	float fDeadzone;
-};
-
 struct NetworkOptions {
 	/** @brief Optionally bind to a specific network interface. */
 	char szBindAddress[129];
@@ -152,7 +141,6 @@ struct Options {
 	AudioOptions Audio;
 	GameplayOptions Gameplay;
 	GraphicsOptions Graphics;
-	ControllerOptions Controller;
 	NetworkOptions Network;
 	ChatOptions Chat;
 	LanguageOptions Language;

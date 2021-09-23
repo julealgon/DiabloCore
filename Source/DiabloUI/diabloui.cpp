@@ -9,7 +9,6 @@
 #include "DiabloUI/fonts.h"
 #include "DiabloUI/scrollbar.h"
 #include "DiabloUI/text_draw.h"
-#include "controls/controller.h"
 #include "controls/menu_controls.h"
 #include "dx.h"
 #include "engine/render/text_render.hpp"
@@ -333,8 +332,6 @@ void UiHandleEvents(SDL_Event *event)
 	if (event->type == SDL_QUIT)
 		diablo_quit(0);
 
-	HandleControllerAddedOrRemovedEvent(*event);
-
 	if (event->type == SDL_WINDOWEVENT) {
 		if (event->window.event == SDL_WINDOWEVENT_SHOWN) {
 			gbActive = true;
@@ -637,14 +634,13 @@ void UiPollAndRender()
 		UiFocusNavigation(&event);
 		UiHandleEvents(&event);
 	}
-	HandleMenuAction(GetMenuHeldUpDownAction());
 	UiRenderItems(gUiItems);
 	DrawMouse();
 	UiFadeIn();
 
 	// Must happen after the very first UiFadeIn, which sets the cursor.
 	if (IsHardwareCursor())
-		SetHardwareCursorVisible(!sgbControllerActive);
+		SetHardwareCursorVisible(true);
 }
 
 namespace {
@@ -931,7 +927,7 @@ bool UiItemMouseEvents(SDL_Event *event, const std::vector<std::unique_ptr<UiIte
 
 void DrawMouse()
 {
-	if (IsHardwareCursor() || sgbControllerActive)
+	if (IsHardwareCursor())
 		return;
 
 	DrawArt(MousePosition, &ArtCursor);

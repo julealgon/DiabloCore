@@ -22,7 +22,4 @@ enum MenuAction : uint8_t {
 
 MenuAction GetMenuAction(const SDL_Event &event);
 
-/** Menu action from holding the left stick or DPad. */
-MenuAction GetMenuHeldUpDownAction();
-
 } // namespace devilution
