@@ -15,7 +15,6 @@
 #include "engine/demomode.h"
 #include "options.h"
 #include "utils/file_util.h"
-#include "utils/language.h"
 #include "utils/paths.h"
 
 namespace devilution {
@@ -244,19 +243,6 @@ void LoadOptions()
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		GetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i], MAX_SEND_STR_LEN, "");
 
-	std::string locale = std::locale("").name().substr(0, 5);
-
-	LogVerbose("Prefered locale: {}", locale);
-	if (!HasTranslation(locale)) {
-		locale = locale.substr(0, 2);
-		if (!HasTranslation(locale)) {
-			locale = "en";
-		}
-	}
-	LogVerbose("Best match locale: {}", locale);
-
-	GetIniValue("Language", "Code", sgOptions.Language.szCode, sizeof(sgOptions.Language.szCode), locale.c_str());
-
 	keymapper.Load();
 
 	if (demo::IsRunning())
@@ -324,8 +310,6 @@ void SaveOptions()
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		SetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i]);
-
-	SetIniValue("Language", "Code", sgOptions.Language.szCode);
 
 	keymapper.Save();
 

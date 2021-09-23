@@ -33,7 +33,6 @@
 #include "stores.h"
 #include "towners.h"
 #include "trigs.h"
-#include "utils/language.h"
 #include "utils/sdl_geometry.h"
 #include "utils/stdcompat/optional.hpp"
 #include "options.h"
@@ -193,16 +192,16 @@ enum panel_button_id {
 };
 
 /** Maps from panel_button_id to hotkey name. */
-const char *const PanBtnHotKey[8] = { "'c'", "'q'", N_("Tab"), N_("Esc"), "'i'", "'b'", N_("Enter"), nullptr };
+const char *const PanBtnHotKey[8] = { "'c'", "'q'", "Tab", "Esc", "'i'", "'b'", "Enter", nullptr };
 /** Maps from panel_button_id to panel button description. */
 const char *const PanBtnStr[8] = {
-	N_("Character Information"),
-	N_("Quests log"),
-	N_("Automap"),
-	N_("Main Menu"),
-	N_("Inventory"),
-	N_("Spell book"),
-	N_("Send Message"),
+	"Character Information",
+	"Quests log",
+	"Automap",
+	"Main Menu",
+	"Inventory",
+	"Spell book",
+	"Send Message",
 	"" // Player attack
 };
 
@@ -709,24 +708,24 @@ void DrawSpellList(const Surface &out)
 		switch (spellListItem.type) {
 		case RSPLTYPE_SKILL:
 			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 3);
-			strcpy(infostr, fmt::format(_("{:s} Skill"), pgettext("spell", spellDataItem.sSkillText)).c_str());
+			strcpy(infostr, fmt::format("{:s} Skill", spellDataItem.sSkillText).c_str());
 			break;
 		case RSPLTYPE_SPELL:
 			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 4);
-			strcpy(infostr, fmt::format(_("{:s} Spell"), pgettext("spell", spellDataItem.sNameText)).c_str());
+			strcpy(infostr, fmt::format("{:s} Spell", spellDataItem.sNameText).c_str());
 			if (spellListItem.id == SPL_HBOLT) {
-				strcpy(tempstr, _("Damages undead only"));
+				strcpy(tempstr, "Damages undead only");
 				AddPanelString(tempstr);
 			}
 			if (spellLevel == 0)
-				strcpy(tempstr, _("Spell Level 0 - Unusable"));
+				strcpy(tempstr, "Spell Level 0 - Unusable");
 			else
-				strcpy(tempstr, fmt::format(_("Spell Level {:d}"), spellLevel).c_str());
+				strcpy(tempstr, fmt::format("Spell Level {:d}", spellLevel).c_str());
 			AddPanelString(tempstr);
 			break;
 		case RSPLTYPE_SCROLL: {
 			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 1);
-			strcpy(infostr, fmt::format(_("Scroll of {:s}"), pgettext("spell", spellDataItem.sNameText)).c_str());
+			strcpy(infostr, fmt::format("Scroll of {:s}", spellDataItem.sNameText).c_str());
 			int v = 0;
 			for (int t = 0; t < myPlayer._pNumInv; t++) {
 				if (!myPlayer.InvList[t].isEmpty()
@@ -742,14 +741,14 @@ void DrawSpellList(const Surface &out)
 					v++;
 				}
 			}
-			strcpy(tempstr, fmt::format(ngettext("{:d} Scroll", "{:d} Scrolls", v), v).c_str());
+			strcpy(tempstr, fmt::format(v == 1 ? "{:d} Scroll" : "{:d} Scrolls", v).c_str());
 			AddPanelString(tempstr);
 		} break;
 		case RSPLTYPE_CHARGES: {
 			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 2);
-			strcpy(infostr, fmt::format(_("Staff of {:s}"), pgettext("spell", spellDataItem.sNameText)).c_str());
+			strcpy(infostr, fmt::format("Staff of {:s}", spellDataItem.sNameText).c_str());
 			int charges = myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges;
-			strcpy(tempstr, fmt::format(ngettext("{:d} Charge", "{:d} Charges", charges), charges).c_str());
+			strcpy(tempstr, fmt::format(charges == 1 ? "{:d} Charge" : "{:d} Charges", charges).c_str());
 			AddPanelString(tempstr);
 		} break;
 		case RSPLTYPE_INVALID:
@@ -759,7 +758,7 @@ void DrawSpellList(const Surface &out)
 			if (myPlayer._pSplHotKey[t] == spellListItem.id && myPlayer._pSplTHotKey[t] == spellListItem.type) {
 				auto hotkeyName = keymapper.KeyNameForAction(quickSpellActionIndexes[t]);
 				PrintSBookHotkey(out, spellListItem.location, hotkeyName);
-				strcpy(tempstr, fmt::format(_("Spell Hotkey {:s}"), hotkeyName.c_str()).c_str());
+				strcpy(tempstr, fmt::format("Spell Hotkey {:s}", hotkeyName.c_str()).c_str());
 				AddPanelString(tempstr);
 			}
 		}
@@ -1146,15 +1145,15 @@ void CheckPanelInfo()
 		int yend = PanBtnPos[i].y + PANEL_TOP + PanBtnPos[i].h;
 		if (MousePosition.x >= PanBtnPos[i].x + PANEL_LEFT && MousePosition.x <= xend && MousePosition.y >= PanBtnPos[i].y + PANEL_TOP && MousePosition.y <= yend) {
 			if (i != 7) {
-				strcpy(infostr, _(PanBtnStr[i]));
+				strcpy(infostr, PanBtnStr[i]);
 			} else {
 				if (gbFriendlyMode)
-					strcpy(infostr, _("Player friendly"));
+					strcpy(infostr, "Player friendly");
 				else
-					strcpy(infostr, _("Player attack"));
+					strcpy(infostr, "Player attack");
 			}
 			if (PanBtnHotKey[i] != nullptr) {
-				strcpy(tempstr, fmt::format(_("Hotkey: {:s}"), _(PanBtnHotKey[i])).c_str());
+				strcpy(tempstr, fmt::format("Hotkey: {:s}", PanBtnHotKey[i]).c_str());
 				AddPanelString(tempstr);
 			}
 			InfoColor = UiFlags::ColorWhite;
@@ -1162,31 +1161,31 @@ void CheckPanelInfo()
 		}
 	}
 	if (!spselflag && MousePosition.x >= 565 + PANEL_LEFT && MousePosition.x < 621 + PANEL_LEFT && MousePosition.y >= 64 + PANEL_TOP && MousePosition.y < 120 + PANEL_TOP) {
-		strcpy(infostr, _("Select current spell button"));
+		strcpy(infostr, "Select current spell button");
 		InfoColor = UiFlags::ColorWhite;
 		panelflag = true;
-		strcpy(tempstr, _("Hotkey: 's'"));
+		strcpy(tempstr, "Hotkey: 's'");
 		AddPanelString(tempstr);
 		auto &myPlayer = Players[MyPlayerId];
 		spell_id v = myPlayer._pRSpell;
 		if (v != SPL_INVALID) {
 			switch (myPlayer._pRSplType) {
 			case RSPLTYPE_SKILL:
-				strcpy(tempstr, fmt::format(_("{:s} Skill"), pgettext("spell", spelldata[v].sSkillText)).c_str());
+				strcpy(tempstr, fmt::format("{:s} Skill", spelldata[v].sSkillText).c_str());
 				AddPanelString(tempstr);
 				break;
 			case RSPLTYPE_SPELL: {
-				strcpy(tempstr, fmt::format(_("{:s} Spell"), pgettext("spell", spelldata[v].sNameText)).c_str());
+				strcpy(tempstr, fmt::format("{:s} Spell", spelldata[v].sNameText).c_str());
 				AddPanelString(tempstr);
 				int c = std::max(myPlayer._pISplLvlAdd + myPlayer._pSplLvl[v], 0);
 				if (c == 0)
-					strcpy(tempstr, _("Spell Level 0 - Unusable"));
+					strcpy(tempstr, "Spell Level 0 - Unusable");
 				else
-					strcpy(tempstr, fmt::format(_("Spell Level {:d}"), c).c_str());
+					strcpy(tempstr, fmt::format("Spell Level {:d}", c).c_str());
 				AddPanelString(tempstr);
 			} break;
 			case RSPLTYPE_SCROLL: {
-				strcpy(tempstr, fmt::format(_("Scroll of {:s}"), pgettext("spell", spelldata[v].sNameText)).c_str());
+				strcpy(tempstr, fmt::format("Scroll of {:s}", spelldata[v].sNameText).c_str());
 				AddPanelString(tempstr);
 				int s = 0;
 				for (int i = 0; i < myPlayer._pNumInv; i++) {
@@ -1203,13 +1202,13 @@ void CheckPanelInfo()
 						s++;
 					}
 				}
-				strcpy(tempstr, fmt::format(ngettext("{:d} Scroll", "{:d} Scrolls", s), s).c_str());
+				strcpy(tempstr, fmt::format(s == 1 ? "{:d} Scroll" : "{:d} Scrolls", s).c_str());
 				AddPanelString(tempstr);
 			} break;
 			case RSPLTYPE_CHARGES:
-				strcpy(tempstr, fmt::format(_("Staff of {:s}"), pgettext("spell", spelldata[v].sNameText)).c_str());
+				strcpy(tempstr, fmt::format("Staff of {:s}", spelldata[v].sNameText).c_str());
 				AddPanelString(tempstr);
-				strcpy(tempstr, fmt::format(ngettext("{:d} Charge", "{:d} Charges", myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges), myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges).c_str());
+				strcpy(tempstr, fmt::format(myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges == 1 ? "{:d} Charge" : "{:d} Charges", myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges).c_str());
 				AddPanelString(tempstr);
 				break;
 			case RSPLTYPE_INVALID:
@@ -1331,10 +1330,10 @@ void DrawInfoBox(const Surface &out)
 		auto &myPlayer = Players[MyPlayerId];
 		if (myPlayer.HoldItem._itype == ItemType::Gold) {
 			int nGold = myPlayer.HoldItem._ivalue;
-			strcpy(infostr, fmt::format(ngettext("{:d} gold piece", "{:d} gold pieces", nGold), nGold).c_str());
+			strcpy(infostr, fmt::format(nGold == 1 ? "{:d} gold piece" : "{:d} gold pieces", nGold).c_str());
 		} else if (!myPlayer.HoldItem._iStatFlag) {
 			ClearPanel();
-			AddPanelString(_("Requirements not met"));
+			AddPanelString("Requirements not met");
 		} else {
 			if (myPlayer.HoldItem._iIdentified)
 				strcpy(infostr, myPlayer.HoldItem._iIName);
@@ -1370,9 +1369,9 @@ void DrawInfoBox(const Surface &out)
 			auto &target = Players[pcursplr];
 			strcpy(infostr, target._pName);
 			ClearPanel();
-			strcpy(tempstr, fmt::format(_("{:s}, Level: {:d}"), _(ClassStrTbl[static_cast<std::size_t>(target._pClass)]), target._pLevel).c_str());
+			strcpy(tempstr, fmt::format("{:s}, Level: {:d}", ClassStrTbl[static_cast<std::size_t>(target._pClass)], target._pLevel).c_str());
 			AddPanelString(tempstr);
-			strcpy(tempstr, fmt::format(_("Hit Points {:d} of {:d}"), target._pHitPoints >> 6, target._pMaxHP >> 6).c_str());
+			strcpy(tempstr, fmt::format("Hit Points {:d} of {:d}", target._pHitPoints >> 6, target._pMaxHP >> 6).c_str());
 			AddPanelString(tempstr);
 		}
 	}
@@ -1399,7 +1398,7 @@ void DrawLevelUpIcon(const Surface &out)
 {
 	if (stextflag == STORE_NONE) {
 		int nCel = lvlbtndown ? 3 : 2;
-		DrawString(out, _("Level Up"), { { PANEL_LEFT + 0, PANEL_TOP - 62 }, { 120, 0 } }, UiFlags::ColorWhite | UiFlags::AlignCenter);
+		DrawString(out, "Level Up", { { PANEL_LEFT + 0, PANEL_TOP - 62 }, { 120, 0 } }, UiFlags::ColorWhite | UiFlags::AlignCenter);
 		CelDrawTo(out, { 40 + PANEL_X, -17 + PANEL_Y }, *pChrButtons, nCel);
 	}
 }
@@ -1526,14 +1525,14 @@ void DrawSpellBook(const Surface &out)
 				SetSpellTrans(RSPLTYPE_SKILL);
 				DrawSpellCel(out, spellCellPosition, *pSBkIconCels, SPLICONLAST);
 			}
-			PrintSBookStr(out, { 10, yp - 23 }, pgettext("spell", spelldata[sn].sNameText));
+			PrintSBookStr(out, { 10, yp - 23 }, spelldata[sn].sNameText);
 			switch (GetSBookTrans(sn, false)) {
 			case RSPLTYPE_SKILL:
-				strcpy(tempstr, _("Skill"));
+				strcpy(tempstr, "Skill");
 				break;
 			case RSPLTYPE_CHARGES: {
 				int charges = myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges;
-				strcpy(tempstr, fmt::format(ngettext("Staff ({:d} charge)", "Staff ({:d} charges)", charges), charges).c_str());
+				strcpy(tempstr, fmt::format(charges == 1 ? "Staff ({:d} charge)" : "Staff ({:d} charges)", charges).c_str());
 			} break;
 			default: {
 				int mana = GetManaAmount(myPlayer, sn) >> 6;
@@ -1541,19 +1540,19 @@ void DrawSpellBook(const Surface &out)
 				int max;
 				GetDamageAmt(sn, &min, &max);
 				if (min != -1) {
-					strcpy(tempstr, fmt::format(_(/* TRANSLATORS: Dam refers to damage. UI constrains, keep short please.*/ "Mana: {:d}  Dam: {:d} - {:d}"), mana, min, max).c_str());
+					strcpy(tempstr, fmt::format("Mana: {:d}  Dam: {:d} - {:d}", mana, min, max).c_str());
 				} else {
-					strcpy(tempstr, fmt::format(_(/* TRANSLATORS: Dam refers to damage. UI constrains, keep short please.*/ "Mana: {:d}   Dam: n/a"), mana).c_str());
+					strcpy(tempstr, fmt::format("Mana: {:d}   Dam: n/a", mana).c_str());
 				}
 				if (sn == SPL_BONESPIRIT) {
-					strcpy(tempstr, fmt::format(_(/* TRANSLATORS: Dam refers to damage. UI constrains, keep short please.*/ "Mana: {:d}  Dam: 1/3 tgt hp"), mana).c_str());
+					strcpy(tempstr, fmt::format("Mana: {:d}  Dam: 1/3 tgt hp", mana).c_str());
 				}
 				PrintSBookStr(out, { 10, yp - 1 }, tempstr);
 				int lvl = std::max(myPlayer._pSplLvl[sn] + myPlayer._pISplLvlAdd, 0);
 				if (lvl == 0) {
-					strcpy(tempstr, _("Spell Level 0 - Unusable"));
+					strcpy(tempstr, "Spell Level 0 - Unusable");
 				} else {
-					strcpy(tempstr, fmt::format(_("Spell Level {:d}"), lvl).c_str());
+					strcpy(tempstr, fmt::format("Spell Level {:d}", lvl).c_str());
 				}
 			} break;
 			}
@@ -1602,14 +1601,13 @@ void DrawGoldSplit(const Surface &out, int amount)
 	// ensure that the buffer ends in a null character manually.
 	strncpy(
 	    tempstr,
-	    fmt::format(ngettext(
-	                    /* TRANSLATORS: {:d} is a number. Dialog is shown when splitting a stash of Gold.*/ "You have {:d} gold piece. How many do you want to remove?",
-	                    "You have {:d} gold pieces. How many do you want to remove?",
-	                    initialDropGoldValue),
+	    fmt::format(initialDropGoldValue == 1 
+	                   ? "You have {:d} gold piece. How many do you want to remove?"
+	                   : "You have {:d} gold pieces. How many do you want to remove?",
 	        initialDropGoldValue)
 	        .c_str(),
 	    BufferSize - 1);
-	// Ensure the prompt shown to the player is terminated properly (in case the formatted/translated string ends up
+	// Ensure the prompt shown to the player is terminated properly (in case the formatted string ends up
 	// being longer than 255 characters)
 	tempstr[BufferSize - 1] = '\0';
 

@@ -14,7 +14,6 @@
 #include "control.h"
 #include "engine/point.hpp"
 #include "options.h"
-#include "utils/language.h"
 
 namespace devilution {
 
@@ -53,9 +52,9 @@ void InitXPBar()
 		LoadMaskedArt("data\\xpbar.pcx", &xpbarArt, 1, 1);
 
 		if (xpbarArt.surface == nullptr) {
-			app_fatal("%s", _("Failed to load UI resources.\n"
+			app_fatal("%s", "Failed to load UI resources.\n"
 			                  "\n"
-			                  "Make sure devilutionx.mpq is in the game folder and that it is up to date."));
+			                  "Make sure devilutionx.mpq is in the game folder and that it is up to date.");
 		}
 	}
 }
@@ -122,33 +121,33 @@ bool CheckXPBarInfo()
 
 	const int8_t charLevel = player._pLevel;
 
-	strcpy(tempstr, fmt::format(_("Level {:d}"), charLevel).c_str());
+	strcpy(tempstr, fmt::format("Level {:d}", charLevel).c_str());
 	AddPanelString(tempstr);
 
 	if (charLevel == MAXCHARLEVEL - 1) {
 		// Show a maximum level indicator for max level players.
 		InfoColor = UiFlags::ColorWhitegold;
 
-		strcpy(tempstr, _("Experience: "));
+		strcpy(tempstr, "Experience: ");
 		PrintWithSeparator(tempstr + strlen(tempstr), ExpLvlsTbl[charLevel - 1]);
 		AddPanelString(tempstr);
 
-		AddPanelString(_("Maximum Level"));
+		AddPanelString("Maximum Level");
 
 		return true;
 	}
 
 	InfoColor = UiFlags::ColorWhite;
 
-	strcpy(tempstr, _("Experience: "));
+	strcpy(tempstr, "Experience: ");
 	PrintWithSeparator(tempstr + strlen(tempstr), player._pExperience);
 	AddPanelString(tempstr);
 
-	strcpy(tempstr, _("Next Level: "));
+	strcpy(tempstr, "Next Level: ");
 	PrintWithSeparator(tempstr + strlen(tempstr), ExpLvlsTbl[charLevel]);
 	AddPanelString(tempstr);
 
-	strcpy(PrintWithSeparator(tempstr, ExpLvlsTbl[charLevel] - player._pExperience), fmt::format(_(" to Level {:d}"), charLevel + 1).c_str());
+	strcpy(PrintWithSeparator(tempstr, ExpLvlsTbl[charLevel] - player._pExperience), fmt::format(" to Level {:d}", charLevel + 1).c_str());
 	AddPanelString(tempstr);
 
 	return true;

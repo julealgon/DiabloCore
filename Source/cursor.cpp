@@ -20,7 +20,6 @@
 #include "towners.h"
 #include "track.h"
 #include "trigs.h"
-#include "utils/language.h"
 
 namespace devilution {
 namespace {
@@ -208,8 +207,8 @@ void CheckTown()
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
 				ClearPanel();
-				strcpy(infostr, _("Town Portal"));
-				strcpy(tempstr, fmt::format(_("from {:s}"), Players[missile._misource]._pName).c_str());
+				strcpy(infostr, "Town Portal");
+				strcpy(tempstr, fmt::format("from {:s}", Players[missile._misource]._pName).c_str());
 				AddPanelString(tempstr);
 				cursPosition = missile.position.tile;
 			}
@@ -226,11 +225,11 @@ void CheckRportal()
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
 				ClearPanel();
-				strcpy(infostr, _("Portal to"));
+				strcpy(infostr, "Portal to");
 				if (!setlevel)
-					strcpy(tempstr, _("The Unholy Altar"));
+					strcpy(tempstr, "The Unholy Altar");
 				else
-					strcpy(tempstr, _("level 15"));
+					strcpy(tempstr, "level 15");
 				AddPanelString(tempstr);
 				cursPosition = missile.position.tile;
 			}

@@ -31,7 +31,6 @@
 #include "themes.h"
 #include "towners.h"
 #include "trigs.h"
-#include "utils/language.h"
 
 #ifdef _DEBUG
 #include "debug.h"
@@ -161,7 +160,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 	monster._mmode = MonsterMode::Stand;
 	monster.MType = &LevelMonsterTypes[mtype];
 	monster.MData = monster.MType->MData;
-	monster.mName = pgettext("monster", monster.MData->mName);
+	monster.mName = monster.MData->mName;
 	monster.AnimInfo = {};
 	monster.ChangeAnimationData(MonsterGraphic::Stand);
 	monster.AnimInfo.TickCounterOfCurrentFrame = GenerateRnd(monster.AnimInfo.TicksPerFrame - 1);
@@ -486,7 +485,7 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	}
 
 	monster.mExp *= 2;
-	monster.mName = pgettext("monster", uniqueMonsterData.mName);
+	monster.mName = uniqueMonsterData.mName;
 	monster._mmaxhp = uniqueMonsterData.mmaxhp << 6;
 
 	if (!gbIsMultiplayer)
@@ -3467,11 +3466,11 @@ const char *GetMonsterTypeText(const MonsterData &monsterData)
 {
 	switch (monsterData.mMonstClass) {
 	case MonsterClass::Animal:
-		return _("Animal");
+		return "Animal";
 	case MonsterClass::Demon:
-		return _("Demon");
+		return "Demon";
 	case MonsterClass::Undead:
-		return _("Undead");
+		return "Undead";
 	}
 
 	app_fatal("Unknown mMonstClass %i", static_cast<int>(monsterData.mMonstClass));
@@ -4514,9 +4513,9 @@ void SyncMonsterAnim(Monster &monster)
 #endif
 	monster.MData = LevelMonsterTypes[monster._mMTidx].MData;
 	if (monster._uniqtype != 0)
-		monster.mName = pgettext("monster", UniqueMonstersData[monster._uniqtype - 1].mName);
+		monster.mName = UniqueMonstersData[monster._uniqtype - 1].mName;
 	else
-		monster.mName = pgettext("monster", monster.MData->mName);
+		monster.mName = monster.MData->mName;
 
 	MonsterGraphic graphic = MonsterGraphic::Stand;
 
@@ -4603,9 +4602,9 @@ void M_FallenFear(Point position)
 void PrintMonstHistory(int mt)
 {
 	if (sgOptions.Gameplay.bShowMonsterType) {
-		strcpy(tempstr, fmt::format(_("Type: {:s}  Kills: {:d}"), GetMonsterTypeText(MonstersData[mt]), MonsterKillCounts[mt]).c_str());
+		strcpy(tempstr, fmt::format("Type: {:s}  Kills: {:d}", GetMonsterTypeText(MonstersData[mt]), MonsterKillCounts[mt]).c_str());
 	} else {
-		strcpy(tempstr, fmt::format(_("Total kills: {:d}"), MonsterKillCounts[mt]).c_str());
+		strcpy(tempstr, fmt::format("Total kills: {:d}", MonsterKillCounts[mt]).c_str());
 	}
 
 	AddPanelString(tempstr);
@@ -4638,34 +4637,34 @@ void PrintMonstHistory(int mt)
 			minHP = 4 * minHP + hpBonusHell;
 			maxHP = 4 * maxHP + hpBonusHell;
 		}
-		strcpy(tempstr, fmt::format(_("Hit Points: {:d}-{:d}"), minHP, maxHP).c_str());
+		strcpy(tempstr, fmt::format("Hit Points: {:d}-{:d}", minHP, maxHP).c_str());
 		AddPanelString(tempstr);
 	}
 	if (MonsterKillCounts[mt] >= 15) {
 		int res = (sgGameInitInfo.nDifficulty != DIFF_HELL) ? MonstersData[mt].mMagicRes : MonstersData[mt].mMagicRes2;
 		if ((res & (RESIST_MAGIC | RESIST_FIRE | RESIST_LIGHTNING | IMMUNE_MAGIC | IMMUNE_FIRE | IMMUNE_LIGHTNING)) == 0) {
-			strcpy(tempstr, _("No magic resistance"));
+			strcpy(tempstr, "No magic resistance");
 			AddPanelString(tempstr);
 		} else {
 			if ((res & (RESIST_MAGIC | RESIST_FIRE | RESIST_LIGHTNING)) != 0) {
-				strcpy(tempstr, _("Resists: "));
+				strcpy(tempstr, "Resists: ");
 				if ((res & RESIST_MAGIC) != 0)
-					strcat(tempstr, _("Magic "));
+					strcat(tempstr, "Magic ");
 				if ((res & RESIST_FIRE) != 0)
-					strcat(tempstr, _("Fire "));
+					strcat(tempstr, "Fire ");
 				if ((res & RESIST_LIGHTNING) != 0)
-					strcat(tempstr, _("Lightning "));
+					strcat(tempstr, "Lightning ");
 				tempstr[strlen(tempstr) - 1] = '\0';
 				AddPanelString(tempstr);
 			}
 			if ((res & (IMMUNE_MAGIC | IMMUNE_FIRE | IMMUNE_LIGHTNING)) != 0) {
-				strcpy(tempstr, _("Immune: "));
+				strcpy(tempstr, "Immune: ");
 				if ((res & IMMUNE_MAGIC) != 0)
-					strcat(tempstr, _("Magic "));
+					strcat(tempstr, "Magic ");
 				if ((res & IMMUNE_FIRE) != 0)
-					strcat(tempstr, _("Fire "));
+					strcat(tempstr, "Fire ");
 				if ((res & IMMUNE_LIGHTNING) != 0)
-					strcat(tempstr, _("Lightning "));
+					strcat(tempstr, "Lightning ");
 				tempstr[strlen(tempstr) - 1] = '\0';
 				AddPanelString(tempstr);
 			}
@@ -4677,25 +4676,25 @@ void PrintUniqueHistory()
 {
 	auto &monster = Monsters[pcursmonst];
 	if (sgOptions.Gameplay.bShowMonsterType) {
-		strcpy(tempstr, fmt::format(_("Type: {:s}"), GetMonsterTypeText(*monster.MData)).c_str());
+		strcpy(tempstr, fmt::format("Type: {:s}", GetMonsterTypeText(*monster.MData)).c_str());
 		AddPanelString(tempstr);
 	}
 
 	int res = monster.mMagicRes & (RESIST_MAGIC | RESIST_FIRE | RESIST_LIGHTNING | IMMUNE_MAGIC | IMMUNE_FIRE | IMMUNE_LIGHTNING);
 	if (res == 0) {
-		strcpy(tempstr, _("No resistances"));
+		strcpy(tempstr, "No resistances");
 		AddPanelString(tempstr);
-		strcpy(tempstr, _("No Immunities"));
+		strcpy(tempstr, "No Immunities");
 	} else {
 		if ((res & (RESIST_MAGIC | RESIST_FIRE | RESIST_LIGHTNING)) != 0)
-			strcpy(tempstr, _("Some Magic Resistances"));
+			strcpy(tempstr, "Some Magic Resistances");
 		else
-			strcpy(tempstr, _("No resistances"));
+			strcpy(tempstr, "No resistances");
 		AddPanelString(tempstr);
 		if ((res & (IMMUNE_MAGIC | IMMUNE_FIRE | IMMUNE_LIGHTNING)) != 0) {
-			strcpy(tempstr, _("Some Magic Immunities"));
+			strcpy(tempstr, "Some Magic Immunities");
 		} else {
-			strcpy(tempstr, _("No Immunities"));
+			strcpy(tempstr, "No Immunities");
 		}
 	}
 	AddPanelString(tempstr);

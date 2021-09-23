@@ -8,7 +8,6 @@
 #include "hwcursor.hpp"
 #include "palette.h"
 #include "utils/display.h"
-#include "utils/language.h"
 #include "utils/ttf_wrap.h"
 
 namespace devilution {
@@ -45,7 +44,7 @@ void ProgressLoad(const char *msg)
 		msgShadow = TTFWrap::RenderText_Solid(font, msg, black);
 	}
 	SDL_Rect rect3 = { (Sint16)(PANEL_LEFT + 265), (Sint16)(UI_OFFSET_Y + 267), SML_BUTTON_WIDTH, SML_BUTTON_HEIGHT };
-	vecProgress.push_back(std::make_unique<UiButton>(&SmlButton, _("Cancel"), &DialogActionCancel, rect3));
+	vecProgress.push_back(std::make_unique<UiButton>(&SmlButton, "Cancel", &DialogActionCancel, rect3));
 }
 
 void ProgressFree()

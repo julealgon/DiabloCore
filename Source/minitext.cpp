@@ -14,7 +14,6 @@
 #include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "textdat.h"
-#include "utils/language.h"
 #include "utils/stdcompat/optional.hpp"
 #include "utils/stdcompat/string_view.hpp"
 
@@ -138,7 +137,7 @@ void InitQTextMsg(_speech_id m)
 {
 	if (Speeches[m].scrlltxt) {
 		QuestLogIsOpen = false;
-		LoadText(_(Speeches[m].txtstr));
+		LoadText(Speeches[m].txtstr);
 		qtextflag = true;
 		qtextSpd = CalculateTextSpeed(Speeches[m].sfxnr);
 		ScrollStart = SDL_GetTicks();

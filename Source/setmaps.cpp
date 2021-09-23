@@ -14,18 +14,17 @@
 #include "palette.h"
 #include "quests.h"
 #include "trigs.h"
-#include "utils/language.h"
 
 namespace devilution {
 
 /** Maps from quest level to quest level names. */
 const char *const QuestLevelNames[] = {
 	"",
-	N_("Skeleton King's Lair"),
-	N_("Chamber of Bone"),
-	N_("Maze"),
-	N_("Poisoned Water Supply"),
-	N_("Archbishop Lazarus' Lair"),
+	"Skeleton King's Lair",
+	"Chamber of Bone",
+	"Maze",
+	"Poisoned Water Supply",
+	"Archbishop Lazarus' Lair",
 };
 
 namespace {

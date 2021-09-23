@@ -27,7 +27,6 @@
 #include "pfile.h"
 #include "stores.h"
 #include "utils/endian.hpp"
-#include "utils/language.h"
 
 namespace devilution {
 
@@ -1673,10 +1672,10 @@ void LoadGame(bool firstflag)
 
 	LoadHelper file("game");
 	if (!file.IsValid())
-		app_fatal("%s", _("Unable to open save file archive"));
+		app_fatal("%s", "Unable to open save file archive");
 
 	if (!IsHeaderValid(file.NextLE<uint32_t>()))
-		app_fatal("%s", _("Invalid save file"));
+		app_fatal("%s", "Invalid save file");
 
 	if (gbIsHellfireSaveGame) {
 		giNumberOfLevels = 25;
@@ -1705,7 +1704,7 @@ void LoadGame(bool firstflag)
 	int tmpNobjects = file.NextBE<int32_t>();
 
 	if (!gbIsHellfire && currlevel > 17)
-		app_fatal("%s", _("Player is on a Hellfire only level"));
+		app_fatal("%s", "Player is on a Hellfire only level");
 
 	for (uint8_t i = 0; i < giNumberOfLevels; i++) {
 		glSeedTbl[i] = file.NextBE<uint32_t>();
@@ -1902,7 +1901,7 @@ void SaveGameData()
 	else if (!gbIsSpawn && !gbIsHellfire)
 		file.WriteLE<uint32_t>(LoadLE32("RETL"));
 	else
-		app_fatal("%s", _("Invalid game state"));
+		app_fatal("%s", "Invalid game state");
 
 	if (gbIsHellfire) {
 		giNumberOfLevels = 25;
@@ -2139,7 +2138,7 @@ void LoadLevel()
 	GetPermLevelNames(szName);
 	LoadHelper file(szName);
 	if (!file.IsValid())
-		app_fatal("%s", _("Unable to open save file archive"));
+		app_fatal("%s", "Unable to open save file archive");
 
 	if (leveltype != DTYPE_TOWN) {
 		for (int j = 0; j < MAXDUNY; j++) {

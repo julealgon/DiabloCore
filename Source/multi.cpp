@@ -23,7 +23,6 @@
 #include "sync.h"
 #include "tmsg.h"
 #include "utils/endian.hpp"
-#include "utils/language.h"
 #include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
@@ -192,14 +191,14 @@ void PlayerLeftMsg(int pnum, bool left)
 	delta_close_portal(pnum);
 	RemovePlrMissiles(pnum);
 	if (left) {
-		const char *pszFmt = _("Player '{:s}' just left the game");
+		const char *pszFmt = "Player '{:s}' just left the game";
 		switch (sgdwPlayerLeftReasonTbl[pnum]) {
 		case LEAVE_ENDING:
-			pszFmt = _("Player '{:s}' killed Diablo and left the game!");
+			pszFmt = "Player '{:s}' killed Diablo and left the game!";
 			gbSomebodyWonGameKludge = true;
 			break;
 		case LEAVE_DROP:
-			pszFmt = _("Player '{:s}' dropped due to timeout");
+			pszFmt = "Player '{:s}' dropped due to timeout";
 			break;
 		}
 		EventPlrMsg(fmt::format(pszFmt, player._pName).c_str());
@@ -812,9 +811,9 @@ void recv_plrinfo(int pnum, TCmdPlrInfoHdr *p, bool recv)
 	gbActivePlayers++;
 
 	if (sgbPlayerTurnBitTbl[pnum]) {
-		szEvent = _("Player '{:s}' (level {:d}) just joined the game");
+		szEvent = "Player '{:s}' (level {:d}) just joined the game";
 	} else {
-		szEvent = _("Player '{:s}' (level {:d}) is already in the game");
+		szEvent = "Player '{:s}' (level {:d}) is already in the game";
 	}
 	EventPlrMsg(fmt::format(szEvent, player._pName, player._pLevel).c_str());
 

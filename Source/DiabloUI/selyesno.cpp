@@ -2,7 +2,6 @@
 
 #include "DiabloUI/diabloui.h"
 #include "control.h"
-#include "utils/language.h"
 
 namespace devilution {
 namespace {
@@ -51,8 +50,8 @@ bool UiSelHeroYesNoDialog(const char *title, const char *body)
 	SDL_Rect rect2 = { (Sint16)(PANEL_LEFT + 120), (Sint16)(UI_OFFSET_Y + 236), MESSAGE_WIDTH, 168 };
 	vecSelYesNoDialog.push_back(std::make_unique<UiArtText>(selyesno_confirmationMessage, rect2, UiFlags::FontSize24 | UiFlags::ColorUiSilver));
 
-	vecSelYesNoDialogItems.push_back(std::make_unique<UiListItem>(_("Yes"), 0));
-	vecSelYesNoDialogItems.push_back(std::make_unique<UiListItem>(_("No"), 1));
+	vecSelYesNoDialogItems.push_back(std::make_unique<UiListItem>("Yes", 0));
+	vecSelYesNoDialogItems.push_back(std::make_unique<UiListItem>("No", 1));
 	vecSelYesNoDialog.push_back(std::make_unique<UiList>(vecSelYesNoDialogItems, PANEL_LEFT + 230, (UI_OFFSET_Y + 390), 180, 35, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
 
 	strncpy(selyesno_confirmationMessage, body, sizeof(selyesno_confirmationMessage) - 1);

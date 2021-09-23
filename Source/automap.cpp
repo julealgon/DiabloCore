@@ -15,7 +15,6 @@
 #include "palette.h"
 #include "player.h"
 #include "setmaps.h"
-#include "utils/language.h"
 #include "utils/stdcompat/algorithm.hpp"
 #include "utils/ui_fwd.h"
 
@@ -465,30 +464,30 @@ void DrawAutomapText(const Surface &out)
 
 	if (gbIsMultiplayer) {
 		if (strcasecmp("0.0.0.0", szPlayerName) != 0) {
-			strcat(strcpy(desc, _("game: ")), szPlayerName);
+			strcat(strcpy(desc, "game: "), szPlayerName);
 			DrawString(out, desc, linePosition);
 			linePosition.y += 15;
 		}
 
 		if (szPlayerDescript[0] != '\0') {
-			strcat(strcpy(desc, _("password: ")), szPlayerDescript);
+			strcat(strcpy(desc, "password: "), szPlayerDescript);
 			DrawString(out, desc, linePosition);
 			linePosition.y += 15;
 		}
 	}
 
 	if (setlevel) {
-		DrawString(out, _(QuestLevelNames[setlvlnum]), linePosition);
+		DrawString(out, QuestLevelNames[setlvlnum], linePosition);
 		return;
 	}
 
 	if (currlevel != 0) {
 		if (currlevel >= 17 && currlevel <= 20) {
-			strcpy(desc, fmt::format(_("Level: Nest {:d}"), currlevel - 16).c_str());
+			strcpy(desc, fmt::format("Level: Nest {:d}", currlevel - 16).c_str());
 		} else if (currlevel >= 21 && currlevel <= 24) {
-			strcpy(desc, fmt::format(_("Level: Crypt {:d}"), currlevel - 20).c_str());
+			strcpy(desc, fmt::format("Level: Crypt {:d}", currlevel - 20).c_str());
 		} else {
-			strcpy(desc, fmt::format(_("Level: {:d}"), currlevel).c_str());
+			strcpy(desc, fmt::format("Level: {:d}", currlevel).c_str());
 		}
 
 		DrawString(out, desc, linePosition);

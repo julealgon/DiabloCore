@@ -12,7 +12,6 @@
 #include "controls/menu_controls.h"
 #include "hwcursor.hpp"
 #include "utils/display.h"
-#include "utils/language.h"
 #include "utils/log.hpp"
 #include "utils/sdl_compat.h"
 #include "utils/ttf_wrap.h"
@@ -56,7 +55,7 @@ struct CachedLine {
 
 CachedLine PrepareLine(std::size_t index)
 {
-	const char *contents = _(Text[index]);
+	const char *contents = Text[index];
 	while (contents[0] == '\t')
 		++contents;
 

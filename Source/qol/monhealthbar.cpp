@@ -9,7 +9,6 @@
 #include "cursor.h"
 #include "options.h"
 #include "qol/common.h"
-#include "utils/language.h"
 
 namespace devilution {
 namespace {
@@ -32,9 +31,9 @@ void InitMonsterHealthBar()
 	if ((healthBox.surface == nullptr)
 	    || (health.surface == nullptr)
 	    || (resistance.surface == nullptr)) {
-		app_fatal("%s", _("Failed to load UI resources.\n"
+		app_fatal("%s", "Failed to load UI resources.\n"
 		                  "\n"
-		                  "Make sure devilutionx.mpq is in the game folder and that it is up to date."));
+		                  "Make sure devilutionx.mpq is in the game folder and that it is up to date.");
 	}
 }
 

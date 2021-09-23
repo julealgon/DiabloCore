@@ -2,7 +2,6 @@
 
 #include "DiabloUI/diabloui.h"
 #include "control.h"
-#include "utils/language.h"
 #include "engine/render/text_render.hpp"
 
 namespace devilution {
@@ -65,7 +64,7 @@ void UiSelOkDialog(const char *title, const char *body, bool background)
 		vecSelOkDialog.push_back(std::make_unique<UiArtText>(dialogText, rect1, UiFlags::FontSize24 | UiFlags::ColorUiSilver));
 	}
 
-	vecSelOkDialogItems.push_back(std::make_unique<UiListItem>(_("OK"), 0));
+	vecSelOkDialogItems.push_back(std::make_unique<UiListItem>("OK", 0));
 	vecSelOkDialog.push_back(std::make_unique<UiList>(vecSelOkDialogItems, PANEL_LEFT + 230, (UI_OFFSET_Y + 390), 180, 35, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
 
 	strncpy(dialogText, body, sizeof(dialogText) - 1);

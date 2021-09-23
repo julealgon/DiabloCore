@@ -20,7 +20,6 @@
 #include "plrmsg.h"
 #include "stores.h"
 #include "towners.h"
-#include "utils/language.h"
 #include "utils/sdl_geometry.h"
 #include "utils/stdcompat/optional.hpp"
 
@@ -1890,7 +1889,7 @@ int8_t CheckInvHLight()
 
 	if (pi->_itype == ItemType::Gold) {
 		int nGold = pi->_ivalue;
-		strcpy(infostr, fmt::format(ngettext("{:d} gold piece", "{:d} gold pieces", nGold), nGold).c_str());
+		strcpy(infostr, fmt::format(nGold == 1 ? "{:d} gold piece" : "{:d} gold pieces", nGold).c_str());
 	} else {
 		InfoColor = pi->getTextColor();
 		if (pi->_iIdentified) {

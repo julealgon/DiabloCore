@@ -2,7 +2,6 @@
 #include "control.h"
 #include "DiabloUI/diabloui.h"
 #include "DiabloUI/selok.h"
-#include "utils/language.h"
 
 namespace devilution {
 namespace {
@@ -33,12 +32,12 @@ void MainmenuLoad(const char *name, void (*fnSound)(const char *file))
 {
 	gfnSoundFunction = fnSound;
 
-	vecMenuItems.push_back(std::make_unique<UiListItem>(_("Single Player"), MAINMENU_SINGLE_PLAYER));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(_("Multi Player"), MAINMENU_MULTIPLAYER));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(_("Replay Intro"), MAINMENU_REPLAY_INTRO));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(_("Support"), MAINMENU_SHOW_SUPPORT));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(_("Show Credits"), MAINMENU_SHOW_CREDITS));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(gbIsHellfire ? _("Exit Hellfire") : _("Exit Diablo"), MAINMENU_EXIT_DIABLO));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Single Player", MAINMENU_SINGLE_PLAYER));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Multi Player", MAINMENU_MULTIPLAYER));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Replay Intro", MAINMENU_REPLAY_INTRO));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Support", MAINMENU_SHOW_SUPPORT));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Show Credits", MAINMENU_SHOW_CREDITS));
+	vecMenuItems.push_back(std::make_unique<UiListItem>(gbIsHellfire ? "Exit Hellfire" : "Exit Diablo", MAINMENU_EXIT_DIABLO));
 
 	if (!gbSpawned || gbIsHellfire) {
 		if (gbIsHellfire)
@@ -96,7 +95,7 @@ bool UiMainMenuDialog(const char *name, _mainmenu_selections *pdwResult, void (*
 		MainmenuFree();
 
 		if (gbSpawned && !gbIsHellfire && MainMenuResult == MAINMENU_REPLAY_INTRO) {
-			UiSelOkDialog(nullptr, _(/* TRANSLATORS:  Error Message when a Shareware User clicks on "Replay Intro" in the Main Menu */ "The Diablo introduction cinematic is only available in the full retail version of Diablo. Visit https://www.gog.com/game/diablo to purchase."), true);
+			UiSelOkDialog(nullptr, "The Diablo introduction cinematic is only available in the full retail version of Diablo. Visit https://www.gog.com/game/diablo to purchase.", true);
 			MainMenuResult = MAINMENU_NONE;
 		}
 	}

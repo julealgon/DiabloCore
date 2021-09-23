@@ -12,7 +12,6 @@
 #include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "stores.h"
-#include "utils/language.h"
 #include "utils/stdcompat/optional.hpp"
 #include "utils/ui_fwd.h"
 
@@ -94,7 +93,7 @@ int GmenuGetLineWidth(TMenuItem *pItem)
 	if ((pItem->dwFlags & GMENU_SLIDER) != 0)
 		return 490;
 
-	return GetLineWidth(_(pItem->pszStr), GameFont46, 2);
+	return GetLineWidth(pItem->pszStr, GameFont46, 2);
 }
 
 void GmenuDrawMenuItem(const Surface &out, TMenuItem *pItem, int y)
@@ -112,7 +111,7 @@ void GmenuDrawMenuItem(const Surface &out, TMenuItem *pItem, int y)
 
 	int x = (gnScreenWidth - w) / 2;
 	UiFlags style = (pItem->dwFlags & GMENU_ENABLED) != 0 ? UiFlags::ColorGold : UiFlags::ColorBlack;
-	DrawString(out, _(pItem->pszStr), Point { x, y }, style | UiFlags::FontSize46, 2);
+	DrawString(out, pItem->pszStr, Point { x, y }, style | UiFlags::FontSize46, 2);
 	if (pItem == sgpCurrItem) {
 		CelDrawTo(out, { x - 54, y + 51 }, *PentSpin_cel, PentSpn2Spin());
 		CelDrawTo(out, { x + 4 + w, y + 51 }, *PentSpin_cel, PentSpn2Spin());
@@ -151,7 +150,7 @@ void gmenu_draw_pause(const Surface &out)
 		RedBack(out);
 	if (sgpCurrentMenu == nullptr) {
 		LightTableIndex = 0;
-		DrawString(out, _("Pause"), { { 0, 0 }, { gnScreenWidth, PANEL_TOP } }, UiFlags::FontSize46 | UiFlags::ColorGold | UiFlags::AlignCenter | UiFlags::VerticalCenter, 2);
+		DrawString(out, "Pause", { { 0, 0 }, { gnScreenWidth, PANEL_TOP } }, UiFlags::FontSize46 | UiFlags::ColorGold | UiFlags::AlignCenter | UiFlags::VerticalCenter, 2);
 	}
 }
 
