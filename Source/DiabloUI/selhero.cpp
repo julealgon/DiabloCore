@@ -250,7 +250,7 @@ bool ShouldPrefillHeroName()
 #if defined(PREFILL_PLAYER_NAME)
 	return true;
 #else
-	return sgbControllerActive;
+	return false;
 #endif
 }
 

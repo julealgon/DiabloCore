@@ -244,11 +244,6 @@ void LoadOptions()
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		GetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i], MAX_SEND_STR_LEN, "");
 
-	GetIniValue("Controller", "Mapping", sgOptions.Controller.szMapping, sizeof(sgOptions.Controller.szMapping), "");
-	sgOptions.Controller.bSwapShoulderButtonMode = GetIniBool("Controller", "Swap Shoulder Button Mode", false);
-	sgOptions.Controller.bDpadHotkeys = GetIniBool("Controller", "Dpad Hotkeys", false);
-	sgOptions.Controller.fDeadzone = GetIniFloat("Controller", "deadzone", 0.07F);
-
 	std::string locale = std::locale("").name().substr(0, 5);
 
 	LogVerbose("Prefered locale: {}", locale);
@@ -329,11 +324,6 @@ void SaveOptions()
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		SetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i]);
-
-	SetIniValue("Controller", "Mapping", sgOptions.Controller.szMapping);
-	SetIniValue("Controller", "Swap Shoulder Button Mode", sgOptions.Controller.bSwapShoulderButtonMode);
-	SetIniValue("Controller", "Dpad Hotkeys", sgOptions.Controller.bDpadHotkeys);
-	SetIniValue("Controller", "deadzone", sgOptions.Controller.fDeadzone);
 
 	SetIniValue("Language", "Code", sgOptions.Language.szCode);
 

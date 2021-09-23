@@ -2620,9 +2620,6 @@ void NextPlrLevel(int pnum)
 		drawmanaflag = true;
 	}
 
-	if (sgbControllerActive)
-		FocusOnCharInfo();
-
 	CalcPlrInv(player, true);
 }
 
@@ -3451,25 +3448,23 @@ void CheckPlrSpell()
 		return;
 	}
 
-	if (!sgbControllerActive) {
-		if (pcurs != CURSOR_HAND)
-			return;
+	if (pcurs != CURSOR_HAND)
+		return;
 
-		if (MainPanel.Contains(MousePosition)) // inside main panel
-			return;
+	if (MainPanel.Contains(MousePosition)) // inside main panel
+		return;
 
-		if (
-		    ((chrflag || QuestLogIsOpen) && LeftPanel.Contains(MousePosition)) // inside left panel
-		    || ((invflag || sbookflag) && RightPanel.Contains(MousePosition))  // inside right panel
-		) {
-			if (rspell != SPL_HEAL
-			    && rspell != SPL_IDENTIFY
-			    && rspell != SPL_REPAIR
-			    && rspell != SPL_INFRA
-			    && rspell != SPL_RECHARGE)
-				return;
-		}
-	}
+	if (
+		((chrflag || QuestLogIsOpen) && LeftPanel.Contains(MousePosition)) // inside left panel
+		|| ((invflag || sbookflag) && RightPanel.Contains(MousePosition))  // inside right panel
+	) {
+		if (rspell != SPL_HEAL
+			&& rspell != SPL_IDENTIFY
+			&& rspell != SPL_REPAIR
+			&& rspell != SPL_INFRA
+			&& rspell != SPL_RECHARGE)
+			return;
+	}	
 	SpellCheckResult spellcheck = SpellCheckResult::Success;
 	switch (myPlayer._pRSplType) {
 	case RSPLTYPE_SKILL:

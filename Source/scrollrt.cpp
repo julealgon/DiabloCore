@@ -5,7 +5,6 @@
  */
 
 #include "automap.h"
-#include "controls/touch/renderers.h"
 #include "cursor.h"
 #include "dead.h"
 #include "doom.h"
@@ -70,9 +69,6 @@ bool cel_foliage_active = false;
  * Specifies the current dungeon piece ID of the level, as used during rendering of the level tiles.
  */
 int level_piece_id;
-
-// DevilutionX extension.
-extern void DrawControllerModifierHints(const Surface &out);
 
 namespace {
 /**
@@ -251,7 +247,7 @@ void UndrawCursor(const Surface &out)
 
 bool ShouldShowCursor()
 {
-	return !(sgbControllerActive && !IsMovingMouseCursorWithController() && pcurs != CURSOR_TELEPORT && !invflag && (!chrflag || Players[MyPlayerId]._pStatPts <= 0));
+	return true;
 }
 
 /**
@@ -1284,7 +1280,6 @@ void DrawView(const Surface &out, Point startPosition)
 		gmenu_draw_pause(out);
 	}
 
-	DrawControllerModifierHints(out);
 	DrawPlrMsg(out);
 	gmenu_draw(out);
 	doom_draw(out);
@@ -1723,12 +1718,6 @@ void DrawAndBlit()
 	unlock_buf(0);
 
 	DrawMain(hgt, ddsdesc, drawhpflag, drawmanaflag, drawsbarflag, drawbtnflag);
-
-#if defined(VIRTUAL_GAMEPAD)
-	SDL_Surface *sdlOutputSurface = GetOutputSurface();
-	Surface outputSurface(sdlOutputSurface);
-	DrawVirtualGamepad(outputSurface);
-#endif
 
 	RenderPresent();
 

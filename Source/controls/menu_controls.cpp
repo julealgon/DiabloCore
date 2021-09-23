@@ -1,72 +1,13 @@
 #include "controls/menu_controls.h"
 
 #include "DiabloUI/diabloui.h"
-#include "controls/axis_direction.h"
-#include "controls/controller.h"
-#include "controls/controller_motion.h"
 #include "controls/remap_keyboard.h"
 #include "utils/sdl_compat.h"
 
 namespace devilution {
 
-MenuAction GetMenuHeldUpDownAction()
-{
-	static AxisDirectionRepeater repeater;
-	const AxisDirection dir = repeater.Get(GetLeftStickOrDpadDirection());
-	switch (dir.y) {
-	case AxisDirectionY_UP:
-		return MenuAction_UP;
-	case AxisDirectionY_DOWN:
-		return MenuAction_DOWN;
-	default:
-		return MenuAction_NONE;
-	}
-}
-
 MenuAction GetMenuAction(const SDL_Event &event)
 {
-	const ControllerButtonEvent ctrlEvent = ToControllerButtonEvent(event);
-
-	if (ProcessControllerMotion(event, ctrlEvent)) {
-		sgbControllerActive = true;
-		return GetMenuHeldUpDownAction();
-	}
-
-	if (ctrlEvent.button != ControllerButton_NONE)
-		sgbControllerActive = true;
-
-	if (!ctrlEvent.up) {
-		switch (ctrlEvent.button) {
-		case ControllerButton_IGNORE:
-			return MenuAction_NONE;
-		case ControllerButton_BUTTON_B: // Right button
-		case ControllerButton_BUTTON_START:
-			return MenuAction_SELECT;
-		case ControllerButton_BUTTON_BACK:
-		case ControllerButton_BUTTON_A: // Bottom button
-			return MenuAction_BACK;
-		case ControllerButton_BUTTON_X: // Left button
-			return MenuAction_DELETE;
-		case ControllerButton_BUTTON_DPAD_UP:
-		case ControllerButton_BUTTON_DPAD_DOWN:
-			return GetMenuHeldUpDownAction();
-		case ControllerButton_BUTTON_DPAD_LEFT:
-			return MenuAction_LEFT;
-		case ControllerButton_BUTTON_DPAD_RIGHT:
-			return MenuAction_RIGHT;
-		case ControllerButton_BUTTON_LEFTSHOULDER:
-			return MenuAction_PAGE_UP;
-		case ControllerButton_BUTTON_RIGHTSHOULDER:
-			return MenuAction_PAGE_DOWN;
-		default:
-			break;
-		}
-	}
-
-#if HAS_KBCTRL == 0
-	if (event.type >= SDL_KEYDOWN && event.type < SDL_JOYAXISMOTION)
-		sgbControllerActive = false;
-
 	if (event.type == SDL_KEYDOWN) {
 		auto sym = event.key.keysym.sym;
 		remap_keyboard_key(&sym);
@@ -110,7 +51,6 @@ MenuAction GetMenuAction(const SDL_Event &event)
 			break;
 		}
 	}
-#endif
 
 	return MenuAction_NONE;
 } // namespace devilution

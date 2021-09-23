@@ -1236,7 +1236,7 @@ void DrawInvBelt(const Surface &out)
 		const int celFrame = GetInvItemFrame(frame);
 
 		if (pcursinvitem == i + INVITEM_BELT_FIRST) {
-			if (!sgbControllerActive || invflag) {
+			if (invflag) {
 				CelBlitOutlineTo(out, GetOutlineColor(myPlayer.SpdList[i], true), position, cel, celFrame, false);
 			}
 		}

@@ -19,8 +19,6 @@
 #endif
 #include "DiabloUI/diabloui.h"
 #include "controls/keymapper.hpp"
-#include "controls/touch/gamepad.h"
-#include "controls/touch/renderers.h"
 #include "diablo.h"
 #include "doom.h"
 #include "drlg_l1.h"
@@ -114,12 +112,6 @@ QuickMessage QuickMessages[QUICK_MESSAGE_OPTIONS] = {
 /** This and the following mouse variables are for handling in-game click-and-hold actions */
 MouseActionType LastMouseButtonAction = MouseActionType::None;
 
-// Controller support: Actions to run after updating the cursor state.
-// Defined in SourceX/controls/plctrls.cpp.
-extern void plrctrls_after_check_curs_move();
-extern void plrctrls_every_frame();
-extern void plrctrls_after_game_logic();
-
 namespace {
 
 char gszVersionNumber[64] = "internal version unknown";
@@ -181,8 +173,6 @@ bool ProcessInput()
 		return false;
 	}
 
-	plrctrls_every_frame();
-
 	if (!gbIsMultiplayer && gmenu_is_active()) {
 		force_redraw |= 1;
 		return false;
@@ -190,7 +180,6 @@ bool ProcessInput()
 
 	if (!gmenu_is_active() && sgnTimeoutCurs == CURSOR_NONE) {
 		CheckCursMove();
-		plrctrls_after_check_curs_move();
 		RepeatMouseAction();
 	}
 
@@ -879,8 +868,7 @@ void DiabloParseFlags(int argc, char **argv)
 void DiabloInitScreen()
 {
 	MousePosition = { gnScreenWidth / 2, gnScreenHeight / 2 };
-	if (!sgbControllerActive)
-		SetCursorPos(MousePosition);
+	SetCursorPos(MousePosition);
 	ScrollInfo.tile = { 0, 0 };
 	ScrollInfo.offset = { 0, 0 };
 	ScrollInfo._sdir = ScrollDirection::None;
@@ -923,10 +911,6 @@ void DiabloInit()
 		}
 		strncpy(sgOptions.Chat.szHotKeyMsgs[i], _(QuickMessages[i].message), MAX_SEND_STR_LEN);
 	}
-
-#if defined(VIRTUAL_GAMEPAD)
-	InitializeVirtualGamepad();
-#endif
 
 	UiInitialize();
 	UiSetSpawned(gbIsSpawn);
@@ -1049,9 +1033,6 @@ void LoadLvlGFX()
 void LoadAllGFX()
 {
 	IncProgress();
-#if defined(VIRTUAL_GAMEPAD) && !defined(USE_SDL1)
-	InitVirtualGamepadGFX();
-#endif
 	IncProgress();
 	InitObjectGFX();
 	IncProgress();
@@ -1189,8 +1170,6 @@ void GameLogic()
 	CheckQuests();
 	force_redraw |= 1;
 	pfile_update(false);
-
-	plrctrls_after_game_logic();
 }
 
 void TimeoutCursor(bool bTimeout)
@@ -1516,9 +1495,6 @@ void FreeGameMem()
 	FreeObjectGFX();
 	FreeMonsterSnd();
 	FreeTownerGFX();
-#if defined(VIRTUAL_GAMEPAD) && !defined(USE_SDL1)
-	FreeVirtualGamepadGFX();
-#endif
 }
 
 bool StartGame(bool bNewGame, bool bSinglePlayer)
@@ -1853,9 +1829,6 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 			LoadAllGFX();
 		} else {
 			IncProgress();
-#if defined(VIRTUAL_GAMEPAD) && !defined(USE_SDL1)
-			InitVirtualGamepadGFX();
-#endif
 			IncProgress();
 			InitMissileGFX(gbIsHellfire);
 			IncProgress();
