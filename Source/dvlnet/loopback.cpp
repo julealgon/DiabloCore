@@ -1,5 +1,4 @@
 #include "dvlnet/loopback.h"
-#include "utils/language.h"
 #include "utils/stubs.h"
 
 namespace devilution {
@@ -108,7 +107,7 @@ bool loopback::SNetGetTurnsInTransit(uint32_t *turns)
 
 std::string loopback::make_default_gamename()
 {
-	return std::string(_("loopback"));
+	return std::string("loopback");
 }
 
 } // namespace net

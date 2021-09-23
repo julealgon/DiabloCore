@@ -17,7 +17,6 @@
 #include "storm/storm.h"
 #include "utils/endian.hpp"
 #include "utils/file_util.h"
-#include "utils/language.h"
 #include "utils/paths.h"
 
 namespace devilution {
@@ -257,7 +256,7 @@ PFileScopedArchiveWriter::PFileScopedArchiveWriter(bool clearTables)
     , clear_tables_(clearTables)
 {
 	if (!OpenArchive(save_num_))
-		app_fatal("%s", _("Failed to open player archive for writing."));
+		app_fatal("%s", "Failed to open player archive for writing.");
 }
 
 PFileScopedArchiveWriter::~PFileScopedArchiveWriter()
@@ -382,9 +381,9 @@ void pfile_read_player_from_save(uint32_t saveNum, Player &player)
 
 	archive = OpenSaveArchive(saveNum);
 	if (archive == nullptr)
-		app_fatal("%s", _("Unable to open archive"));
+		app_fatal("%s", "Unable to open archive");
 	if (!ReadHero(archive, &pkplr))
-		app_fatal("%s", _("Unable to load character"));
+		app_fatal("%s", "Unable to load character");
 
 	gbValidSaveFile = ArchiveContainsGame(archive);
 	if (gbValidSaveFile)
@@ -407,7 +406,7 @@ bool LevelFileExists()
 
 	uint32_t saveNum = gSaveNumber;
 	if (!OpenArchive(saveNum))
-		app_fatal("%s", _("Unable to read to save file archive"));
+		app_fatal("%s", "Unable to read to save file archive");
 
 	bool hasFile = mpqapi_has_file(szName);
 	mpqapi_flush_and_close(true);
@@ -427,7 +426,7 @@ void GetPermLevelNames(char *szPerm)
 	uint32_t saveNum = gSaveNumber;
 	GetTempLevelNames(szPerm);
 	if (!OpenArchive(saveNum))
-		app_fatal("%s", _("Unable to read to save file archive"));
+		app_fatal("%s", "Unable to read to save file archive");
 
 	bool hasFile = mpqapi_has_file(szPerm);
 	mpqapi_flush_and_close(true);
@@ -446,7 +445,7 @@ void pfile_remove_temp_files()
 
 	uint32_t saveNum = gSaveNumber;
 	if (!OpenArchive(saveNum))
-		app_fatal("%s", _("Unable to write to save file archive"));
+		app_fatal("%s", "Unable to write to save file archive");
 	mpqapi_remove_hash_entries(GetTempSaveNames);
 	mpqapi_flush_and_close(true);
 }

@@ -30,7 +30,6 @@
 #include "sync.h"
 #include "town.h"
 #include "trigs.h"
-#include "utils/language.h"
 
 namespace devilution {
 
@@ -481,7 +480,7 @@ void DeltaPutItem(TCmdPItem *pI, int x, int y, BYTE bLevel)
 		    && pD->dwSeed == pI->dwSeed) {
 			if (pD->bCmd == CMD_ACK_PLRINFO)
 				return;
-			app_fatal("%s", _("Trying to drop a floor item?"));
+			app_fatal("%s", "Trying to drop a floor item?");
 		}
 	}
 
@@ -948,7 +947,7 @@ DWORD OnSpellWall(TCmd *pCmd, Player &player)
 			player._pSplType = spellType;
 			player._pSplFrom = 0;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -972,7 +971,7 @@ DWORD OnSpellTile(TCmd *pCmd, Player &player)
 			player._pSplType = spellType;
 			player._pSplFrom = 0;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -995,7 +994,7 @@ DWORD OnTargetSpellTile(TCmd *pCmd, Player &player)
 			player._pSplType = RSPLTYPE_INVALID;
 			player._pSplFrom = 2;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -1110,7 +1109,7 @@ DWORD OnSpellMonster(TCmd *pCmd, Player &player)
 			player._pSplType = spellType;
 			player._pSplFrom = 0;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -1133,7 +1132,7 @@ DWORD OnSpellPlayer(TCmd *pCmd, Player &player)
 			player._pSplType = spellType;
 			player._pSplFrom = 0;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -1155,7 +1154,7 @@ DWORD OnTargetSpellMonster(TCmd *pCmd, Player &player)
 			player._pSplType = RSPLTYPE_INVALID;
 			player._pSplFrom = 2;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -1177,7 +1176,7 @@ DWORD OnTargetSpellPlayer(TCmd *pCmd, Player &player)
 			player._pSplType = RSPLTYPE_INVALID;
 			player._pSplFrom = 2;
 		} else {
-			PlayerMessageFormat(fmt::format(_("{:s} has cast an illegal spell."), player._pName).c_str());
+			PlayerMessageFormat(fmt::format("{:s} has cast an illegal spell.", player._pName).c_str());
 		}
 	}
 
@@ -1526,7 +1525,7 @@ DWORD OnPlayerJoinLevel(TCmd *pCmd, int pnum)
 		ResetPlayerGFX(player);
 		player.plractive = true;
 		gbActivePlayers++;
-		EventPlrMsg(fmt::format(_("Player '{:s}' (level {:d}) just joined the game"), player._pName, player._pLevel).c_str());
+		EventPlrMsg(fmt::format("Player '{:s}' (level {:d}) just joined the game", player._pName, player._pLevel).c_str());
 	}
 
 	if (player.plractive && MyPlayerId != pnum) {
@@ -1823,7 +1822,7 @@ bool msg_wait_resync()
 	sgbRecvCmd = CMD_DLEVEL_END;
 	gbBufferMsgs = 1;
 	sgdwOwnerWait = SDL_GetTicks();
-	success = UiProgressDialog(_("Waiting for game data..."), WaitForTurns);
+	success = UiProgressDialog("Waiting for game data...", WaitForTurns);
 	gbBufferMsgs = 0;
 	if (!success) {
 		FreePackets();
@@ -1831,13 +1830,13 @@ bool msg_wait_resync()
 	}
 
 	if (gbGameDestroyed) {
-		DrawDlg("%s", _("The game ended"));
+		DrawDlg("%s", "The game ended");
 		FreePackets();
 		return false;
 	}
 
 	if (sgbDeltaChunks != MAX_CHUNKS) {
-		DrawDlg("%s", _("Unable to get level data"));
+		DrawDlg("%s", "Unable to get level data");
 		FreePackets();
 		return false;
 	}

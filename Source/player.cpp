@@ -28,7 +28,6 @@
 #include "stores.h"
 #include "storm/storm.h"
 #include "towners.h"
-#include "utils/language.h"
 #include "utils/log.hpp"
 
 namespace devilution {
@@ -3029,7 +3028,7 @@ StartPlayerKill(int pnum, int earflag)
 					if (earflag != 0) {
 						Item ear;
 						SetPlrHandItem(ear, IDI_EAR);
-						strcpy(ear._iName, fmt::format(_("Ear of {:s}"), player._pName).c_str());
+						strcpy(ear._iName, fmt::format("Ear of {:s}", player._pName).c_str());
 						switch (player._pClass) {
 						case HeroClass::Sorcerer:
 							ear._iCurs = ICURS_EAR_SORCERER;

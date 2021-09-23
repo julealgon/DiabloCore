@@ -355,7 +355,7 @@ set(libdevilutionx_SRCS
   Source/utils/console.cpp
   Source/utils/display.cpp
   Source/utils/file_util.cpp
-  Source/utils/language.cpp
+  
   Source/utils/paths.cpp
   Source/utils/sdl_bilinear_scale.cpp
   Source/utils/sdl_thread.cpp
@@ -456,14 +456,6 @@ file(GENERATE OUTPUT ${CONFIG_PATH} CONTENT
 
 if(GPERF)
   find_package(Gperftools REQUIRED)
-endif()
-
-find_package(Gettext)
-if (Gettext_FOUND)
-  foreach(lang bg da de es fr hr it ko_KR pt_BR ru sv zh_CN zh_TW)
-    GETTEXT_PROCESS_PO_FILES(${lang} ALL PO_FILES ${CMAKE_CURRENT_LIST_DIR}/Translations/${lang}.po)
-    list(APPEND devilutionx_TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/${lang}.gmo)
-  endforeach(lang)
 endif()
 
 target_include_directories(libdevilutionx PUBLIC

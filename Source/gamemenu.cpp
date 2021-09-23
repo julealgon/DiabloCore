@@ -13,7 +13,6 @@
 #include "options.h"
 #include "pfile.h"
 #include "sound.h"
-#include "utils/language.h"
 
 namespace devilution {
 namespace {
@@ -32,11 +31,11 @@ void GamemenuSpeed(bool bActivate);
 TMenuItem sgSingleMenu[] = {
 	// clang-format off
     // dwFlags,      pszStr,              fnMenu
-	{ GMENU_ENABLED, N_("Save Game"),     &gamemenu_save_game  },
-	{ GMENU_ENABLED, N_("Options"),       &GamemenuOptions    },
-	{ GMENU_ENABLED, N_("New Game"),      &GamemenuNewGame   },
-	{ GMENU_ENABLED, N_("Load Game"),     &gamemenu_load_game  },
-	{ GMENU_ENABLED, N_("Quit Game"),     &gamemenu_quit_game  },
+	{ GMENU_ENABLED, "Save Game",     &gamemenu_save_game  },
+	{ GMENU_ENABLED, "Options",       &GamemenuOptions    },
+	{ GMENU_ENABLED, "New Game",      &GamemenuNewGame   },
+	{ GMENU_ENABLED, "Load Game",     &gamemenu_load_game  },
+	{ GMENU_ENABLED, "Quit Game",     &gamemenu_quit_game  },
 	{ GMENU_ENABLED, nullptr,              nullptr             }
 	// clang-format on
 };
@@ -44,10 +43,10 @@ TMenuItem sgSingleMenu[] = {
 TMenuItem sgMultiMenu[] = {
 	// clang-format off
     // dwFlags,      pszStr,                fnMenu
-	{ GMENU_ENABLED, N_("Options"),         &GamemenuOptions      },
-	{ GMENU_ENABLED, N_("New Game"),        &GamemenuNewGame     },
-	{ GMENU_ENABLED, N_("Restart In Town"), &GamemenuRestartTown },
-	{ GMENU_ENABLED, N_("Quit Game"),       &gamemenu_quit_game    },
+	{ GMENU_ENABLED, "Options",         &GamemenuOptions      },
+	{ GMENU_ENABLED, "New Game",        &GamemenuNewGame     },
+	{ GMENU_ENABLED, "Restart In Town", &GamemenuRestartTown },
+	{ GMENU_ENABLED, "Quit Game",       &gamemenu_quit_game    },
 	{ GMENU_ENABLED, nullptr,                nullptr               },
 	// clang-format on
 };
@@ -56,21 +55,21 @@ TMenuItem sgOptionsMenu[] = {
     // dwFlags,                     pszStr,              fnMenu
 	{ GMENU_ENABLED | GMENU_SLIDER, nullptr,             &GamemenuMusicVolume  },
 	{ GMENU_ENABLED | GMENU_SLIDER, nullptr,             &GamemenuSoundVolume  },
-	{ GMENU_ENABLED | GMENU_SLIDER, N_("Gamma"),         &GamemenuGamma         },
-	{ GMENU_ENABLED | GMENU_SLIDER, N_("Speed"),         &GamemenuSpeed         },
-	{ GMENU_ENABLED               , N_("Previous Menu"), &GamemenuPrevious      },
+	{ GMENU_ENABLED | GMENU_SLIDER, "Gamma",         &GamemenuGamma         },
+	{ GMENU_ENABLED | GMENU_SLIDER, "Speed",         &GamemenuSpeed         },
+	{ GMENU_ENABLED               , "Previous Menu", &GamemenuPrevious      },
 	{ GMENU_ENABLED               , nullptr,              nullptr                },
 	// clang-format on
 };
 /** Specifies the menu names for music enabled and disabled. */
 const char *const MusicToggleNames[] = {
-	N_("Music"),
-	N_("Music Disabled"),
+	"Music",
+	"Music Disabled",
 };
 /** Specifies the menu names for sound enabled and disabled. */
 const char *const SoundToggleNames[] = {
-	N_("Sound"),
-	N_("Sound Disabled"),
+	"Sound",
+	"Sound Disabled",
 };
 
 void GamemenuUpdateSingle()
@@ -152,19 +151,19 @@ void GamemenuGetSpeed()
 	if (gbIsMultiplayer) {
 		sgOptionsMenu[3].dwFlags &= ~(GMENU_ENABLED | GMENU_SLIDER);
 		if (sgGameInitInfo.nTickRate >= 50)
-			sgOptionsMenu[3].pszStr = _("Speed: Fastest");
+			sgOptionsMenu[3].pszStr = "Speed: Fastest";
 		else if (sgGameInitInfo.nTickRate >= 40)
-			sgOptionsMenu[3].pszStr = _("Speed: Faster");
+			sgOptionsMenu[3].pszStr = "Speed: Faster";
 		else if (sgGameInitInfo.nTickRate >= 30)
-			sgOptionsMenu[3].pszStr = _("Speed: Fast");
+			sgOptionsMenu[3].pszStr = "Speed: Fast";
 		else if (sgGameInitInfo.nTickRate == 20)
-			sgOptionsMenu[3].pszStr = _("Speed: Normal");
+			sgOptionsMenu[3].pszStr = "Speed: Normal";
 		return;
 	}
 
 	sgOptionsMenu[3].dwFlags |= GMENU_ENABLED | GMENU_SLIDER;
 
-	sgOptionsMenu[3].pszStr = _("Speed");
+	sgOptionsMenu[3].pszStr = "Speed";
 	gmenu_slider_steps(&sgOptionsMenu[3], 46);
 	gmenu_slider_set(&sgOptionsMenu[3], 20, 50, sgGameInitInfo.nTickRate);
 }

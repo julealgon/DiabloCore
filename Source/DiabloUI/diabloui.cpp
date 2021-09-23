@@ -21,7 +21,6 @@
 #include "utils/sdl_wrap.h"
 #include "utils/stubs.h"
 #include "utils/utf8.h"
-#include "utils/language.h"
 
 namespace devilution {
 

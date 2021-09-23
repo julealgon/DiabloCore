@@ -11,7 +11,6 @@
 #include "init.h"
 #include "minitext.h"
 #include "stores.h"
-#include "utils/language.h"
 #include "utils/stdcompat/string_view.hpp"
 
 namespace devilution {
@@ -23,75 +22,75 @@ namespace {
 unsigned int SkipLines;
 
 const char *const HelpText[] = {
-	N_("$Keyboard Shortcuts:"),
-	N_("F1:    Open Help Screen"),
-	N_("Esc:   Display Main Menu"),
-	N_("Tab:   Display Auto-map"),
-	N_("Space: Hide all info screens"),
-	N_("S: Open Speedbook"),
-	N_("B: Open Spellbook"),
-	N_("I: Open Inventory screen"),
-	N_("C: Open Character screen"),
-	N_("Q: Open Quest log"),
-	N_("F: Reduce screen brightness"),
-	N_("G: Increase screen brightness"),
-	N_("Z: Zoom Game Screen"),
-	N_("+ / -: Zoom Automap"),
-	N_("1 - 8: Use Belt item"),
-	N_("F5, F6, F7, F8:     Set hotkey for skill or spell"),
-	N_("Shift + Left Mouse Button: Attack without moving"),
-	N_("Shift + Left Mouse Button (on character screen): Assign all stat points"),
-	N_("Shift + Left Mouse Button (on inventory): Move item to belt or equip/unequip item"),
-	N_("Shift + Left Mouse Button (on belt): Move item to inventory"),
+	"$Keyboard Shortcuts:",
+	"F1:    Open Help Screen",
+	"Esc:   Display Main Menu",
+	"Tab:   Display Auto-map",
+	"Space: Hide all info screens",
+	"S: Open Speedbook",
+	"B: Open Spellbook",
+	"I: Open Inventory screen",
+	"C: Open Character screen",
+	"Q: Open Quest log",
+	"F: Reduce screen brightness",
+	"G: Increase screen brightness",
+	"Z: Zoom Game Screen",
+	"+ / -: Zoom Automap",
+	"1 - 8: Use Belt item",
+	"F5, F6, F7, F8:     Set hotkey for skill or spell",
+	"Shift + Left Mouse Button: Attack without moving",
+	"Shift + Left Mouse Button (on character screen): Assign all stat points",
+	"Shift + Left Mouse Button (on inventory): Move item to belt or equip/unequip item",
+	"Shift + Left Mouse Button (on belt): Move item to inventory",
 	"",
-	N_("$Movement:"),
-	N_("If you hold the mouse button down while moving, the character "
-	   "will continue to move in that direction."),
+	"$Movement:",
+	"If you hold the mouse button down while moving, the character "
+	   "will continue to move in that direction.",
 	"",
-	N_("$Combat:"),
-	N_("Holding down the shift key and then left-clicking allows the "
-	   "character to attack without moving."),
+	"$Combat:",
+	"Holding down the shift key and then left-clicking allows the "
+	   "character to attack without moving.",
 	"",
-	N_("$Auto-map:"),
-	N_("To access the auto-map, click the 'MAP' button on the "
+	"$Auto-map:",
+	"To access the auto-map, click the 'MAP' button on the "
 	   "Information Bar or press 'TAB' on the keyboard. Zooming in and "
 	   "out of the map is done with the + and - keys. Scrolling the map "
-	   "uses the arrow keys."),
+	   "uses the arrow keys.",
 	"",
-	N_("$Picking up Objects:"),
-	N_("Useable items that are small in size, such as potions or scrolls, "
+	"$Picking up Objects:",
+	"Useable items that are small in size, such as potions or scrolls, "
 	   "are automatically placed in your 'belt' located at the top of "
 	   "the Interface bar . When an item is placed in the belt, a small "
 	   "number appears in that box. Items may be used by either pressing "
-	   "the corresponding number or right-clicking on the item."),
+	   "the corresponding number or right-clicking on the item.",
 	"",
-	N_("$Gold"),
-	N_("You can select a specific amount of gold to drop by "
-	   "right-clicking on a pile of gold in your inventory."),
+	"$Gold",
+	"You can select a specific amount of gold to drop by "
+	   "right-clicking on a pile of gold in your inventory.",
 	"",
-	N_("$Skills & Spells:"),
-	N_("You can access your list of skills and spells by left-clicking on "
+	"$Skills & Spells:",
+	"You can access your list of skills and spells by left-clicking on "
 	   "the 'SPELLS' button in the interface bar. Memorized spells and "
 	   "those available through staffs are listed here. Left-clicking on "
 	   "the spell you wish to cast will ready the spell. A readied spell "
-	   "may be cast by simply right-clicking in the play area."),
+	   "may be cast by simply right-clicking in the play area.",
 	"",
-	N_("$Using the Speedbook for Spells"),
-	N_("Left-clicking on the 'readied spell' button will open the 'Speedbook' "
+	"$Using the Speedbook for Spells",
+	"Left-clicking on the 'readied spell' button will open the 'Speedbook' "
 	   "which allows you to select a skill or spell for immediate use. "
 	   "To use a readied skill or spell, simply right-click in the main play "
-	   "area."),
-	N_("Shift + Left-clicking on the 'select current spell' button will clear the readied spell"),
+	   "area.",
+	"Shift + Left-clicking on the 'select current spell' button will clear the readied spell",
 	"",
-	N_("$Setting Spell Hotkeys"),
-	N_("You can assign up to four Hotkeys for skills, spells or scrolls. "
+	"$Setting Spell Hotkeys",
+	"You can assign up to four Hotkeys for skills, spells or scrolls. "
 	   "Start by opening the 'speedbook' as described in the section above. "
 	   "Press the F5, F6, F7 or F8 keys after highlighting the spell you "
-	   "wish to assign."),
+	   "wish to assign.",
 	"",
-	N_("$Spell Books"),
-	N_("Reading more than one book increases your knowledge of that "
-	   "spell, allowing you to cast the spell more effectively."),
+	"$Spell Books",
+	"Reading more than one book increases your knowledge of that "
+	   "spell, allowing you to cast the spell more effectively.",
 };
 
 std::vector<std::string> HelpTextLines;
@@ -104,7 +103,7 @@ void InitHelp()
 	char tempString[512];
 
 	for (const auto *text : HelpText) {
-		strcpy(tempString, _(text));
+		strcpy(tempString, text);
 
 		WordWrapString(tempString, 577);
 		const string_view paragraph = tempString;
@@ -127,9 +126,9 @@ void DrawHelp(const Surface &out)
 
 	const char *title;
 	if (gbIsHellfire)
-		title = gbIsSpawn ? _("Shareware Hellfire Help") : _("Hellfire Help");
+		title = gbIsSpawn ? "Shareware Hellfire Help" : "Hellfire Help";
 	else
-		title = gbIsSpawn ? _("Shareware Diablo Help") : _("Diablo Help");
+		title = gbIsSpawn ? "Shareware Diablo Help" : "Diablo Help";
 	PrintSString(out, 0, 2, title, UiFlags::ColorWhitegold | UiFlags::AlignCenter);
 
 	DrawSLine(out, 5);
@@ -153,7 +152,7 @@ void DrawHelp(const Surface &out)
 		DrawString(out, &line[offset], { { sx, sy + i * 12 }, { 577, 12 } }, style);
 	}
 
-	PrintSString(out, 0, 23, _("Press ESC to end or the arrow keys to scroll."), UiFlags::ColorWhitegold | UiFlags::AlignCenter);
+	PrintSString(out, 0, 23, "Press ESC to end or the arrow keys to scroll.", UiFlags::ColorWhitegold | UiFlags::AlignCenter);
 }
 
 void DisplayHelp()

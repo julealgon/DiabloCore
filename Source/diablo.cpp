@@ -62,7 +62,6 @@
 #include "track.h"
 #include "trigs.h"
 #include "utils/console.h"
-#include "utils/language.h"
 #include "utils/paths.h"
 
 #ifdef GPERF_HEAP_FIRST_GAME_ITERATION
@@ -103,10 +102,10 @@ std::vector<std::string> DebugCmdsFromCommandLine;
 bool gbFriendlyMode = true;
 GameLogicStep gGameLogicStep = GameLogicStep::None;
 QuickMessage QuickMessages[QUICK_MESSAGE_OPTIONS] = {
-	{ "QuickMessage1", N_("I need help! Come Here!") },
-	{ "QuickMessage2", N_("Follow me.") },
-	{ "QuickMessage3", N_("Here's something for you.") },
-	{ "QuickMessage4", N_("Now you DIE!") }
+	{ "QuickMessage1", "I need help! Come Here!" },
+	{ "QuickMessage2", "Follow me." },
+	{ "QuickMessage3", "Here's something for you." },
+	{ "QuickMessage4", "Now you DIE!" }
 };
 
 /** This and the following mouse variables are for handling in-game click-and-hold actions */
@@ -757,31 +756,31 @@ void RunGameLoop(interface_mode uMsg)
 
 [[noreturn]] void PrintHelpAndExit()
 {
-	printInConsole("%s", _(/* TRANSLATORS: Commandline Option */ "Options:\n"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "-h, --help", _("Print this message and exit"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--version", _("Print the version and exit"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--data-dir", _("Specify the folder of diabdat.mpq"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--save-dir", _("Specify the folder of save files"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--config-dir", _("Specify the location of diablo.ini"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--ttf-dir", _("Specify the location of the .ttf font"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--ttf-name", _("Specify the name of a custom .ttf font"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "-n", _("Skip startup videos"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "-f", _("Display frames per second"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "-x", _("Run in windowed mode"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--verbose", _("Enable verbose logging"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--spawn", _("Force spawn mode even if diabdat.mpq is found"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--record <#>", _("Record a demo file"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--demo <#>", _("Play a demo file"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--timedemo", _("Disable all frame limiting during demo playback"));
-	printInConsole("%s", _(/* TRANSLATORS: Commandline Option */ "\nHellfire options:\n"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--diablo", _("Force diablo mode even if hellfire.mpq is found"));
-	printInConsole("    %-20s %-30s\n", /* TRANSLATORS: Commandline Option */ "--nestart", _("Use alternate nest palette"));
+	printInConsole("%s", "Options:\n");
+	printInConsole("    %-20s %-30s\n", "-h, --help", "Print this message and exit");
+	printInConsole("    %-20s %-30s\n", "--version", "Print the version and exit");
+	printInConsole("    %-20s %-30s\n", "--data-dir", "Specify the folder of diabdat.mpq");
+	printInConsole("    %-20s %-30s\n", "--save-dir", "Specify the folder of save files");
+	printInConsole("    %-20s %-30s\n", "--config-dir", "Specify the location of diablo.ini");
+	printInConsole("    %-20s %-30s\n", "--ttf-dir", "Specify the location of the .ttf font");
+	printInConsole("    %-20s %-30s\n", "--ttf-name", "Specify the name of a custom .ttf font");
+	printInConsole("    %-20s %-30s\n", "-n", "Skip startup videos");
+	printInConsole("    %-20s %-30s\n", "-f", "Display frames per second");
+	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
+	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
+	printInConsole("    %-20s %-30s\n", "--spawn", "Force spawn mode even if diabdat.mpq is found");
+	printInConsole("    %-20s %-30s\n", "--record <#>", "Record a demo file");
+	printInConsole("    %-20s %-30s\n", "--demo <#>", "Play a demo file");
+	printInConsole("    %-20s %-30s\n", "--timedemo", "Disable all frame limiting during demo playback");
+	printInConsole("%s", "\nHellfire options:\n");
+	printInConsole("    %-20s %-30s\n", "--diablo", "Force diablo mode even if hellfire.mpq is found");
+	printInConsole("    %-20s %-30s\n", "--nestart", "Use alternate nest palette");
 #ifdef _DEBUG
 	printInConsole("\nDebug options:\n");
 	printInConsole("    %-20s %-30s\n", "-i", "Ignore network timeout");
 	printInConsole("    %-20s %-30s\n", "+<internal command>", "Pass commands to the engine");
 #endif
-	printInConsole("%s", _("\nReport bugs at https://github.com/diasurgical/devilutionX/\n"));
+	printInConsole("%s", "\nReport bugs at https://github.com/diasurgical/devilutionX/\n");
 	diablo_quit(0);
 }
 
@@ -849,7 +848,7 @@ void DiabloParseFlags(int argc, char **argv)
 			argumentIndexOfLastCommandPart = i;
 #endif
 		} else {
-			printInConsole("%s", fmt::format(_("unrecognized option '{:s}'\n"), argv[i]).c_str());
+			printInConsole("%s", fmt::format("unrecognized option '{:s}'\n", argv[i]).c_str());
 			PrintHelpAndExit();
 		}
 	}
@@ -879,7 +878,7 @@ void DiabloInitScreen()
 void SetApplicationVersions()
 {
 	snprintf(gszProductName, sizeof(gszProductName) / sizeof(char), "%s v%s", PROJECT_NAME, PROJECT_VERSION);
-	strncpy(gszVersionNumber, fmt::format(_("version {:s}"), PROJECT_VERSION).c_str(), sizeof(gszVersionNumber) / sizeof(char));
+	strncpy(gszVersionNumber, fmt::format("version {:s}", PROJECT_VERSION).c_str(), sizeof(gszVersionNumber) / sizeof(char));
 }
 
 void DiabloInit()
@@ -901,15 +900,13 @@ void DiabloInit()
 
 	gbIsHellfireSaveGame = gbIsHellfire;
 
-	LanguageInitialize();
-
 	SetApplicationVersions();
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++) {
 		if (strlen(sgOptions.Chat.szHotKeyMsgs[i]) != 0) {
 			continue;
 		}
-		strncpy(sgOptions.Chat.szHotKeyMsgs[i], _(QuickMessages[i].message), MAX_SEND_STR_LEN);
+		strncpy(sgOptions.Chat.szHotKeyMsgs[i], QuickMessages[i].message, MAX_SEND_STR_LEN);
 	}
 
 	UiInitialize();
@@ -1179,8 +1176,8 @@ void TimeoutCursor(bool bTimeout)
 			sgnTimeoutCurs = pcurs;
 			multi_net_ping();
 			ClearPanel();
-			AddPanelString(_("-- Network timeout --"));
-			AddPanelString(_("-- Waiting for players --"));
+			AddPanelString("-- Network timeout --");
+			AddPanelString("-- Waiting for players --");
 			NewCursor(CURSOR_HOURGLASS);
 			force_redraw = 255;
 		}
@@ -1199,8 +1196,8 @@ void HelpKeyPressed()
 		HelpFlag = false;
 	} else if (stextflag != STORE_NONE) {
 		ClearPanel();
-		AddPanelString(_("No help available")); /// BUGFIX: message isn't displayed
-		AddPanelString(_("while in stores"));
+		AddPanelString("No help available"); /// BUGFIX: message isn't displayed
+		AddPanelString("while in stores");
 		LastMouseButtonAction = MouseActionType::None;
 	} else {
 		invflag = false;
@@ -1407,12 +1404,11 @@ void InitKeymapActions()
 	    [] {
 		    char pszStr[120];
 		    const char *difficulties[3] = {
-			    _("Normal"),
-			    _("Nightmare"),
-			    _("Hell"),
+			    "Normal",
+			    "Nightmare",
+			    "Hell",
 		    };
-		    strcpy(pszStr, fmt::format(_(/* TRANSLATORS: {:s} means: Character Name, Game Version, Game Difficulty. */
-		                                   "{:s}, version = {:s}, mode = {:s}"),
+		    strcpy(pszStr, fmt::format("{:s}, version = {:s}, mode = {:s}",
 		                       gszProductName, PROJECT_VERSION, difficulties[sgGameInitInfo.nDifficulty])
 		                       .c_str());
 		    NetSendCmdString(1 << MyPlayerId, pszStr);

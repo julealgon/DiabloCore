@@ -4,7 +4,6 @@
 #include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "utils/display.h"
-#include "utils/language.h"
 #include "utils/sdl_compat.h"
 #include "utils/sdl_geometry.h"
 
@@ -59,7 +58,7 @@ void RenderMainButton(int buttonId, const char *text, int frame)
 
 void DrawTalkButton(int buttonId)
 {
-	const char *text = _("voice");
+	const char *text = "voice";
 	Point position { 176, PANEL_HEIGHT + 101 + 18 * buttonId };
 	DrawArt(*pBtmBuff, position, &TalkButton);
 	int width = std::min(GetLineWidth(text, GameFont12, 1), PanelButton.w());
@@ -84,12 +83,12 @@ void LoadMainPanel()
 	LoadFont(GameFont12, ColorButtonface);
 	LoadFont(GameFont12, ColorButtonpushed);
 
-	RenderMainButton(0, _("char"), 0);
-	RenderMainButton(1, _("quests"), 1);
-	RenderMainButton(2, _("map"), 1);
-	RenderMainButton(3, _("menu"), 0);
-	RenderMainButton(4, _("inv"), 1);
-	RenderMainButton(5, _("spells"), 0);
+	RenderMainButton(0, "char", 0);
+	RenderMainButton(1, "quests", 1);
+	RenderMainButton(2, "map", 1);
+	RenderMainButton(3, "menu", 0);
+	RenderMainButton(4, "inv", 1);
+	RenderMainButton(5, "spells", 0);
 
 	if (IsChatAvailable()) {
 		LoadArt("data\\talkbutton.pcx", &TalkButton, 3);
@@ -101,14 +100,14 @@ void LoadMainPanel()
 		DrawTalkButton(2);
 
 		const Surface talkSurface(TalkButton.surface.get());
-		int muteWidth = GetLineWidth(_("mute"), GameFont12, 2);
+		int muteWidth = GetLineWidth("mute", GameFont12, 2);
 		DrawArt(talkSurface, { (TalkButton.w() - muteWidth) / 2, 6 }, &PanelButtonGrime, 1, muteWidth, 9);
-		DrawButtonText(talkSurface, _("mute"), { { 0, 0 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonface);
+		DrawButtonText(talkSurface, "mute", { { 0, 0 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonface);
 		DrawArt(talkSurface, { (TalkButton.w() - muteWidth) / 2, 23 }, &PanelButtonGrime, 1, muteWidth, 9);
-		DrawButtonText(talkSurface, _("mute"), { { 0, 17 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonpushed);
-		int voiceWidth = GetLineWidth(_("voice"), GameFont12, 2);
+		DrawButtonText(talkSurface, "mute", { { 0, 17 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonpushed);
+		int voiceWidth = GetLineWidth("voice", GameFont12, 2);
 		DrawArt(talkSurface, { (TalkButton.w() - voiceWidth) / 2, 39 }, &PanelButtonGrime, 1, voiceWidth, 9);
-		DrawButtonText(talkSurface, _("voice"), { { 0, 33 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonpushed);
+		DrawButtonText(talkSurface, "voice", { { 0, 33 }, { TalkButton.w(), 0 } }, UiFlags::ColorButtonpushed);
 	}
 
 	UnloadFont(GameFont12, ColorButtonface);

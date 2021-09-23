@@ -3,7 +3,6 @@
 #include "DiabloUI/diabloui.h"
 #include "stores.h"
 #include "storm/storm.h"
-#include "utils/language.h"
 
 namespace devilution {
 
@@ -35,45 +34,45 @@ void SelconnLoad()
 	vecConnItems.push_back(std::make_unique<UiListItem>("Zerotier", SELCONN_ZT));
 #endif
 #ifndef DISABLE_TCP
-	vecConnItems.push_back(std::make_unique<UiListItem>(_("Client-Server (TCP)"), SELCONN_TCP));
+	vecConnItems.push_back(std::make_unique<UiListItem>("Client-Server (TCP)", SELCONN_TCP));
 #endif
 #endif
-	vecConnItems.push_back(std::make_unique<UiListItem>(_("Loopback"), SELCONN_LOOPBACK));
+	vecConnItems.push_back(std::make_unique<UiListItem>("Loopback", SELCONN_LOOPBACK));
 
 	UiAddBackground(&vecSelConnDlg);
 	UiAddLogo(&vecSelConnDlg);
 
 	SDL_Rect rect1 = { (Sint16)(PANEL_LEFT + 24), (Sint16)(Sint16)(UI_OFFSET_Y + 161), 590, 35 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtText>(_("Multi Player Game"), rect1, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
+	vecSelConnDlg.push_back(std::make_unique<UiArtText>("Multi Player Game", rect1, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
 
 	SDL_Rect rect2 = { (Sint16)(PANEL_LEFT + 35), (Sint16)(UI_OFFSET_Y + 218), DESCRIPTION_WIDTH, 21 };
 	vecSelConnDlg.push_back(std::make_unique<UiArtText>(selconn_MaxPlayers, rect2, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
 
 	SDL_Rect rect3 = { (Sint16)(PANEL_LEFT + 35), (Sint16)(UI_OFFSET_Y + 256), DESCRIPTION_WIDTH, 21 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtText>(_("Requirements:"), rect3, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
+	vecSelConnDlg.push_back(std::make_unique<UiArtText>("Requirements:", rect3, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
 
 	SDL_Rect rect4 = { (Sint16)(PANEL_LEFT + 35), (Sint16)(UI_OFFSET_Y + 275), DESCRIPTION_WIDTH, 66 };
 	vecSelConnDlg.push_back(std::make_unique<UiArtText>(selconn_Description, rect4, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark, 1, 16));
 
 	SDL_Rect rect5 = { (Sint16)(PANEL_LEFT + 30), (Sint16)(UI_OFFSET_Y + 356), 220, 31 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtText>(_("no gateway needed"), rect5, UiFlags::AlignCenter | UiFlags::FontSize24 | UiFlags::ColorUiSilver, 0));
+	vecSelConnDlg.push_back(std::make_unique<UiArtText>("no gateway needed", rect5, UiFlags::AlignCenter | UiFlags::FontSize24 | UiFlags::ColorUiSilver, 0));
 
 	SDL_Rect rect6 = { (Sint16)(PANEL_LEFT + 35), (Sint16)(UI_OFFSET_Y + 393), DESCRIPTION_WIDTH, 21 };
 	vecSelConnDlg.push_back(std::make_unique<UiArtText>(selconn_Gateway, rect6, UiFlags::AlignCenter | UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
 
 	SDL_Rect rect7 = { (Sint16)(PANEL_LEFT + 300), (Sint16)(UI_OFFSET_Y + 211), 295, 33 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtText>(_("Select Connection"), rect7, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
+	vecSelConnDlg.push_back(std::make_unique<UiArtText>("Select Connection", rect7, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
 
 	SDL_Rect rect8 = { (Sint16)(PANEL_LEFT + 16), (Sint16)(UI_OFFSET_Y + 427), 250, 35 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>(_("Change Gateway"), nullptr, rect8, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold | UiFlags::ElementHidden));
+	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>("Change Gateway", nullptr, rect8, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold | UiFlags::ElementHidden));
 
 	vecSelConnDlg.push_back(std::make_unique<UiList>(vecConnItems, PANEL_LEFT + 305, (UI_OFFSET_Y + 256), 285, 26, UiFlags::AlignCenter | UiFlags::FontSize12 | UiFlags::VerticalCenter | UiFlags::ColorUiGoldDark));
 
 	SDL_Rect rect9 = { (Sint16)(PANEL_LEFT + 299), (Sint16)(UI_OFFSET_Y + 427), 140, 35 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>(_("OK"), &UiFocusNavigationSelect, rect9, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
+	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>("OK", &UiFocusNavigationSelect, rect9, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
 
 	SDL_Rect rect10 = { (Sint16)(PANEL_LEFT + 454), (Sint16)(UI_OFFSET_Y + 427), 140, 35 };
-	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>(_("Cancel"), &UiFocusNavigationEsc, rect10, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
+	vecSelConnDlg.push_back(std::make_unique<UiArtTextButton>("Cancel", &UiFocusNavigationEsc, rect10, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
 
 	UiInitList(vecConnItems.size(), SelconnFocus, SelconnSelect, SelconnEsc, vecSelConnDlg, true);
 }
@@ -98,20 +97,20 @@ void SelconnFocus(int value)
 	int players = MAX_PLRS;
 	switch (vecConnItems[value]->m_value) {
 	case SELCONN_TCP:
-		strncpy(selconn_Description, _("All computers must be connected to a TCP-compatible network."), sizeof(selconn_Description) - 1);
+		strncpy(selconn_Description, "All computers must be connected to a TCP-compatible network.", sizeof(selconn_Description) - 1);
 		players = MAX_PLRS;
 		break;
 	case SELCONN_ZT:
-		strncpy(selconn_Description, _("All computers must be connected to the internet."), sizeof(selconn_Description) - 1);
+		strncpy(selconn_Description, "All computers must be connected to the internet.", sizeof(selconn_Description) - 1);
 		players = MAX_PLRS;
 		break;
 	case SELCONN_LOOPBACK:
-		strncpy(selconn_Description, _("Play by yourself with no network exposure."), sizeof(selconn_Description) - 1);
+		strncpy(selconn_Description, "Play by yourself with no network exposure.", sizeof(selconn_Description) - 1);
 		players = 1;
 		break;
 	}
 
-	strncpy(selconn_MaxPlayers, fmt::format(_("Players Supported: {:d}"), players).c_str(), sizeof(selconn_MaxPlayers));
+	strncpy(selconn_MaxPlayers, fmt::format("Players Supported: {:d}", players).c_str(), sizeof(selconn_MaxPlayers));
 	WordWrapString(selconn_Description, DESCRIPTION_WIDTH);
 }
 

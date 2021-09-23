@@ -130,11 +130,6 @@ struct ChatOptions {
 	char szHotKeyMsgs[QUICK_MESSAGE_OPTIONS][MAX_SEND_STR_LEN];
 };
 
-struct LanguageOptions {
-	/** @brief Language code (IETF) for text. */
-	char szCode[5];
-};
-
 struct Options {
 	DiabloOptions Diablo;
 	HellfireOptions Hellfire;
@@ -143,7 +138,6 @@ struct Options {
 	GraphicsOptions Graphics;
 	NetworkOptions Network;
 	ChatOptions Chat;
-	LanguageOptions Language;
 };
 
 bool GetIniValue(const char *sectionName, const char *keyName, char *string, int stringSize, const char *defaultString = "");

@@ -23,7 +23,6 @@
 #include "setmaps.h"
 #include "spells.h"
 #include "towners.h"
-#include "utils/language.h"
 #include "quests.h"
 
 namespace devilution {

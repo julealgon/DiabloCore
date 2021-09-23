@@ -13,7 +13,6 @@
 #include "dx.h"
 #include "pfile.h"
 #include "storm/storm.h"
-#include "utils/language.h"
 #include "utils/log.hpp"
 #include "utils/paths.h"
 #include "utils/ui_fwd.h"
@@ -196,7 +195,7 @@ void init_archives()
 	hfopt2_mpq = LoadMPQ(paths, "hfopt2.mpq");
 
 	if (gbIsHellfire && (hfmonk_mpq == nullptr || hfmusic_mpq == nullptr || hfvoice_mpq == nullptr)) {
-		UiErrorOkDialog(_("Some Hellfire MPQs are missing"), _("Not all Hellfire MPQs were found.\nPlease copy all the hf*.mpq files."));
+		UiErrorOkDialog("Some Hellfire MPQs are missing", "Not all Hellfire MPQs were found.\nPlease copy all the hf*.mpq files.");
 		app_fatal(nullptr);
 	}
 
@@ -206,7 +205,7 @@ void init_archives()
 void init_create_window()
 {
 	if (!SpawnWindow(PROJECT_NAME))
-		app_fatal("%s", _("Unable to create main window"));
+		app_fatal("%s", "Unable to create main window");
 	dx_init();
 	gbActive = true;
 	SDL_DisableScreenSaver();

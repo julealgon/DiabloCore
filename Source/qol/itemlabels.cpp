@@ -12,7 +12,6 @@
 #include "gmenu.h"
 #include "inv.h"
 #include "itemlabels.h"
-#include "utils/language.h"
 
 namespace devilution {
 
@@ -67,7 +66,7 @@ void AddItemToLabelQueue(int id, int x, int y)
 
 	const char *textOnGround;
 	if (item._itype == ItemType::Gold) {
-		std::sprintf(tempstr, _("%i gold"), item._ivalue);
+		std::sprintf(tempstr, "%i gold", item._ivalue);
 		textOnGround = tempstr;
 	} else {
 		textOnGround = item._iIdentified ? item._iIName : item._iName;

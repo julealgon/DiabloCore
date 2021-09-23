@@ -28,7 +28,6 @@
 #include "themes.h"
 #include "towners.h"
 #include "track.h"
-#include "utils/language.h"
 #include "utils/log.hpp"
 
 namespace devilution {
@@ -97,42 +96,40 @@ int bxadd[8] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 int byadd[8] = { -1, -1, -1, 0, 0, 1, 1, 1 };
 /** Maps from shrine_id to shrine name. */
 const char *const ShrineNames[] = {
-	// TRANSLATORS: Shrine Name Block
-	N_("Mysterious"),
-	N_("Hidden"),
-	N_("Gloomy"),
-	N_("Weird"),
-	N_("Magical"),
-	N_("Stone"),
-	N_("Religious"),
-	N_("Enchanted"),
-	N_("Thaumaturgic"),
-	N_("Fascinating"),
-	N_("Cryptic"),
-	N_("Magical"),
-	N_("Eldritch"),
-	N_("Eerie"),
-	N_("Divine"),
-	N_("Holy"),
-	N_("Sacred"),
-	N_("Spiritual"),
-	N_("Spooky"),
-	N_("Abandoned"),
-	N_("Creepy"),
-	N_("Quiet"),
-	N_("Secluded"),
-	N_("Ornate"),
-	N_("Glimmering"),
-	N_("Tainted"),
-	N_("Oily"),
-	N_("Glowing"),
-	N_("Mendicant's"),
-	N_("Sparkling"),
-	N_("Town"),
-	N_("Shimmering"),
-	N_("Solar"),
-	// TRANSLATORS: Shrine Name Block end
-	N_("Murphy's"),
+	"Mysterious",
+	"Hidden",
+	"Gloomy",
+	"Weird",
+	"Magical",
+	"Stone",
+	"Religious",
+	"Enchanted",
+	"Thaumaturgic",
+	"Fascinating",
+	"Cryptic",
+	"Magical",
+	"Eldritch",
+	"Eerie",
+	"Divine",
+	"Holy",
+	"Sacred",
+	"Spiritual",
+	"Spooky",
+	"Abandoned",
+	"Creepy",
+	"Quiet",
+	"Secluded",
+	"Ornate",
+	"Glimmering",
+	"Tainted",
+	"Oily",
+	"Glowing",
+	"Mendicant's",
+	"Sparkling",
+	"Town",
+	"Shimmering",
+	"Solar",
+	"Murphy's",
 };
 /** Specifies the minimum dungeon level on which each shrine will appear. */
 char shrinemin[] = {
@@ -262,22 +259,22 @@ shrine_gametype shrineavail[] = {
 };
 /** Maps from book_id to book name. */
 const char *const StoryBookName[] = {
-	N_(/* TRANSLATORS: Book Title */ "The Great Conflict"),
-	N_(/* TRANSLATORS: Book Title */ "The Wages of Sin are War"),
-	N_(/* TRANSLATORS: Book Title */ "The Tale of the Horadrim"),
-	N_(/* TRANSLATORS: Book Title */ "The Dark Exile"),
-	N_(/* TRANSLATORS: Book Title */ "The Sin War"),
-	N_(/* TRANSLATORS: Book Title */ "The Binding of the Three"),
-	N_(/* TRANSLATORS: Book Title */ "The Realms Beyond"),
-	N_(/* TRANSLATORS: Book Title */ "Tale of the Three"),
-	N_(/* TRANSLATORS: Book Title */ "The Black King"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: The Ensorcellment"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: The Meeting"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: The Tirade"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: His Power Grows"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: NA-KRUL"),
-	N_(/* TRANSLATORS: Book Title */ "Journal: The End"),
-	N_(/* TRANSLATORS: Book Title */ "A Spellbook"),
+	"The Great Conflict",
+	"The Wages of Sin are War",
+	"The Tale of the Horadrim",
+	"The Dark Exile",
+	"The Sin War",
+	"The Binding of the Three",
+	"The Realms Beyond",
+	"Tale of the Three",
+	"The Black King",
+	"Journal: The Ensorcellment",
+	"Journal: The Meeting",
+	"Journal: The Tirade",
+	"Journal: His Power Grows",
+	"Journal: NA-KRUL",
+	"Journal: The End",
+	"A Spellbook",
 };
 /** Specifies the speech IDs of each dungeon type narrator book, for each player class. */
 _speech_id StoryText[3][3] = {
@@ -5358,11 +5355,11 @@ void GetObjectStr(int i)
 	case OBJ_CRUX1:
 	case OBJ_CRUX2:
 	case OBJ_CRUX3:
-		strcpy(infostr, _("Crucified Skeleton"));
+		strcpy(infostr, "Crucified Skeleton");
 		break;
 	case OBJ_LEVER:
 	case OBJ_FLAMELVR:
-		strcpy(infostr, _("Lever"));
+		strcpy(infostr, "Lever");
 		break;
 	case OBJ_L1LDOOR:
 	case OBJ_L1RDOOR:
@@ -5371,137 +5368,137 @@ void GetObjectStr(int i)
 	case OBJ_L3LDOOR:
 	case OBJ_L3RDOOR:
 		if (Objects[i]._oVar4 == 1)
-			strcpy(infostr, _("Open Door"));
+			strcpy(infostr, "Open Door");
 		if (Objects[i]._oVar4 == 0)
-			strcpy(infostr, _("Closed Door"));
+			strcpy(infostr, "Closed Door");
 		if (Objects[i]._oVar4 == 2)
-			strcpy(infostr, _("Blocked Door"));
+			strcpy(infostr, "Blocked Door");
 		break;
 	case OBJ_BOOK2L:
 		if (setlevel) {
 			if (setlvlnum == SL_BONECHAMB) {
-				strcpy(infostr, _("Ancient Tome"));
+				strcpy(infostr, "Ancient Tome");
 			} else if (setlvlnum == SL_VILEBETRAYER) {
-				strcpy(infostr, _("Book of Vileness"));
+				strcpy(infostr, "Book of Vileness");
 			}
 		}
 		break;
 	case OBJ_SWITCHSKL:
-		strcpy(infostr, _("Skull Lever"));
+		strcpy(infostr, "Skull Lever");
 		break;
 	case OBJ_BOOK2R:
-		strcpy(infostr, _("Mythical Book"));
+		strcpy(infostr, "Mythical Book");
 		break;
 	case OBJ_CHEST1:
 	case OBJ_TCHEST1:
-		strcpy(infostr, _("Small Chest"));
+		strcpy(infostr, "Small Chest");
 		break;
 	case OBJ_CHEST2:
 	case OBJ_TCHEST2:
-		strcpy(infostr, _("Chest"));
+		strcpy(infostr, "Chest");
 		break;
 	case OBJ_CHEST3:
 	case OBJ_TCHEST3:
 	case OBJ_SIGNCHEST:
-		strcpy(infostr, _("Large Chest"));
+		strcpy(infostr, "Large Chest");
 		break;
 	case OBJ_SARC:
-		strcpy(infostr, _("Sarcophagus"));
+		strcpy(infostr, "Sarcophagus");
 		break;
 	case OBJ_BOOKSHELF:
-		strcpy(infostr, _("Bookshelf"));
+		strcpy(infostr, "Bookshelf");
 		break;
 	case OBJ_BOOKCASEL:
 	case OBJ_BOOKCASER:
-		strcpy(infostr, _("Bookcase"));
+		strcpy(infostr, "Bookcase");
 		break;
 	case OBJ_BARREL:
 	case OBJ_BARRELEX:
 		if (currlevel >= 17 && currlevel <= 20)      // for hive levels
-			strcpy(infostr, _("Pod"));               //Then a barrel is called a pod
+			strcpy(infostr, "Pod");               //Then a barrel is called a pod
 		else if (currlevel >= 21 && currlevel <= 24) // for crypt levels
-			strcpy(infostr, _("Urn"));               //Then a barrel is called an urn
+			strcpy(infostr, "Urn");               //Then a barrel is called an urn
 		else
-			strcpy(infostr, _("Barrel"));
+			strcpy(infostr, "Barrel");
 		break;
 	case OBJ_SHRINEL:
 	case OBJ_SHRINER:
-		strcpy(tempstr, fmt::format(_(/* TRANSLATORS: {:s} will be a name from the Shrine block above */ "{:s} Shrine"), _(ShrineNames[Objects[i]._oVar1])).c_str());
+		strcpy(tempstr, fmt::format("{:s} Shrine", ShrineNames[Objects[i]._oVar1]).c_str());
 		strcpy(infostr, tempstr);
 		break;
 	case OBJ_SKELBOOK:
-		strcpy(infostr, _("Skeleton Tome"));
+		strcpy(infostr, "Skeleton Tome");
 		break;
 	case OBJ_BOOKSTAND:
-		strcpy(infostr, _("Library Book"));
+		strcpy(infostr, "Library Book");
 		break;
 	case OBJ_BLOODFTN:
-		strcpy(infostr, _("Blood Fountain"));
+		strcpy(infostr, "Blood Fountain");
 		break;
 	case OBJ_DECAP:
-		strcpy(infostr, _("Decapitated Body"));
+		strcpy(infostr, "Decapitated Body");
 		break;
 	case OBJ_BLINDBOOK:
-		strcpy(infostr, _("Book of the Blind"));
+		strcpy(infostr, "Book of the Blind");
 		break;
 	case OBJ_BLOODBOOK:
-		strcpy(infostr, _("Book of Blood"));
+		strcpy(infostr, "Book of Blood");
 		break;
 	case OBJ_PURIFYINGFTN:
-		strcpy(infostr, _("Purifying Spring"));
+		strcpy(infostr, "Purifying Spring");
 		break;
 	case OBJ_ARMORSTAND:
 	case OBJ_WARARMOR:
-		strcpy(infostr, _("Armor"));
+		strcpy(infostr, "Armor");
 		break;
 	case OBJ_WARWEAP:
-		strcpy(infostr, _("Weapon Rack"));
+		strcpy(infostr, "Weapon Rack");
 		break;
 	case OBJ_GOATSHRINE:
-		strcpy(infostr, _("Goat Shrine"));
+		strcpy(infostr, "Goat Shrine");
 		break;
 	case OBJ_CAULDRON:
-		strcpy(infostr, _("Cauldron"));
+		strcpy(infostr, "Cauldron");
 		break;
 	case OBJ_MURKYFTN:
-		strcpy(infostr, _("Murky Pool"));
+		strcpy(infostr, "Murky Pool");
 		break;
 	case OBJ_TEARFTN:
-		strcpy(infostr, _("Fountain of Tears"));
+		strcpy(infostr, "Fountain of Tears");
 		break;
 	case OBJ_STEELTOME:
-		strcpy(infostr, _("Steel Tome"));
+		strcpy(infostr, "Steel Tome");
 		break;
 	case OBJ_PEDISTAL:
-		strcpy(infostr, _("Pedestal of Blood"));
+		strcpy(infostr, "Pedestal of Blood");
 		break;
 	case OBJ_STORYBOOK:
-		strcpy(infostr, _(StoryBookName[Objects[i]._oVar3]));
+		strcpy(infostr, StoryBookName[Objects[i]._oVar3]);
 		break;
 	case OBJ_WEAPONRACK:
-		strcpy(infostr, _("Weapon Rack"));
+		strcpy(infostr, "Weapon Rack");
 		break;
 	case OBJ_MUSHPATCH:
-		strcpy(infostr, _("Mushroom Patch"));
+		strcpy(infostr, "Mushroom Patch");
 		break;
 	case OBJ_LAZSTAND:
-		strcpy(infostr, _("Vile Stand"));
+		strcpy(infostr, "Vile Stand");
 		break;
 	case OBJ_SLAINHERO:
-		strcpy(infostr, _("Slain Hero"));
+		strcpy(infostr, "Slain Hero");
 		break;
 	default:
 		break;
 	}
 	if (Players[MyPlayerId]._pClass == HeroClass::Rogue) {
 		if (Objects[i]._oTrapFlag) {
-			strcpy(tempstr, fmt::format(_(/* TRANSLATORS: {:s} will either be a chest or a door */ "Trapped {:s}"), infostr).c_str());
+			strcpy(tempstr, fmt::format("Trapped {:s}", infostr).c_str());
 			strcpy(infostr, tempstr);
 			InfoColor = UiFlags::ColorRed;
 		}
 	}
 	if (objectIsDisabled(i)) {
-		strcpy(tempstr, fmt::format(_(/* TRANSLATORS: If user enabled diablo.ini setting "Disable Crippling Shrines" is set to 1; also used for Na-Kruls leaver */ "{:s} (disabled)"), infostr).c_str());
+		strcpy(tempstr, fmt::format("{:s} (disabled)", infostr).c_str());
 		strcpy(infostr, tempstr);
 		InfoColor = UiFlags::ColorRed;
 	}
