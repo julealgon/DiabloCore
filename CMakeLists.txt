@@ -25,13 +25,7 @@ option(PIE "Generate position-independent code" OFF)
 option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
-option(NONET "Disable network support" OFF)
 option(NOSOUND "Disable sound support" OFF)
-
-if(NOT NONET)
-  option(DISABLE_TCP "Disable TCP multiplayer option" OFF)
-  option(DISABLE_ZERO_TIER "Disable ZeroTier multiplayer option" OFF)
-endif()
 
 option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
 mark_as_advanced(DISABLE_STREAMING_MUSIC)
@@ -61,12 +55,6 @@ if(NOT NOSOUND)
   option(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
   cmake_dependent_option(DEVILUTIONX_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
                         "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
-endif()
-
-if(NOT NONET)
-  option(DEVILUTIONX_SYSTEM_LIBSODIUM "Use system-provided libsodium" ON)
-  cmake_dependent_option(DEVILUTIONX_STATIC_LIBSODIUM "Link static libsodium" OFF
-                        "DEVILUTIONX_SYSTEM_LIBSODIUM AND NOT DIST" ON)
 endif()
 
 option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
@@ -163,15 +151,6 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(Threads REQUIRED)
 
-if(NOT NONET)
-  if(DEVILUTIONX_SYSTEM_LIBSODIUM)
-    set(sodium_USE_STATIC_LIBS ${DEVILUTIONX_STATIC_LIBSODIUM})
-    find_package(sodium REQUIRED)
-  else()
-    add_subdirectory(3rdParty/libsodium)
-  endif()
-endif()
-
 if(DEVILUTIONX_SYSTEM_LIBFMT)
   find_package(fmt 7.0.0 QUIET)
   if(fmt_FOUND)
@@ -218,10 +197,6 @@ else()
   add_library(SDL2::SDL2 ALIAS SDL2_lib)
 endif()
 find_package(SDL2_ttf REQUIRED)
-
-if(NOT NONET AND NOT DISABLE_TCP)
-  add_subdirectory(3rdParty/asio)
-endif()
 
 add_subdirectory(3rdParty/SDL_image)
 
@@ -384,10 +359,10 @@ set(libdevilutionx_SRCS
   Source/panels/mainpanel.cpp
   Source/dvlnet/abstract_net.cpp
   Source/dvlnet/base.cpp
-  Source/dvlnet/cdwrap.cpp
+  Source/dvlnet/cdwrap.cpp  
   Source/dvlnet/frame_queue.cpp
   Source/dvlnet/loopback.cpp
-  Source/dvlnet/packet.cpp
+  Source/dvlnet/packet.cpp  
   Source/storm/storm.cpp
   
   Source/storm/storm_net.cpp
@@ -405,20 +380,6 @@ else()
     Source/sound.cpp
     Source/utils/push_aulib_decoder.cpp
     Source/utils/soundsample.cpp)
-endif()
-
-if(NOT NONET)
-  if(NOT DISABLE_TCP)
-    list(APPEND libdevilutionx_SRCS
-      Source/dvlnet/tcp_client.cpp
-      Source/dvlnet/tcp_server.cpp)
-  endif()
-  if(NOT DISABLE_ZERO_TIER)
-    list(APPEND libdevilutionx_SRCS
-      Source/dvlnet/protocol_zt.cpp
-      Source/dvlnet/zerotier_native.cpp
-      Source/dvlnet/zerotier_lwip.cpp)
-  endif()
 endif()
 
 set(BIN_TARGET devilutionx)
@@ -475,31 +436,17 @@ if(WIN32)
   target_link_libraries(libdevilutionx PUBLIC find_steam_game)
 endif()
 
-if(NOT NONET)
-  if(NOT DISABLE_TCP)
-    target_link_libraries(libdevilutionx PUBLIC asio)
-  endif()
-  target_link_libraries(libdevilutionx PUBLIC sodium)
-endif()
-
 target_link_libraries(libdevilutionx PUBLIC fmt::fmt)
 target_link_libraries(libdevilutionx PUBLIC PNG::PNG)
 
 genex_for_option(DEBUG)
 target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 
-if(NOT NONET AND NOT DISABLE_TCP)
-  target_compile_definitions(libdevilutionx PUBLIC ASIO_STANDALONE)
-endif()
-
 # Defines without value
 foreach(
   def_name
   NOSOUND
-  NONET
   PREFILL_PLAYER_NAME
-  DISABLE_TCP
-  DISABLE_ZERO_TIER
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
   GPERF
@@ -759,9 +706,4 @@ if(CPACK)
   set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
   set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
   include(CPack)
-endif()
-
-if(NOT NONET AND NOT DISABLE_ZERO_TIER)
-  add_subdirectory(3rdParty/libzt)
-  target_link_libraries(libdevilutionx PUBLIC zt-static)
 endif()

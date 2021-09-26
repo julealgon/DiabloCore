@@ -29,14 +29,6 @@ void SelconnLoad()
 {
 	LoadBackgroundArt("ui_art\\selconn.pcx");
 
-#ifndef NONET
-#ifndef DISABLE_ZERO_TIER
-	vecConnItems.push_back(std::make_unique<UiListItem>("Zerotier", SELCONN_ZT));
-#endif
-#ifndef DISABLE_TCP
-	vecConnItems.push_back(std::make_unique<UiListItem>("Client-Server (TCP)", SELCONN_TCP));
-#endif
-#endif
 	vecConnItems.push_back(std::make_unique<UiListItem>("Loopback", SELCONN_LOOPBACK));
 
 	UiAddBackground(&vecSelConnDlg);
