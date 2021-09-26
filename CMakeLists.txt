@@ -25,7 +25,6 @@ option(PIE "Generate position-independent code" OFF)
 option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
-option(NONET "Disable network support" OFF)
 option(NOSOUND "Disable sound support" OFF)
 
 option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
@@ -56,12 +55,6 @@ if(NOT NOSOUND)
   option(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
   cmake_dependent_option(DEVILUTIONX_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
                         "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
-endif()
-
-if(NOT NONET)
-  option(DEVILUTIONX_SYSTEM_LIBSODIUM "Use system-provided libsodium" ON)
-  cmake_dependent_option(DEVILUTIONX_STATIC_LIBSODIUM "Link static libsodium" OFF
-                        "DEVILUTIONX_SYSTEM_LIBSODIUM AND NOT DIST" ON)
 endif()
 
 option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
@@ -157,15 +150,6 @@ set(CMAKE_THREAD_PREFER_PTHREAD ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(Threads REQUIRED)
-
-if(NOT NONET)
-  if(DEVILUTIONX_SYSTEM_LIBSODIUM)
-    set(sodium_USE_STATIC_LIBS ${DEVILUTIONX_STATIC_LIBSODIUM})
-    find_package(sodium REQUIRED)
-  else()
-    add_subdirectory(3rdParty/libsodium)
-  endif()
-endif()
 
 if(DEVILUTIONX_SYSTEM_LIBFMT)
   find_package(fmt 7.0.0 QUIET)
@@ -375,10 +359,10 @@ set(libdevilutionx_SRCS
   Source/panels/mainpanel.cpp
   Source/dvlnet/abstract_net.cpp
   Source/dvlnet/base.cpp
-  Source/dvlnet/cdwrap.cpp
+  Source/dvlnet/cdwrap.cpp  
   Source/dvlnet/frame_queue.cpp
   Source/dvlnet/loopback.cpp
-  Source/dvlnet/packet.cpp
+  Source/dvlnet/packet.cpp  
   Source/storm/storm.cpp
   
   Source/storm/storm_net.cpp
@@ -452,10 +436,6 @@ if(WIN32)
   target_link_libraries(libdevilutionx PUBLIC find_steam_game)
 endif()
 
-if(NOT NONET)
-  target_link_libraries(libdevilutionx PUBLIC sodium)
-endif()
-
 target_link_libraries(libdevilutionx PUBLIC fmt::fmt)
 target_link_libraries(libdevilutionx PUBLIC PNG::PNG)
 
@@ -466,7 +446,6 @@ target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 foreach(
   def_name
   NOSOUND
-  NONET
   PREFILL_PLAYER_NAME
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
