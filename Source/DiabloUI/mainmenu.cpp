@@ -39,13 +39,9 @@ void MainmenuLoad(const char *name, void (*fnSound)(const char *file))
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Show Credits", MAINMENU_SHOW_CREDITS));
 	vecMenuItems.push_back(std::make_unique<UiListItem>(gbIsHellfire ? "Exit Hellfire" : "Exit Diablo", MAINMENU_EXIT_DIABLO));
 
-	if (!gbSpawned || gbIsHellfire) {
-		if (gbIsHellfire)
-			LoadArt("ui_art\\mainmenuw.pcx", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\mainmenu.pcx");
-	} else {
-		LoadBackgroundArt("ui_art\\swmmenu.pcx");
-	}
+	if (gbIsHellfire)
+		LoadArt("ui_art\\mainmenuw.pcx", &ArtBackgroundWidescreen);
+	LoadBackgroundArt("ui_art\\mainmenu.pcx");
 
 	UiAddBackground(&vecMainMenuDialog);
 	UiAddLogo(&vecMainMenuDialog);
@@ -87,17 +83,12 @@ bool UiMainMenuDialog(const char *name, _mainmenu_selections *pdwResult, void (*
 		while (MainMenuResult == MAINMENU_NONE) {
 			UiClearScreen();
 			UiPollAndRender();
-			if (!gbSpawned && SDL_GetTicks() >= dwAttractTicks) {
+			if (SDL_GetTicks() >= dwAttractTicks) {
 				MainMenuResult = MAINMENU_ATTRACT_MODE;
 			}
 		}
 
 		MainmenuFree();
-
-		if (gbSpawned && !gbIsHellfire && MainMenuResult == MAINMENU_REPLAY_INTRO) {
-			UiSelOkDialog(nullptr, "The Diablo introduction cinematic is only available in the full retail version of Diablo. Visit https://www.gog.com/game/diablo to purchase.", true);
-			MainMenuResult = MAINMENU_NONE;
-		}
 	}
 
 	*pdwResult = MainMenuResult;

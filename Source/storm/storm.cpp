@@ -106,9 +106,6 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 	if (!result && patch_rt_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)patch_rt_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
-	if (!result && spawn_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)spawn_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
-	}
 	if (!result && diabdat_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)diabdat_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}

@@ -91,17 +91,6 @@ SoundSample *DuplicateSound(const SoundSample &sound)
 	return result;
 }
 
-/** Maps from track ID to track name in spawn. */
-const char *const SpawnMusicTracks[NUM_MUSIC] = {
-	"Music\\sTowne.wav",
-	"Music\\sLvlA.wav",
-	"Music\\sLvlA.wav",
-	"Music\\sLvlA.wav",
-	"Music\\sLvlA.wav",
-	"Music\\DLvlE.wav",
-	"Music\\DLvlF.wav",
-	"Music\\sintro.wav",
-};
 /** Maps from track ID to track name. */
 const char *const MusicTracks[NUM_MUSIC] = {
 	"Music\\DTowne.wav",
@@ -234,10 +223,7 @@ void music_start(uint8_t nTrack)
 	assert(nTrack < NUM_MUSIC);
 	music_stop();
 	if (gbMusicOn) {
-		if (spawn_mpq != nullptr)
-			trackPath = SpawnMusicTracks[nTrack];
-		else
-			trackPath = MusicTracks[nTrack];
+		trackPath = MusicTracks[nTrack];
 		HANDLE handle;
 		success = SFileOpenFile(trackPath, &handle);
 		if (!success) {

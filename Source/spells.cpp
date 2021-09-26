@@ -330,20 +330,6 @@ void DoHealOther(int pnum, uint16_t rid)
 
 int GetSpellBookLevel(spell_id s)
 {
-	if (gbIsSpawn) {
-		switch (s) {
-		case SPL_STONE:
-		case SPL_GUARDIAN:
-		case SPL_GOLEM:
-		case SPL_ELEMENT:
-		case SPL_FLARE:
-		case SPL_BONESPIRIT:
-			return -1;
-		default:
-			break;
-		}
-	}
-
 	if (!gbIsHellfire) {
 		switch (s) {
 		case SPL_NOVA:
@@ -361,21 +347,6 @@ int GetSpellBookLevel(spell_id s)
 
 int GetSpellStaffLevel(spell_id s)
 {
-	if (gbIsSpawn) {
-		switch (s) {
-		case SPL_STONE:
-		case SPL_GUARDIAN:
-		case SPL_GOLEM:
-		case SPL_APOCA:
-		case SPL_ELEMENT:
-		case SPL_FLARE:
-		case SPL_BONESPIRIT:
-			return -1;
-		default:
-			break;
-		}
-	}
-
 	if (!gbIsHellfire && s > SPL_LASTDIABLO)
 		return -1;
 

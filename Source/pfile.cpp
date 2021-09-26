@@ -21,8 +21,6 @@
 
 namespace devilution {
 
-#define PASSWORD_SPAWN_SINGLE "adslhfb1"
-#define PASSWORD_SPAWN_MULTI "lshbkfg1"
 #define PASSWORD_SINGLE "xrgyrkj1"
 #define PASSWORD_MULTI "szqnlsk1"
 
@@ -40,18 +38,10 @@ std::string GetSavePath(uint32_t saveNum)
 	if (gbIsHellfire)
 		ext = ".hsv";
 
-	if (gbIsSpawn) {
-		if (!gbIsMultiplayer) {
-			path.append("spawn_");
-		} else {
-			path.append("share_");
-		}
+	if (!gbIsMultiplayer) {
+		path.append("single_");
 	} else {
-		if (!gbIsMultiplayer) {
-			path.append("single_");
-		} else {
-			path.append("multi_");
-		}
+		path.append("multi_");
 	}
 
 	char saveNumStr[21];
@@ -200,7 +190,6 @@ void Game2UiPlayer(const Player &player, _uiheroinfo *heroinfo, bool bHasSaveFil
 	heroinfo->vitality = player._pVitality;
 	heroinfo->hassaved = bHasSaveFile;
 	heroinfo->herorank = player.pDiabloKillLevel;
-	heroinfo->spawned = gbIsSpawn;
 }
 
 bool GetFileName(uint8_t lvl, char *dst)
@@ -246,8 +235,6 @@ bool ArchiveContainsGame(HANDLE hsArchive)
 
 const char *pfile_get_password()
 {
-	if (gbIsSpawn)
-		return gbIsMultiplayer ? PASSWORD_SPAWN_MULTI : PASSWORD_SPAWN_SINGLE;
 	return gbIsMultiplayer ? PASSWORD_MULTI : PASSWORD_SINGLE;
 }
 

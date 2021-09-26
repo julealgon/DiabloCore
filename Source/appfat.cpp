@@ -111,7 +111,7 @@ void InsertCDDlg()
 	    text,
 	    sizeof(text),
 	    "%s",
-	    "Unable to open main data archive (diabdat.mpq or spawn.mpq).\n"
+	    "Unable to open main data archive (diabdat.mpq).\n"
 	      "\n"
 	      "Make sure that it is in the game folder.");
 

@@ -688,9 +688,6 @@ void GetBookSpell(Item &item, int lvl)
 
 	rv = GenerateRnd(maxSpells) + 1;
 
-	if (gbIsSpawn && lvl > 5)
-		lvl = 5;
-
 	int s = SPL_FIREBOLT;
 	enum spell_id bs = SPL_FIREBOLT;
 	while (rv > 0) {
@@ -1281,9 +1278,6 @@ void GetStaffSpell(Item &item, int lvl, bool onlygood)
 	if (l == 0)
 		l = 1;
 	int rv = GenerateRnd(maxSpells) + 1;
-
-	if (gbIsSpawn && lvl > 10)
-		lvl = 10;
 
 	int s = SPL_FIREBOLT;
 	enum spell_id bs = SPL_NULL;
@@ -2498,13 +2492,6 @@ void NextItemRecord(int i)
 
 bool IsItemAvailable(int i)
 {
-	if (gbIsSpawn) {
-		if (i >= 62 && i <= 71)
-			return false; // Medium and heavy armors
-		if (i == AnyOf(105, 107, 108, 110, 111, 113))
-			return false; // Unavailable scrolls
-	}
-
 	if (gbIsHellfire)
 		return true;
 

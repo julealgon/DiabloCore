@@ -25,14 +25,10 @@ bool gbActive;
 HANDLE hellfire_mpq;
 /** The current input handler function */
 WNDPROC CurrentProc;
-/** A handle to the spawn.mpq archive. */
-HANDLE spawn_mpq;
 /** A handle to the diabdat.mpq archive. */
 HANDLE diabdat_mpq;
 /** A handle to the patch_rt.mpq archive. */
 HANDLE patch_rt_mpq;
-/** Indicate if we only have access to demo data */
-bool gbIsSpawn;
 /** Indicate if we have loaded the Hellfire expansion data */
 bool gbIsHellfire;
 /** Indicate if we want vanilla savefiles */
@@ -78,10 +74,6 @@ void init_cleanup()
 		pfile_write_hero(/*writeGameData=*/false, /*clearTables=*/true);
 	}
 
-	if (spawn_mpq != nullptr) {
-		SFileCloseArchive(spawn_mpq);
-		spawn_mpq = nullptr;
-	}
 	if (diabdat_mpq != nullptr) {
 		SFileCloseArchive(diabdat_mpq);
 		diabdat_mpq = nullptr;
@@ -165,11 +157,6 @@ void init_archives()
 		diabdat_mpq = LoadMPQ(paths, "diabdat.mpq");
 	}
 
-	if (diabdat_mpq == nullptr) {
-		spawn_mpq = LoadMPQ(paths, "spawn.mpq");
-		if (spawn_mpq != nullptr)
-			gbIsSpawn = true;
-	}
 	HANDLE fh = nullptr;
 	if (!SFileOpenFile("ui_art\\title.pcx", &fh))
 		InsertCDDlg();

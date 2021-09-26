@@ -1308,8 +1308,7 @@ void sound_init()
 	uint8_t mask = sfx_MISC;
 	if (gbIsMultiplayer) {
 		mask |= sfx_WARRIOR;
-		if (!gbIsSpawn)
-			mask |= (sfx_ROGUE | sfx_SORCERER);
+		mask |= (sfx_ROGUE | sfx_SORCERER);
 		if (gbIsHellfire)
 			mask |= sfx_MONK;
 	} else {

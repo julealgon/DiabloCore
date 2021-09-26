@@ -1180,15 +1180,6 @@ void StartTalk()
 	strcpy(tempstr, fmt::format("Talk to {:s}", TownerNames[talker]).c_str());
 	AddSText(0, 2, tempstr, UiFlags::ColorWhitegold | UiFlags::AlignCenter, false);
 	AddSLine(5);
-	if (gbIsSpawn) {
-		strcpy(tempstr, fmt::format("Talking to {:s}", TownerNames[talker]).c_str());
-		AddSText(0, 10, tempstr, UiFlags::ColorWhite | UiFlags::AlignCenter, false);
-		AddSText(0, 12, "is not available", UiFlags::ColorWhite | UiFlags::AlignCenter, false);
-		AddSText(0, 14, "in the shareware", UiFlags::ColorWhite | UiFlags::AlignCenter, false);
-		AddSText(0, 16, "version", UiFlags::ColorWhite | UiFlags::AlignCenter, false);
-		AddSText(0, 22, "Back", UiFlags::ColorWhite | UiFlags::AlignCenter, true);
-		return;
-	}
 
 	int sn = 0;
 	for (auto &quest : Quests) {

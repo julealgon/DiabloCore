@@ -125,9 +125,9 @@ void DrawHelp(const Surface &out)
 
 	const char *title;
 	if (gbIsHellfire)
-		title = gbIsSpawn ? "Shareware Hellfire Help" : "Hellfire Help";
+		title = "Hellfire Help";
 	else
-		title = gbIsSpawn ? "Shareware Diablo Help" : "Diablo Help";
+		title = "Diablo Help";
 	PrintSString(out, 0, 2, title, UiFlags::ColorWhitegold | UiFlags::AlignCenter);
 
 	DrawSLine(out, 5);

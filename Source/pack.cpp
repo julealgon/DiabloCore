@@ -45,9 +45,6 @@ void PackItem(ItemPack *id, const Item *is)
 		if (!gbIsHellfire) {
 			idx = RemapItemIdxToDiablo(idx);
 		}
-		if (gbIsSpawn) {
-			idx = RemapItemIdxToSpawn(idx);
-		}
 		id->idx = SDL_SwapLE16(idx);
 		if (is->IDidx == IDI_EAR) {
 			id->iCreateInfo = is->_iName[8] | (is->_iName[7] << 8);
@@ -145,9 +142,6 @@ void UnPackItem(const ItemPack *is, Item *id, bool isHellfire)
 		return;
 	}
 
-	if (gbIsSpawn) {
-		idx = RemapItemIdxFromSpawn(idx);
-	}
 	if (!isHellfire) {
 		idx = RemapItemIdxFromDiablo(idx);
 	}

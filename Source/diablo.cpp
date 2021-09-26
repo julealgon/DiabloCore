@@ -116,7 +116,6 @@ namespace {
 char gszVersionNumber[64] = "internal version unknown";
 
 bool gbGameLoopStartup;
-bool forceSpawn;
 bool forceDiablo;
 int sgnTimeoutCurs;
 bool gbShowIntro = true;
@@ -768,7 +767,6 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-f", "Display frames per second");
 	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
 	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
-	printInConsole("    %-20s %-30s\n", "--spawn", "Force spawn mode even if diabdat.mpq is found");
 	printInConsole("    %-20s %-30s\n", "--record <#>", "Record a demo file");
 	printInConsole("    %-20s %-30s\n", "--demo <#>", "Play a demo file");
 	printInConsole("    %-20s %-30s\n", "--timedemo", "Disable all frame limiting during demo playback");
@@ -824,8 +822,6 @@ void DiabloParseFlags(int argc, char **argv)
 			EnableFrameCount();
 		} else if (strcasecmp("-x", argv[i]) == 0) {
 			gbForceWindowed = true;
-		} else if (strcasecmp("--spawn", argv[i]) == 0) {
-			forceSpawn = true;
 		} else if (strcasecmp("--diablo", argv[i]) == 0) {
 			forceDiablo = true;
 		} else if (strcasecmp("--nestart", argv[i]) == 0) {
@@ -893,8 +889,6 @@ void DiabloInit()
 	init_archives();
 	was_archives_init = true;
 
-	if (forceSpawn)
-		gbIsSpawn = true;
 	if (forceDiablo)
 		gbIsHellfire = false;
 
@@ -910,7 +904,6 @@ void DiabloInit()
 	}
 
 	UiInitialize();
-	UiSetSpawned(gbIsSpawn);
 	was_ui_init = true;
 
 	ReadOnlyTest();
@@ -937,7 +930,7 @@ void DiabloSplash()
 		play_movie("gendata\\Hellfire.smk", true);
 		sgOptions.Hellfire.bIntro = false;
 	}
-	if (!gbIsHellfire && !gbIsSpawn && sgOptions.Diablo.bIntro) {
+	if (!gbIsHellfire && sgOptions.Diablo.bIntro) {
 		play_movie("gendata\\diablo1.smk", true);
 		sgOptions.Diablo.bIntro = false;
 	}
@@ -2013,7 +2006,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 	while (!IncProgress())
 		;
 
-	if (!gbIsSpawn && setlevel && setlvlnum == SL_SKELKING && Quests[Q_SKELKING]._qactive == QUEST_ACTIVE)
+	if (setlevel && setlvlnum == SL_SKELKING && Quests[Q_SKELKING]._qactive == QUEST_ACTIVE)
 		PlaySFX(USFX_SKING1);
 
 	// Reset mouse selection of entities

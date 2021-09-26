@@ -318,12 +318,6 @@ void InitQuests()
 		InitialiseQuestPools(glSeedTbl[15], Quests);
 	}
 
-	if (gbIsSpawn) {
-		for (auto &quest : Quests) {
-			quest._qactive = QUEST_NOTAVAIL;
-		}
-	}
-
 	if (Quests[Q_SKELKING]._qactive == QUEST_NOTAVAIL)
 		Quests[Q_SKELKING]._qvar2 = 2;
 	if (Quests[Q_ROCK]._qactive == QUEST_NOTAVAIL)
@@ -364,9 +358,6 @@ void InitialiseQuestPools(uint32_t seed, Quest quests[])
 
 void CheckQuests()
 {
-	if (gbIsSpawn)
-		return;
-
 	auto &quest = Quests[Q_BETRAYER];
 	if (quest.IsAvailable() && gbIsMultiplayer && quest._qvar1 == 2) {
 		AddObject(OBJ_ALTBOY, { 2 * setpc_x + 20, 2 * setpc_y + 22 });
@@ -433,9 +424,6 @@ void CheckQuests()
 
 bool ForceQuests()
 {
-	if (gbIsSpawn)
-		return false;
-
 	if (gbIsMultiplayer) {
 		return false;
 	}
@@ -457,9 +445,6 @@ bool ForceQuests()
 
 void CheckQuestKill(const Monster &monster, bool sendmsg)
 {
-	if (gbIsSpawn)
-		return;
-
 	auto &myPlayer = Players[MyPlayerId];
 
 	if (monster.MType->mtype == MT_SKING) {
@@ -611,9 +596,6 @@ void UpdatePWaterPalette()
 
 void ResyncMPQuests()
 {
-	if (gbIsSpawn)
-		return;
-
 	auto &kingQuest = Quests[Q_SKELKING];
 	if (kingQuest._qactive == QUEST_INIT
 	    && currlevel >= kingQuest._qlevel - 1
@@ -665,9 +647,6 @@ void ResyncMPQuests()
 
 void ResyncQuests()
 {
-	if (gbIsSpawn)
-		return;
-
 	if (Quests[Q_LTBANNER].IsAvailable()) {
 		if (Quests[Q_LTBANNER]._qvar1 == 1) {
 			ObjChangeMapResync(
@@ -853,9 +832,6 @@ void QuestlogESC()
 
 void SetMultiQuest(int q, quest_state s, bool log, int v1)
 {
-	if (gbIsSpawn)
-		return;
-
 	if (Quests[q]._qactive != QUEST_DONE) {
 		if (s > Quests[q]._qactive)
 			Quests[q]._qactive = s;

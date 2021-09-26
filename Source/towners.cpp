@@ -558,11 +558,8 @@ void TalkToCow(Player &player, Towner &cow)
 
 	CowPlaying = TSFX_COW1;
 	if (CowClicks == 4) {
-		if (gbIsSpawn)
-			CowClicks = 0;
-
 		CowPlaying = TSFX_COW2;
-	} else if (CowClicks >= 8 && !gbIsSpawn) {
+	} else if (CowClicks >= 8) {
 		CowClicks = 4;
 
 		static const HeroSpeech SnSfx[3] = {

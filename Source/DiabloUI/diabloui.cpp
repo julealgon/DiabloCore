@@ -34,7 +34,6 @@ Art ArtBackgroundWidescreen;
 Art ArtBackground;
 Art ArtCursor;
 Art ArtHero;
-bool gbSpawned;
 
 void (*gfnSoundFunction)(const char *file);
 void (*gfnListFocus)(int value);
