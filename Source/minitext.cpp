@@ -14,8 +14,6 @@
 #include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "textdat.h"
-#include "utils/stdcompat/optional.hpp"
-#include "utils/stdcompat/string_view.hpp"
 
 namespace devilution {
 
@@ -44,7 +42,7 @@ void LoadText(const char *text)
 	strcpy(tempstr, text);
 
 	WordWrapString(tempstr, 543, GameFont30);
-	const string_view paragraphs = tempstr;
+	const std::string_view paragraphs = tempstr;
 
 	size_t previous = 0;
 	while (true) {

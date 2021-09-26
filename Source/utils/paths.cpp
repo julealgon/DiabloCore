@@ -4,7 +4,6 @@
 
 #include "utils/file_util.h"
 #include "utils/log.hpp"
-#include "utils/stdcompat/optional.hpp"
 #include "utils/sdl_ptrs.h"
 
 #ifndef TTF_FONT_DIR

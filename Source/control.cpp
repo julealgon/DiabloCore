@@ -34,7 +34,6 @@
 #include "towners.h"
 #include "trigs.h"
 #include "utils/sdl_geometry.h"
-#include "utils/stdcompat/optional.hpp"
 #include "options.h"
 
 #ifdef _DEBUG
@@ -359,7 +358,7 @@ void DrawFlask(const Surface &out, const Surface &celBuf, Point sourcePosition, 
 void DrawFlaskUpper(const Surface &out, const Surface &sourceBuffer, int offset, int fillPer)
 {
 	// clamping because this function only draws the top 12% of the flask display
-	int emptyPortion = clamp(80 - fillPer, 0, 11) + 2; // +2 to account for the frame being included in the sprite
+	int emptyPortion = std::clamp(80 - fillPer, 0, 11) + 2; // +2 to account for the frame being included in the sprite
 
 	// Draw the empty part of the flask
 	DrawFlask(out, sourceBuffer, { 13, 3 }, { PANEL_LEFT + offset, PANEL_TOP - 13 }, emptyPortion);
@@ -378,7 +377,7 @@ void DrawFlaskUpper(const Surface &out, const Surface &sourceBuffer, int offset,
  */
 void DrawFlaskLower(const Surface &out, const Surface &sourceBuffer, int offset, int fillPer)
 {
-	int filled = clamp(fillPer, 0, 69);
+	int filled = std::clamp(fillPer, 0, 69);
 
 	if (filled < 69)
 		DrawFlaskTop(out, { PANEL_X + offset, PANEL_Y }, sourceBuffer, 16, 85 - filled);
@@ -1359,7 +1358,7 @@ void DrawInfoBox(const Surface &out)
 					PrintMonstHistory(monster.MType->mtype);
 				}
 			} else if (pcursitem == -1) {
-				string_view townerName = Towners[pcursmonst].name;
+				std::string_view townerName = Towners[pcursmonst].name;
 				strncpy(infostr, townerName.data(), townerName.length());
 				infostr[townerName.length()] = '\0';
 			}

@@ -113,15 +113,15 @@ void ProcessMessages()
 }
 
 struct DebugCmdItem {
-	const string_view text;
-	const string_view description;
-	const string_view requiredParameter;
-	std::string (*actionProc)(const string_view);
+	const std::string_view text;
+	const std::string_view description;
+	const std::string_view requiredParameter;
+	std::string (*actionProc)(const std::string_view);
 };
 
 extern std::vector<DebugCmdItem> DebugCmdList;
 
-std::string DebugCmdHelp(const string_view parameter)
+std::string DebugCmdHelp(const std::string_view parameter)
 {
 	if (parameter.empty()) {
 		std::string ret = "Available Debug Commands: ";
@@ -145,7 +145,7 @@ std::string DebugCmdHelp(const string_view parameter)
 	}
 }
 
-std::string DebugCmdGiveGoldCheat(const string_view parameter)
+std::string DebugCmdGiveGoldCheat(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 
@@ -166,7 +166,7 @@ std::string DebugCmdGiveGoldCheat(const string_view parameter)
 	return "You are now rich! If only this was as easy in real life...";
 }
 
-std::string DebugCmdTakeGoldCheat(const string_view parameter)
+std::string DebugCmdTakeGoldCheat(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 
@@ -186,7 +186,7 @@ std::string DebugCmdTakeGoldCheat(const string_view parameter)
 	return "You are poor...";
 }
 
-std::string DebugCmdWarpToLevel(const string_view parameter)
+std::string DebugCmdWarpToLevel(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	auto level = atoi(parameter.data());
@@ -199,7 +199,7 @@ std::string DebugCmdWarpToLevel(const string_view parameter)
 	return fmt::format("Welcome to level {}.", level);
 }
 
-std::string DebugCmdLoadMap(const string_view parameter)
+std::string DebugCmdLoadMap(const std::string_view parameter)
 {
 	if (parameter.empty()) {
 		std::string ret = "What mapid do you want to visit?";
@@ -233,7 +233,7 @@ std::string DebugCmdLoadMap(const string_view parameter)
 	return fmt::format("Mapid {} is not known. Do you want to write a mod?", level);
 }
 
-std::unordered_map<string_view, _talker_id> TownerShortNameToTownerId = {
+std::unordered_map<std::string_view, _talker_id> TownerShortNameToTownerId = {
 	{ "griswold", _talker_id::TOWN_SMITH },
 	{ "pepin", _talker_id::TOWN_HEALER },
 	{ "ogden", _talker_id::TOWN_TAVERN },
@@ -247,7 +247,7 @@ std::unordered_map<string_view, _talker_id> TownerShortNameToTownerId = {
 	{ "nut", _talker_id::TOWN_COWFARM },
 };
 
-std::string DebugCmdVisitTowner(const string_view parameter)
+std::string DebugCmdVisitTowner(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 
@@ -287,7 +287,7 @@ std::string DebugCmdVisitTowner(const string_view parameter)
 	return fmt::format("Couldn't find {}.", parameter);
 }
 
-std::string DebugCmdResetLevel(const string_view parameter)
+std::string DebugCmdResetLevel(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 
@@ -310,7 +310,7 @@ std::string DebugCmdResetLevel(const string_view parameter)
 	return fmt::format("Level {} was restored and looks fabulous.", level);
 }
 
-std::string DebugCmdGodMode(const string_view parameter)
+std::string DebugCmdGodMode(const std::string_view parameter)
 {
 	DebugGodMode = !DebugGodMode;
 	if (DebugGodMode)
@@ -318,21 +318,21 @@ std::string DebugCmdGodMode(const string_view parameter)
 	return "You are mortal, beware of the darkness.";
 }
 
-std::string DebugCmdLighting(const string_view parameter)
+std::string DebugCmdLighting(const std::string_view parameter)
 {
 	ToggleLighting();
 
 	return "All raindrops are the same.";
 }
 
-std::string DebugCmdMap(const string_view parameter)
+std::string DebugCmdMap(const std::string_view parameter)
 {
 	std::fill(&AutomapView[0][0], &AutomapView[DMAXX - 1][DMAXX - 1], true);
 
 	return "The way is made clear when viewed from above";
 }
 
-std::string DebugCmdVision(const string_view parameter)
+std::string DebugCmdVision(const std::string_view parameter)
 {
 	DebugVision = !DebugVision;
 	if (DebugVision)
@@ -341,7 +341,7 @@ std::string DebugCmdVision(const string_view parameter)
 	return "My path is set.";
 }
 
-std::string DebugCmdQuest(const string_view parameter)
+std::string DebugCmdQuest(const std::string_view parameter)
 {
 	if (parameter.empty()) {
 		std::string ret = "You must provide an id. This could be: all";
@@ -380,7 +380,7 @@ std::string DebugCmdQuest(const string_view parameter)
 	return fmt::format("{} enabled.", QuestsData[questId]._qlstr);
 }
 
-std::string DebugCmdLevelUp(const string_view parameter)
+std::string DebugCmdLevelUp(const std::string_view parameter)
 {
 	int levels = std::max(1, atoi(parameter.data()));
 	for (int i = 0; i < levels; i++)
@@ -388,7 +388,7 @@ std::string DebugCmdLevelUp(const string_view parameter)
 	return "New experience leads to new insights.";
 }
 
-std::string DebugCmdSetSpellsLevel(const string_view parameter)
+std::string DebugCmdSetSpellsLevel(const std::string_view parameter)
 {
 	int level = std::max(0, atoi(parameter.data()));
 	for (int i = SPL_FIREBOLT; i < MAX_SPELLS; i++) {
@@ -402,7 +402,7 @@ std::string DebugCmdSetSpellsLevel(const string_view parameter)
 	return "Knowledge is power.";
 }
 
-std::string DebugCmdRefillHealthMana(const string_view parameter)
+std::string DebugCmdRefillHealthMana(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	myPlayer._pMana = myPlayer._pMaxMana;
@@ -415,24 +415,24 @@ std::string DebugCmdRefillHealthMana(const string_view parameter)
 	return "Ready for more.";
 }
 
-std::string DebugCmdGenerateUniqueItem(const string_view parameter)
+std::string DebugCmdGenerateUniqueItem(const std::string_view parameter)
 {
 	return DebugSpawnItem(parameter.data(), true);
 }
 
-std::string DebugCmdGenerateItem(const string_view parameter)
+std::string DebugCmdGenerateItem(const std::string_view parameter)
 {
 	return DebugSpawnItem(parameter.data(), false);
 }
 
-std::string DebugCmdExit(const string_view parameter)
+std::string DebugCmdExit(const std::string_view parameter)
 {
 	gbRunGame = false;
 	gbRunGameResult = false;
 	return "See you again my Lord.";
 }
 
-std::string DebugCmdArrow(const string_view parameter)
+std::string DebugCmdArrow(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 
@@ -454,7 +454,7 @@ std::string DebugCmdArrow(const string_view parameter)
 	return "I can shoot any arrow.";
 }
 
-std::string DebugCmdTalkToTowner(const string_view parameter)
+std::string DebugCmdTalkToTowner(const std::string_view parameter)
 {
 	if (DebugTalkToTowner(parameter.data())) {
 		return "Hello from the other side.";
@@ -462,7 +462,7 @@ std::string DebugCmdTalkToTowner(const string_view parameter)
 	return "NPC not found.";
 }
 
-std::string DebugCmdShowGrid(const string_view parameter)
+std::string DebugCmdShowGrid(const std::string_view parameter)
 {
 	DebugGrid = !DebugGrid;
 	if (DebugGrid)
@@ -471,12 +471,12 @@ std::string DebugCmdShowGrid(const string_view parameter)
 	return "Back to boring.";
 }
 
-std::string DebugCmdLevelSeed(const string_view parameter)
+std::string DebugCmdLevelSeed(const std::string_view parameter)
 {
 	return fmt::format("Seedinfo for level {}\nseed: {}\nMid1: {}\nMid2: {}\nMid3: {}\nEnd: {}", currlevel, glSeedTbl[currlevel], glMid1Seed[currlevel], glMid2Seed[currlevel], glMid3Seed[currlevel], glEndSeed[currlevel]);
 }
 
-std::string DebugCmdSpawnMonster(const string_view parameter)
+std::string DebugCmdSpawnMonster(const std::string_view parameter)
 {
 	if (currlevel == 0)
 		return "Do you want to kill the towners?!?";
@@ -570,7 +570,7 @@ std::string DebugCmdSpawnMonster(const string_view parameter)
 	return fmt::format("I could only summon {} Monsters. The rest strike for shorter working hours.", spawnedMonster);
 }
 
-std::string DebugCmdShowTileData(const string_view parameter)
+std::string DebugCmdShowTileData(const std::string_view parameter)
 {
 	std::string paramList[] = {
 		"dPiece",
@@ -619,7 +619,7 @@ std::string DebugCmdShowTileData(const string_view parameter)
 	return "Special powers activated.";
 }
 
-std::string DebugCmdScrollView(const string_view parameter)
+std::string DebugCmdScrollView(const std::string_view parameter)
 {
 	DebugScrollViewEnabled = !DebugScrollViewEnabled;
 	if (DebugScrollViewEnabled)
@@ -628,7 +628,7 @@ std::string DebugCmdScrollView(const string_view parameter)
 	return "If you want to see the world, you need to explore it yourself.";
 }
 
-std::string DebugCmdItemInfo(const string_view parameter)
+std::string DebugCmdItemInfo(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	Item *pItem = nullptr;
@@ -648,7 +648,7 @@ std::string DebugCmdItemInfo(const string_view parameter)
 	return fmt::format("Numitems: {}", ActiveItemCount);
 }
 
-std::string DebugCmdQuestInfo(const string_view parameter)
+std::string DebugCmdQuestInfo(const std::string_view parameter)
 {
 	if (parameter.empty()) {
 		std::string ret = "You must provide an id. This could be:";
@@ -668,7 +668,7 @@ std::string DebugCmdQuestInfo(const string_view parameter)
 	return fmt::format("\nQuest: {}\nActive: {} Var1: {} Var2: {}", QuestsData[quest._qidx]._qlstr, quest._qactive, quest._qvar1, quest._qvar2);
 }
 
-std::string DebugCmdPlayerInfo(const string_view parameter)
+std::string DebugCmdPlayerInfo(const std::string_view parameter)
 {
 	int playerId = atoi(parameter.data());
 	if (playerId < 0 || playerId >= MAX_PLRS)
@@ -765,14 +765,14 @@ void SetDebugLevelSeedInfos(uint32_t mid1Seed, uint32_t mid2Seed, uint32_t mid3S
 	glEndSeed[currlevel] = endSeed;
 }
 
-bool CheckDebugTextCommand(const string_view text)
+bool CheckDebugTextCommand(const std::string_view text)
 {
 	auto debugCmdIterator = std::find_if(DebugCmdList.begin(), DebugCmdList.end(), [&](const DebugCmdItem &elem) { return text.find(elem.text) == 0 && (text.length() == elem.text.length() || text[elem.text.length()] == ' '); });
 	if (debugCmdIterator == DebugCmdList.end())
 		return false;
 
 	auto &dbgCmd = *debugCmdIterator;
-	string_view parameter = "";
+	std::string_view parameter = "";
 	if (text.length() > (dbgCmd.text.length() + 1))
 		parameter = text.substr(dbgCmd.text.length() + 1);
 	const auto result = dbgCmd.actionProc(parameter);

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 #include <SDL.h>
 
@@ -13,8 +14,6 @@
 #include "engine.h"
 #include "engine/cel_sprite.hpp"
 #include "engine/rectangle.hpp"
-#include "utils/stdcompat/optional.hpp"
-#include "utils/stdcompat/string_view.hpp"
 
 namespace devilution {
 
@@ -57,7 +56,7 @@ void UnloadFont(GameFontTables size, text_color color);
  * @param charactersInLine Receives characters read until newline or terminator
  * @return Line width in pixels
  */
-int GetLineWidth(string_view text, GameFontTables size = GameFont12, int spacing = 1, int *charactersInLine = nullptr);
+int GetLineWidth(std::string_view text, GameFontTables size = GameFont12, int spacing = 1, int *charactersInLine = nullptr);
 void WordWrapString(char *text, size_t width, GameFontTables size = GameFont12, int spacing = 1);
 
 /**
@@ -79,7 +78,7 @@ void WordWrapString(char *text, size_t width, GameFontTables size = GameFont12, 
  * @param lineHeight Allows overriding the default line height, useful for multi-line strings.
  * @return The number of characters rendered, including characters "drawn" outside the buffer.
  */
-uint32_t DrawString(const Surface &out, string_view text, const Rectangle &rect, UiFlags flags = UiFlags::None, int spacing = 1, int lineHeight = -1);
+uint32_t DrawString(const Surface &out, std::string_view text, const Rectangle &rect, UiFlags flags = UiFlags::None, int spacing = 1, int lineHeight = -1);
 
 /**
  * @brief Draws a line of text at the given position relative to the origin of the output buffer.
@@ -96,7 +95,7 @@ uint32_t DrawString(const Surface &out, string_view text, const Rectangle &rect,
  *                This value may be adjusted if the flag UIS_FIT_SPACING is passed in the flags parameter.
  * @param lineHeight Allows overriding the default line height, useful for multi-line strings.
  */
-inline void DrawString(const Surface &out, string_view text, const Point &position, UiFlags flags = UiFlags::None, int spacing = 1, int lineHeight = -1)
+inline void DrawString(const Surface &out, std::string_view text, const Point &position, UiFlags flags = UiFlags::None, int spacing = 1, int lineHeight = -1)
 {
 	DrawString(out, text, { position, { out.w() - position.x, 0 } }, flags, spacing, lineHeight);
 }

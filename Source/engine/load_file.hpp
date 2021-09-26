@@ -8,7 +8,6 @@
 #include "appfat.h"
 #include "diablo.h"
 #include "storm/storm.h"
-#include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
 
@@ -72,7 +71,7 @@ void LoadFileInMem(const char *path, T *data, std::size_t count)
 	SFile file { path };
 	if (!file.Ok())
 		return;
-	file.Read(reinterpret_cast<byte *>(data), count * sizeof(T));
+	file.Read(reinterpret_cast<std::byte *>(data), count * sizeof(T));
 }
 
 template <typename T, std::size_t N>
@@ -87,7 +86,7 @@ void LoadFileInMem(const char *path, std::array<T, N> &data)
  * @param numRead Number of T elements read
  * @return Buffer with content of file
  */
-template <typename T = byte>
+template <typename T = std::byte>
 std::unique_ptr<T[]> LoadFileInMem(const char *path, std::size_t *numRead = nullptr)
 {
 	SFile file { path };
@@ -101,7 +100,7 @@ std::unique_ptr<T[]> LoadFileInMem(const char *path, std::size_t *numRead = null
 		*numRead = fileLen / sizeof(T);
 
 	std::unique_ptr<T[]> buf { new T[fileLen / sizeof(T)] };
-	file.Read(reinterpret_cast<byte *>(buf.get()), fileLen);
+	file.Read(reinterpret_cast<std::byte *>(buf.get()), fileLen);
 	return buf;
 }
 

@@ -12,7 +12,6 @@
 #include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "stores.h"
-#include "utils/stdcompat/optional.hpp"
 #include "utils/ui_fwd.h"
 
 namespace devilution {

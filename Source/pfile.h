@@ -39,7 +39,7 @@ bool LevelFileExists();
 void GetTempLevelNames(char *szTemp);
 void GetPermLevelNames(char *szPerm);
 void pfile_remove_temp_files();
-std::unique_ptr<byte[]> pfile_read(const char *pszName, size_t *pdwLen);
+std::unique_ptr<std::byte[]> pfile_read(const char *pszName, size_t *pdwLen);
 void pfile_update(bool forceSave);
 
 } // namespace devilution

@@ -11,7 +11,7 @@
 namespace devilution {
 namespace {
 
-std::unique_ptr<byte[]> CowCels;
+std::unique_ptr<std::byte[]> CowCels;
 int CowMsg;
 int CowClicks;
 
@@ -33,7 +33,7 @@ struct TownerData {
 	void (*talk)(Player &player, Towner &towner);
 };
 
-void NewTownerAnim(Towner &towner, byte *pAnim, uint8_t numFrames, int delay)
+void NewTownerAnim(Towner &towner, std::byte *pAnim, uint8_t numFrames, int delay)
 {
 	towner._tAnimData = pAnim;
 	towner._tAnimLen = numFrames;

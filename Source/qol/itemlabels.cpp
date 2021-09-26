@@ -122,7 +122,7 @@ void DrawItemNameLabels(const Surface &out)
 			for (unsigned int j = 0; j < i; ++j) {
 				ItemLabel &a = labelQueue[i];
 				ItemLabel &b = labelQueue[j];
-				if (abs(b.pos.y - a.pos.y) < Height + BorderY) {
+				if (std::abs(b.pos.y - a.pos.y) < Height + BorderY) {
 					int widthA = a.width + BorderX + MarginX * 2;
 					int widthB = b.width + BorderX + MarginX * 2;
 					int newpos = b.pos.x;

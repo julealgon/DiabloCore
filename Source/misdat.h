@@ -10,7 +10,6 @@
 
 #include "engine.h"
 #include "effects.h"
-#include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
 
@@ -141,7 +140,7 @@ struct MissileFileData {
 	std::array<uint8_t, 16> animLen = {};
 	int16_t animWidth;
 	int16_t animWidth2;
-	std::array<std::unique_ptr<byte[]>, 16> animData;
+	std::array<std::unique_ptr<std::byte[]>, 16> animData;
 
 	MissileFileData(const char *name, uint8_t animName, uint8_t animFAmt, MissileDataFlags flags,
 	    std::initializer_list<uint8_t> animDelay, std::initializer_list<uint8_t> animLen,

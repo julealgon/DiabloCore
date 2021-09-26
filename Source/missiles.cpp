@@ -246,7 +246,7 @@ bool MonsterMHit(int pnum, int m, Damage damage, int dist, missile_id t, bool sh
 		hper = GenerateRnd(75) - monster.mLevel * 2;
 	}
 
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 
 	if (monster._mmode == MonsterMode::Petrified)
 		hit = 0;
@@ -373,7 +373,7 @@ bool Plr2PlrMHit(int pnum, int p, Damage damage, int dist, missile_id mtype, boo
 		    - dist;
 	}
 
-	hit = clamp(hit, 5, 95);
+	hit = std::clamp(hit, 5, 95);
 
 	if (hper >= hit) {
 		return false;
@@ -385,7 +385,7 @@ bool Plr2PlrMHit(int pnum, int p, Damage damage, int dist, missile_id mtype, boo
 	}
 
 	int blk = target.GetBlockChance() - (player._pLevel * 2);
-	blk = clamp(blk, 0, 100);
+	blk = std::clamp(blk, 0, 100);
 
 	int dam;
 	if (mtype == MIS_BONESPIRIT) {
@@ -593,7 +593,7 @@ bool CouldMissileCollideWithSolidObject(Point tile)
 {
 	int oid = dObject[tile.x][tile.y];
 	if (oid != 0) {
-		oid = abs(oid) - 1;
+		oid = std::abs(oid) - 1;
 		if (!Objects[oid]._oMissFlag)
 			return true;
 	}
@@ -1060,7 +1060,7 @@ bool MonsterTrapHit(int m, Damage damage, int dist, missile_id t, bool shift)
 
 	int hit = GenerateRnd(100);
 	int hper = 90 - (BYTE)monster.mArmorClass - dist;
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 	bool ret;
 	if (CheckMonsterHit(monster, &ret)) {
 		return ret;
@@ -1165,7 +1165,7 @@ bool PlayerMHit(int pnum, Monster *monster, int dist, Damage damage, missile_id 
 	int blkper = player.GetBlockChance(false);
 	if (monster != nullptr)
 		blkper -= (monster->mLevel - player._pLevel) * 2;
-	blkper = clamp(blkper, 0, 100);
+	blkper = std::clamp(blkper, 0, 100);
 
 	int8_t resper;
 	switch (MissilesData[mtype].mResist) {
@@ -1457,7 +1457,7 @@ void AddStealPotions(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			int8_t pnum = dPlayer[target.x][target.y];
 			if (pnum == 0)
 				continue;
-			auto &player = Players[abs(pnum) - 1];
+			auto &player = Players[std::abs(pnum) - 1];
 
 			bool hasPlayedSFX = false;
 			for (int si = 0; si < MAXBELTITEMS; si++) {
@@ -1531,7 +1531,7 @@ void AddManaTrap(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			if (pid == 0)
 				continue;
 
-			auto &player = Players[abs(pid) - 1];
+			auto &player = Players[std::abs(pid) - 1];
 
 			player._pMana = 0;
 			player._pManaBase = player._pMana + player._pMaxManaBase - player._pMaxMana;
@@ -2340,7 +2340,7 @@ void AddStone(Missile &missile, Point dst, Direction /*midir*/)
 			int mid = dMonster[target.x][target.y];
 			if (mid == 0)
 				continue;
-			mid = abs(mid) - 1;
+			mid = std::abs(mid) - 1;
 			auto &monster = Monsters[mid];
 
 			if (monster.MType->mtype == AnyOf(MT_GOLEM, MT_DIABLO, MT_NAKRUL))

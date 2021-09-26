@@ -4,9 +4,7 @@
 #include <cstdio>
 #include <fstream>
 #include <memory>
-
-#include "utils/stdcompat/string_view.hpp"
-#include "utils/stdcompat/optional.hpp"
+#include <optional>
 
 namespace devilution {
 
@@ -18,6 +16,6 @@ void RemoveFile(const char *lpFileName);
 std::optional<std::fstream> CreateFileStream(const char *path, std::ios::openmode mode);
 FILE *FOpen(const char *path, const char *mode);
 
-std::unique_ptr<wchar_t[]> ToWideChar(string_view path);
+std::unique_ptr<wchar_t[]> ToWideChar(std::string_view path);
 
 } // namespace devilution

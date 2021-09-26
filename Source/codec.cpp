@@ -10,7 +10,6 @@
 #include "appfat.h"
 #include "sha.h"
 #include "utils/endian.hpp"
-#include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
 namespace {
@@ -24,29 +23,29 @@ struct CodecSignature {
 
 // https://stackoverflow.com/a/45172360 - helper to make up for not having an implicit initializer for std::byte
 template <typename... Ts>
-std::array<byte, sizeof...(Ts)> make_bytes(Ts &&...args) noexcept
+std::array<std::byte, sizeof...(Ts)> make_bytes(Ts &&...args) noexcept
 {
-	return { byte(std::forward<Ts>(args))... };
+	return { std::byte(std::forward<Ts>(args))... };
 }
 
 void CodecInitKey(const char *pszPassword)
 {
-	byte pw[BlockSize]; // Repeat password until 64 char long
+	std::byte pw[BlockSize]; // Repeat password until 64 char long
 	std::size_t j = 0;
 	for (std::size_t i = 0; i < sizeof(pw); i++, j++) {
 		if (pszPassword[j] == '\0')
 			j = 0;
-		pw[i] = static_cast<byte>(pszPassword[j]);
+		pw[i] = static_cast<std::byte>(pszPassword[j]);
 	}
 
-	byte digest[SHA1HashSize];
+	std::byte digest[SHA1HashSize];
 	SHA1Reset(0);
 	SHA1Calculate(0, pw, digest);
 	SHA1Clear();
 
 	// declaring key as a std::array to make the initialization easier, otherwise we would need to explicitly
 	// declare every value as a byte on platforms that use std::byte.
-	std::array<byte, BlockSize> key = make_bytes( // clang-format off
+	std::array<std::byte, BlockSize> key = make_bytes( // clang-format off
 		0xbf, 0x2f, 0x63, 0xad, 0xd0, 0x56, 0x27, 0xf7, 0x6e, 0x43, 0x47, 0x27, 0x70, 0xc7, 0x5b, 0x42,
 		0x58, 0xac, 0x1e, 0xea, 0xca, 0x50, 0x7d, 0x28, 0x43, 0x93, 0xee, 0x68, 0x07, 0xf3, 0x03, 0xc5,
 		0x5b, 0xf6, 0x3f, 0x87, 0xf5, 0xc9, 0x28, 0xea, 0xb1, 0x26, 0x9d, 0x22, 0x85, 0x7a, 0x6a, 0x9b,
@@ -65,10 +64,10 @@ void CodecInitKey(const char *pszPassword)
 }
 } // namespace
 
-std::size_t codec_decode(byte *pbSrcDst, std::size_t size, const char *pszPassword)
+std::size_t codec_decode(std::byte *pbSrcDst, std::size_t size, const char *pszPassword)
 {
-	byte buf[BlockSize];
-	byte dst[SHA1HashSize];
+	std::byte buf[BlockSize];
+	std::byte dst[SHA1HashSize];
 
 	CodecInitKey(pszPassword);
 	if (size <= sizeof(CodecSignature))
@@ -114,11 +113,11 @@ std::size_t codec_get_encoded_len(std::size_t dwSrcBytes)
 	return dwSrcBytes + sizeof(CodecSignature);
 }
 
-void codec_encode(byte *pbSrcDst, std::size_t size, std::size_t size64, const char *pszPassword)
+void codec_encode(std::byte *pbSrcDst, std::size_t size, std::size_t size64, const char *pszPassword)
 {
-	byte buf[BlockSize];
-	byte tmp[SHA1HashSize];
-	byte dst[SHA1HashSize];
+	std::byte buf[BlockSize];
+	std::byte tmp[SHA1HashSize];
+	std::byte dst[SHA1HashSize];
 
 	if (size64 != codec_get_encoded_len(size))
 		app_fatal("Invalid encode parameters");

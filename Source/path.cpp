@@ -304,7 +304,7 @@ bool IsTileSolid(Point position)
 bool IsTileWalkable(Point position, bool ignoreDoors)
 {
 	if (dObject[position.x][position.y] != 0) {
-		int oi = abs(dObject[position.x][position.y]) - 1;
+		int oi = std::abs(dObject[position.x][position.y]) - 1;
 		if (ignoreDoors && Objects[oi].IsDoor())
 			return true;
 		if (Objects[oi]._oSolidFlag)

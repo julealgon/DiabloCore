@@ -184,7 +184,7 @@ bool GetRunGameLoop(bool &drawGame, bool &processInput)
 				DemoModeLastTick = currentTickCount;
 			}
 		} else {
-			float progressToNextGameTick = clamp((float)ticksElapsed / (float)gnTickDelay, 0.F, 1.F);
+			float progressToNextGameTick = std::clamp((float)ticksElapsed / (float)gnTickDelay, 0.F, 1.F);
 			if (dmsg.type == DemoMsgType::GameTick || dmsg.progressToNextGameTick > progressToNextGameTick) {
 				// we are ahead of the replay => add a additional rendering for smoothness
 				gfProgressToNextGameTick = progressToNextGameTick;

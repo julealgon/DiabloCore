@@ -27,7 +27,7 @@ bool sgbFadedIn = true;
 void LoadGamma()
 {
 	int gammaValue = sgOptions.Graphics.nGammaCorrection;
-	gammaValue = clamp(gammaValue, 30, 100);
+	gammaValue = std::clamp(gammaValue, 30, 100);
 	sgOptions.Graphics.nGammaCorrection = gammaValue - gammaValue % 5;
 }
 

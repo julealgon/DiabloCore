@@ -462,8 +462,8 @@ bool ForceL1Trig()
 				if (dPiece[cursPosition.x][cursPosition.y] == L5TWarpUpList[i]) {
 					for (int j = 0; j < numtrigs; j++) {
 						if (trigs[j]._tmsg == WM_DIABTWARPUP) {
-							int dx = abs(trigs[j].position.x - cursPosition.x);
-							int dy = abs(trigs[j].position.y - cursPosition.y);
+							int dx = std::abs(trigs[j].position.x - cursPosition.x);
+							int dy = std::abs(trigs[j].position.y - cursPosition.y);
 							if (dx < 4 && dy < 4) {
 								strcpy(infostr, "Up to town");
 								cursPosition = trigs[j].position;
@@ -485,8 +485,8 @@ bool ForceL2Trig()
 		if (dPiece[cursPosition.x][cursPosition.y] == L2UpList[i]) {
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABPREVLVL) {
-					int dx = abs(trigs[j].position.x - cursPosition.x);
-					int dy = abs(trigs[j].position.y - cursPosition.y);
+					int dx = std::abs(trigs[j].position.x - cursPosition.x);
+					int dy = std::abs(trigs[j].position.y - cursPosition.y);
 					if (dx < 4 && dy < 4) {
 						strcpy(infostr, fmt::format("Up to level {:d}", currlevel - 1).c_str());
 						cursPosition = trigs[j].position;
@@ -514,8 +514,8 @@ bool ForceL2Trig()
 			if (dPiece[cursPosition.x][cursPosition.y] == L2TWarpUpList[i]) {
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABTWARPUP) {
-						int dx = abs(trigs[j].position.x - cursPosition.x);
-						int dy = abs(trigs[j].position.y - cursPosition.y);
+						int dx = std::abs(trigs[j].position.x - cursPosition.x);
+						int dy = std::abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
 							strcpy(infostr, "Up to town");
 							cursPosition = trigs[j].position;
@@ -589,8 +589,8 @@ bool ForceL3Trig()
 			if (dPiece[cursPosition.x][cursPosition.y] == L3TWarpUpList[i]) {
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABTWARPUP) {
-						int dx = abs(trigs[j].position.x - cursPosition.x);
-						int dy = abs(trigs[j].position.y - cursPosition.y);
+						int dx = std::abs(trigs[j].position.x - cursPosition.x);
+						int dy = std::abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
 							strcpy(infostr, "Up to town");
 							cursPosition = trigs[j].position;
@@ -606,8 +606,8 @@ bool ForceL3Trig()
 			if (dPiece[cursPosition.x][cursPosition.y] == L6TWarpUpList[i]) {
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABTWARPUP) {
-						int dx = abs(trigs[j].position.x - cursPosition.x);
-						int dy = abs(trigs[j].position.y - cursPosition.y);
+						int dx = std::abs(trigs[j].position.x - cursPosition.x);
+						int dy = std::abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
 							strcpy(infostr, "Up to town");
 							cursPosition = trigs[j].position;
@@ -653,8 +653,8 @@ bool ForceL4Trig()
 			if (dPiece[cursPosition.x][cursPosition.y] == L4TWarpUpList[i]) {
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABTWARPUP) {
-						int dx = abs(trigs[j].position.x - cursPosition.x);
-						int dy = abs(trigs[j].position.y - cursPosition.y);
+						int dx = std::abs(trigs[j].position.x - cursPosition.x);
+						int dy = std::abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
 							strcpy(infostr, "Up to town");
 							cursPosition = trigs[j].position;

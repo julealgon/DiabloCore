@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <array>
 #include <functional>
+#include <optional>
 
 #include "damage.hpp"
 #include "engine.h"
@@ -16,7 +17,6 @@
 #include "engine/cel_sprite.hpp"
 #include "engine/point.hpp"
 #include "miniwin/miniwin.h"
-#include "utils/stdcompat/optional.hpp"
 #include "monstdat.h"
 #include "sound.h"
 #include "spelldat.h"
@@ -133,7 +133,7 @@ enum class LeaderRelation : uint8_t {
 };
 
 struct AnimStruct {
-	std::unique_ptr<byte[]> CMem;
+	std::unique_ptr<std::byte[]> CMem;
 	std::array<std::optional<CelSprite>, 8> CelSpritesForDirections;
 
 	inline const std::optional<CelSprite> &GetCelSpritesForDirection(Direction direction) const

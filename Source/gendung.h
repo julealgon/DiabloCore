@@ -7,12 +7,12 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 
 #include "engine.h"
 #include "engine/cel_sprite.hpp"
 #include "engine/point.hpp"
 #include "scrollrt.h"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 
@@ -143,7 +143,7 @@ extern std::optional<CelSprite> pSpecialCels;
 /** Specifies the tile definitions of the active dungeon type; (e.g. levels/l1data/l1.til). */
 extern std::unique_ptr<MegaTile[]> pMegaTiles;
 extern std::unique_ptr<uint16_t[]> pLevelPieces;
-extern std::unique_ptr<byte[]> pDungeonCels;
+extern std::unique_ptr<std::byte[]> pDungeonCels;
 /**
  * List of transparancy masks to use for dPieces
  */

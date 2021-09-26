@@ -81,7 +81,7 @@ enum shrine_type : uint8_t {
 
 int trapid;
 int trapdir;
-std::unique_ptr<byte[]> pObjCels[40];
+std::unique_ptr<std::byte[]> pObjCels[40];
 object_graphic_id ObjFileList[40];
 /** Specifies the number of active objects. */
 int leverid;
@@ -1422,8 +1422,8 @@ void UpdateObjectLight(int i, int lightRadius)
 		for (int p = 0; p < MAX_PLRS && !turnon; p++) {
 			if (Players[p].plractive) {
 				if (currlevel == Players[p].plrlevel) {
-					int dx = abs(Players[p].position.tile.x - ox);
-					int dy = abs(Players[p].position.tile.y - oy);
+					int dx = std::abs(Players[p].position.tile.x - ox);
+					int dy = std::abs(Players[p].position.tile.y - oy);
 					if (dx < tr && dy < tr)
 						turnon = true;
 				}
@@ -2126,8 +2126,8 @@ void OperateL3LDoor(int pnum, int oi, bool sendflag)
 
 void OperateL1Door(int pnum, int i, bool sendflag)
 {
-	int dpx = abs(Objects[i].position.x - Players[pnum].position.tile.x);
-	int dpy = abs(Objects[i].position.y - Players[pnum].position.tile.y);
+	int dpx = std::abs(Objects[i].position.x - Players[pnum].position.tile.x);
+	int dpy = std::abs(Objects[i].position.y - Players[pnum].position.tile.y);
 	if (dpx == 1 && dpy <= 1 && Objects[i]._otype == OBJ_L1LDOOR)
 		OperateL1LDoor(pnum, i, sendflag);
 	if (dpx <= 1 && dpy == 1 && Objects[i]._otype == OBJ_L1RDOOR)
@@ -2524,8 +2524,8 @@ void OperateSarc(int pnum, int i, bool sendmsg)
 
 void OperateL2Door(int pnum, int i, bool sendflag)
 {
-	int dpx = abs(Objects[i].position.x - Players[pnum].position.tile.x);
-	int dpy = abs(Objects[i].position.y - Players[pnum].position.tile.y);
+	int dpx = std::abs(Objects[i].position.x - Players[pnum].position.tile.x);
+	int dpy = std::abs(Objects[i].position.y - Players[pnum].position.tile.y);
 	if (dpx == 1 && dpy <= 1 && Objects[i]._otype == OBJ_L2LDOOR)
 		OperateL2LDoor(pnum, i, sendflag);
 	if (dpx <= 1 && dpy == 1 && Objects[i]._otype == OBJ_L2RDOOR)
@@ -2534,8 +2534,8 @@ void OperateL2Door(int pnum, int i, bool sendflag)
 
 void OperateL3Door(int pnum, int i, bool sendflag)
 {
-	int dpx = abs(Objects[i].position.x - Players[pnum].position.tile.x);
-	int dpy = abs(Objects[i].position.y - Players[pnum].position.tile.y);
+	int dpx = std::abs(Objects[i].position.x - Players[pnum].position.tile.x);
+	int dpy = std::abs(Objects[i].position.y - Players[pnum].position.tile.y);
 	if (dpx == 1 && dpy <= 1 && Objects[i]._otype == OBJ_L3RDOOR)
 		OperateL3RDoor(pnum, i, sendflag);
 	if (dpx <= 1 && dpy == 1 && Objects[i]._otype == OBJ_L3LDOOR)
@@ -3931,7 +3931,7 @@ bool OperateFountains(int pnum, int i)
 			return false;
 
 		int fromStat = GenerateRnd(4);
-		int toStat = abs(GenerateRnd(3));
+		int toStat = std::abs(GenerateRnd(3));
 		if (toStat >= fromStat)
 			toStat++;
 
@@ -4940,24 +4940,24 @@ void MonstCheckDoors(Monster &monster)
 		for (int i = 0; i < ActiveObjectCount; i++) {
 			int oi = ActiveObjects[i];
 			if ((Objects[oi]._otype == OBJ_L1LDOOR || Objects[oi]._otype == OBJ_L1RDOOR) && Objects[oi]._oVar4 == 0) {
-				int dpx = abs(Objects[oi].position.x - mx);
-				int dpy = abs(Objects[oi].position.y - my);
+				int dpx = std::abs(Objects[oi].position.x - mx);
+				int dpy = std::abs(Objects[oi].position.y - my);
 				if (dpx == 1 && dpy <= 1 && Objects[oi]._otype == OBJ_L1LDOOR)
 					OperateL1LDoor(MyPlayerId, oi, true);
 				if (dpx <= 1 && dpy == 1 && Objects[oi]._otype == OBJ_L1RDOOR)
 					OperateL1RDoor(MyPlayerId, oi, true);
 			}
 			if ((Objects[oi]._otype == OBJ_L2LDOOR || Objects[oi]._otype == OBJ_L2RDOOR) && Objects[oi]._oVar4 == 0) {
-				int dpx = abs(Objects[oi].position.x - mx);
-				int dpy = abs(Objects[oi].position.y - my);
+				int dpx = std::abs(Objects[oi].position.x - mx);
+				int dpy = std::abs(Objects[oi].position.y - my);
 				if (dpx == 1 && dpy <= 1 && Objects[oi]._otype == OBJ_L2LDOOR)
 					OperateL2LDoor(MyPlayerId, oi, true);
 				if (dpx <= 1 && dpy == 1 && Objects[oi]._otype == OBJ_L2RDOOR)
 					OperateL2RDoor(MyPlayerId, oi, true);
 			}
 			if ((Objects[oi]._otype == OBJ_L3LDOOR || Objects[oi]._otype == OBJ_L3RDOOR) && Objects[oi]._oVar4 == 0) {
-				int dpx = abs(Objects[oi].position.x - mx);
-				int dpy = abs(Objects[oi].position.y - my);
+				int dpx = std::abs(Objects[oi].position.x - mx);
+				int dpy = std::abs(Objects[oi].position.y - my);
 				if (dpx == 1 && dpy <= 1 && Objects[oi]._otype == OBJ_L3RDOOR)
 					OperateL3RDoor(MyPlayerId, oi, true);
 				if (dpx <= 1 && dpy == 1 && Objects[oi]._otype == OBJ_L3LDOOR)

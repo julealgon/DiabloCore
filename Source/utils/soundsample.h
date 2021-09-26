@@ -6,8 +6,6 @@
 
 #include <Aulib/Stream.h>
 
-#include "utils/stdcompat/shared_ptr_array.hpp"
-
 namespace devilution {
 
 /**
@@ -43,7 +41,7 @@ public:
 	 * @param dwBytes Length of buffer
 	 * @return 0 on success, -1 otherwise
 	 */
-	int SetChunk(ArraySharedPtr<std::uint8_t> fileData, std::size_t dwBytes);
+	int SetChunk(std::shared_ptr<std::uint8_t[]> fileData, std::size_t dwBytes);
 #endif
 
 #ifndef STREAM_ALL_AUDIO
@@ -69,7 +67,7 @@ public:
 private:
 #ifndef STREAM_ALL_AUDIO
 	// Non-streaming audio fields:
-	ArraySharedPtr<std::uint8_t> file_data_;
+	std::shared_ptr<std::uint8_t[]> file_data_;
 	std::size_t file_data_size_;
 #endif
 

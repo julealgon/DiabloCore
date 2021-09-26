@@ -69,7 +69,7 @@ T SwapBE(T in)
 }
 
 class LoadHelper {
-	std::unique_ptr<byte[]> m_buffer_;
+	std::unique_ptr<std::byte[]> m_buffer_;
 	size_t m_cur_ = 0;
 	size_t m_size_;
 
@@ -144,14 +144,14 @@ public:
 
 class SaveHelper {
 	const char *m_szFileName_;
-	std::unique_ptr<byte[]> m_buffer_;
+	std::unique_ptr<std::byte[]> m_buffer_;
 	size_t m_cur_ = 0;
 	size_t m_capacity_;
 
 public:
 	SaveHelper(const char *szFileName, size_t bufferLen)
 	    : m_szFileName_(szFileName)
-	    , m_buffer_(new byte[codec_get_encoded_len(bufferLen)])
+	    , m_buffer_(new std::byte[codec_get_encoded_len(bufferLen)])
 	    , m_capacity_(bufferLen)
 	{
 	}

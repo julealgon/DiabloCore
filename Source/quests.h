@@ -6,6 +6,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 #include "engine.h"
 #include "engine/cel_sprite.hpp"
@@ -14,7 +15,6 @@
 #include "monster.h"
 #include "objdat.h"
 #include "textdat.h"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 

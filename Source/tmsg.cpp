@@ -14,12 +14,12 @@ namespace {
 
 struct TMsg {
 	uint32_t time;
-	std::unique_ptr<byte[]> body;
+	std::unique_ptr<std::byte[]> body;
 	uint8_t len;
 
-	TMsg(uint32_t time, byte *data, uint8_t len)
+	TMsg(uint32_t time, std::byte *data, uint8_t len)
 	    : time(time)
-	    , body(new byte[len])
+	    , body(new std::byte[len])
 	    , len(len)
 	{
 		memcpy(body.get(), data, len);
@@ -30,7 +30,7 @@ std::list<TMsg> TimedMsgList;
 
 } // namespace
 
-uint8_t tmsg_get(std::unique_ptr<byte[]> *msg)
+uint8_t tmsg_get(std::unique_ptr<std::byte[]> *msg)
 {
 	if (TimedMsgList.empty())
 		return 0;
@@ -45,7 +45,7 @@ uint8_t tmsg_get(std::unique_ptr<byte[]> *msg)
 	return len;
 }
 
-void tmsg_add(byte *msg, uint8_t len)
+void tmsg_add(std::byte *msg, uint8_t len)
 {
 	uint32_t time = SDL_GetTicks() + gnTickDelay * 10;
 	TimedMsgList.emplace_back(time, msg, len);

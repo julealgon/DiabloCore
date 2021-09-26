@@ -21,7 +21,6 @@
 #include "stores.h"
 #include "towners.h"
 #include "utils/sdl_geometry.h"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 
@@ -440,7 +439,7 @@ void CheckInvPaste(int pnum, Point cursorPosition)
 						done = false;
 					} else {
 						if (player.InvGrid[xx + yy] != 0) {
-							int8_t iv = abs(player.InvGrid[xx + yy]);
+							int8_t iv = std::abs(player.InvGrid[xx + yy]);
 							if (it != 0) {
 								if (it != iv)
 									done = false;
@@ -1869,7 +1868,7 @@ int8_t CheckInvHLight()
 		rv = INVLOC_CHEST;
 		pi = &myPlayer.InvBody[rv];
 	} else if (r >= SLOTXY_INV_FIRST && r <= SLOTXY_INV_LAST) {
-		int8_t itemId = abs(myPlayer.InvGrid[r - SLOTXY_INV_FIRST]);
+		int8_t itemId = std::abs(myPlayer.InvGrid[r - SLOTXY_INV_FIRST]);
 		if (itemId == 0)
 			return -1;
 		int ii = itemId - 1;

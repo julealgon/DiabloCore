@@ -13,7 +13,6 @@
 #include "engine/render/text_render.hpp"
 #include "spelldat.h"
 #include "spells.h"
-#include "utils/stdcompat/optional.hpp"
 #include "utils/ui_fwd.h"
 
 namespace devilution {

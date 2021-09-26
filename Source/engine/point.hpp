@@ -1,11 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 
 #include "engine/direction.hpp"
 #include "engine/displacement.hpp"
-#include "utils/stdcompat/abs.hpp"
-#include "utils/stdcompat/algorithm.hpp"
 
 namespace devilution {
 
@@ -131,9 +130,9 @@ struct Point {
 		return static_cast<int>(std::sqrt(static_cast<int64_t>(vector.deltaX) * vector.deltaX + static_cast<int64_t>(vector.deltaY) * vector.deltaY));
 	}
 
-	constexpr friend Point abs(Point a)
+	friend Point abs(Point a)
 	{
-		return { abs(a.x), abs(a.y) };
+		return { std::abs(a.x), std::abs(a.y) };
 	}
 
 	constexpr int ManhattanDistance(Point other) const

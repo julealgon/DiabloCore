@@ -9,7 +9,6 @@
 #include "init.h"
 #include "player.h"
 #include "sound.h"
-#include "utils/stdcompat/algorithm.hpp"
 
 namespace devilution {
 
@@ -1242,7 +1241,7 @@ bool CalculateSoundPosition(Point soundPosition, int *plVolume, int *plPan)
 	const auto delta = soundPosition - playerPosition;
 
 	int pan = (delta.deltaX - delta.deltaY) * 256;
-	*plPan = clamp(pan, PAN_MIN, PAN_MAX);
+	*plPan = std::clamp(pan, PAN_MIN, PAN_MAX);
 
 	int volume = playerPosition.ApproxDistance(soundPosition);
 	volume *= -64;

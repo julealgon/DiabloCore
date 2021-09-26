@@ -112,7 +112,7 @@ void RenameTempToPerm()
 	assert(!GetPermSaveNames(dwIndex, szPerm));
 }
 
-std::unique_ptr<byte[]> ReadArchive(HANDLE archive, const char *pszName, size_t *pdwLen = nullptr)
+std::unique_ptr<std::byte[]> ReadArchive(HANDLE archive, const char *pszName, size_t *pdwLen = nullptr)
 {
 	HANDLE file;
 
@@ -123,7 +123,7 @@ std::unique_ptr<byte[]> ReadArchive(HANDLE archive, const char *pszName, size_t 
 	if (length == 0)
 		return nullptr;
 
-	std::unique_ptr<byte[]> buf { new byte[length] };
+	std::unique_ptr<std::byte[]> buf { new std::byte[length] };
 	if (!SFileReadFileThreadSafe(file, buf.get(), length))
 		return nullptr;
 	SFileCloseFileThreadSafe(file);
@@ -158,7 +158,7 @@ bool ReadHero(HANDLE archive, PlayerPack *pPack)
 void EncodeHero(const PlayerPack *pack)
 {
 	size_t packedLen = codec_get_encoded_len(sizeof(*pack));
-	std::unique_ptr<byte[]> packed { new byte[packedLen] };
+	std::unique_ptr<std::byte[]> packed { new std::byte[packedLen] };
 
 	memcpy(packed.get(), pack, sizeof(*pack));
 	codec_encode(packed.get(), sizeof(*pack), packedLen, pfile_get_password());
@@ -450,7 +450,7 @@ void pfile_remove_temp_files()
 	mpqapi_flush_and_close(true);
 }
 
-std::unique_ptr<byte[]> pfile_read(const char *pszName, size_t *pdwLen)
+std::unique_ptr<std::byte[]> pfile_read(const char *pszName, size_t *pdwLen)
 {
 	HANDLE archive;
 

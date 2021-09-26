@@ -325,8 +325,8 @@ void CheckCursMove()
 		mx++;
 	}
 
-	mx = clamp(mx, 0, MAXDUNX - 1);
-	my = clamp(my, 0, MAXDUNY - 1);
+	mx = std::clamp(mx, 0, MAXDUNX - 1);
+	my = std::clamp(my, 0, MAXDUNY - 1);
 
 	// While holding the button down we should retain target (but potentially lose it if it dies, goes out of view, etc)
 	if (sgbMouseDown != CLICK_NONE && pcursinvitem == -1) {

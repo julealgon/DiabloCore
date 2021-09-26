@@ -134,7 +134,7 @@ void UnloadFonts()
 	Fonts.clear();
 }
 
-int GetLineWidth(string_view text, GameFontTables size, int spacing, int *charactersInLine)
+int GetLineWidth(std::string_view text, GameFontTables size, int spacing, int *charactersInLine)
 {
 	int lineWidth = 0;
 
@@ -207,7 +207,7 @@ void WordWrapString(char *text, size_t width, GameFontTables size, int spacing)
 /**
  * @todo replace Rectangle with cropped Surface
  */
-uint32_t DrawString(const Surface &out, string_view text, const Rectangle &rect, UiFlags flags, int spacing, int lineHeight)
+uint32_t DrawString(const Surface &out, std::string_view text, const Rectangle &rect, UiFlags flags, int spacing, int lineHeight)
 {
 	GameFontTables size = GetSizeFromFlags(flags);
 	text_color color = GetColorFromFlags(flags);

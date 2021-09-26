@@ -236,7 +236,7 @@ void PmChangeLightOff(Player &player)
 	int offx = l->position.offset.x + (l->position.tile.x * 8);
 	int offy = l->position.offset.y + (l->position.tile.y * 8);
 
-	if (abs(lx - offx) < 3 && abs(ly - offy) < 3)
+	if (std::abs(lx - offx) < 3 && std::abs(ly - offy) < 3)
 		return;
 
 	ChangeLightOffset(player._plid, { x, y });
@@ -307,12 +307,12 @@ void ScrollViewPort(const Player &player, ScrollDirection dir)
 	ScrollInfo.tile = Point { 0, 0 } + (player.position.tile - ViewPosition);
 
 	if (zoomflag) {
-		if (abs(ScrollInfo.tile.x) >= 3 || abs(ScrollInfo.tile.y) >= 3) {
+		if (std::abs(ScrollInfo.tile.x) >= 3 || std::abs(ScrollInfo.tile.y) >= 3) {
 			ScrollInfo._sdir = ScrollDirection::None;
 		} else {
 			ScrollInfo._sdir = dir;
 		}
-	} else if (abs(ScrollInfo.tile.x) >= 2 || abs(ScrollInfo.tile.y) >= 2) {
+	} else if (std::abs(ScrollInfo.tile.x) >= 2 || std::abs(ScrollInfo.tile.y) >= 2) {
 		ScrollInfo._sdir = ScrollDirection::None;
 	} else {
 		ScrollInfo._sdir = dir;
@@ -391,7 +391,7 @@ void StartWalk(int pnum, Displacement vel, Direction dir, bool pmWillBeCalled)
 	StartWalkAnimation(player, dir, pmWillBeCalled);
 }
 
-void SetPlayerGPtrs(const char *path, std::unique_ptr<byte[]> &data, std::array<std::optional<CelSprite>, 8> &anim, int width)
+void SetPlayerGPtrs(const char *path, std::unique_ptr<std::byte[]> &data, std::array<std::optional<CelSprite>, 8> &anim, int width)
 {
 	data = nullptr;
 	data = LoadFileInMem(path);
@@ -399,7 +399,7 @@ void SetPlayerGPtrs(const char *path, std::unique_ptr<byte[]> &data, std::array<
 		return;
 
 	for (int i = 0; i < 8; i++) {
-		byte *pCelStart = CelGetFrame(data.get(), i);
+		std::byte *pCelStart = CelGetFrame(data.get(), i);
 		anim[i].emplace(pCelStart, width);
 	}
 }
@@ -900,7 +900,7 @@ bool PlrHitMonst(int pnum, int m)
 	}
 
 	hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 
 	bool ret = false;
 	if (CheckMonsterHit(monster, &ret)) {
@@ -1089,7 +1089,7 @@ bool PlrHitPlr(int pnum, int8_t p)
 	int hit = GenerateRnd(100);
 
 	int hper = attacker.GetMeleeToHit() - target.GetArmor();
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 
 	int blk = 100;
 	if ((target._pmode == PM_STAND || target._pmode == PM_ATTACK) && target._pBlockFlag) {
@@ -1097,7 +1097,7 @@ bool PlrHitPlr(int pnum, int8_t p)
 	}
 
 	int blkper = target.GetBlockChance() - (attacker._pLevel * 2);
-	blkper = clamp(blkper, 0, 100);
+	blkper = std::clamp(blkper, 0, 100);
 
 	if (hit >= hper) {
 		return false;
@@ -1228,7 +1228,7 @@ bool DoAttack(int pnum)
 		                && !(player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Shield || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Shield))))) {
 			position = player.position.tile + Right(player._pdir);
 			if (dMonster[position.x][position.y] != 0) {
-				int m = abs(dMonster[position.x][position.y]) - 1;
+				int m = std::abs(dMonster[position.x][position.y]) - 1;
 				auto &monster = Monsters[m];
 				if (!CanTalkToMonst(monster) && monster.position.old == position) {
 					if (PlrHitMonst(-pnum, m))
@@ -1237,7 +1237,7 @@ bool DoAttack(int pnum)
 			}
 			position = player.position.tile + Left(player._pdir);
 			if (dMonster[position.x][position.y] != 0) {
-				int m = abs(dMonster[position.x][position.y]) - 1;
+				int m = std::abs(dMonster[position.x][position.y]) - 1;
 				auto &monster = Monsters[m];
 				if (!CanTalkToMonst(monster) && monster.position.old == position) {
 					if (PlrHitMonst(-pnum, m))
@@ -1578,12 +1578,12 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			if (pnum == MyPlayerId) {
 				if (player.destAction == ACTION_ATTACKMON || player.destAction == ACTION_ATTACKPLR) {
 					if (player.destAction == ACTION_ATTACKMON) {
-						x = abs(player.position.future.x - monster->position.future.x);
-						y = abs(player.position.future.y - monster->position.future.y);
+						x = std::abs(player.position.future.x - monster->position.future.x);
+						y = std::abs(player.position.future.y - monster->position.future.y);
 						d = GetDirection(player.position.future, monster->position.future);
 					} else {
-						x = abs(player.position.future.x - target->position.future.x);
-						y = abs(player.position.future.y - target->position.future.y);
+						x = std::abs(player.position.future.x - target->position.future.x);
+						y = std::abs(player.position.future.y - target->position.future.y);
 						d = GetDirection(player.position.future, target->position.future);
 					}
 
@@ -1660,8 +1660,8 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			StartAttack(pnum, d);
 			break;
 		case ACTION_ATTACKMON:
-			x = abs(player.position.tile.x - monster->position.future.x);
-			y = abs(player.position.tile.y - monster->position.future.y);
+			x = std::abs(player.position.tile.x - monster->position.future.x);
+			y = std::abs(player.position.tile.y - monster->position.future.y);
 			if (x <= 1 && y <= 1) {
 				d = GetDirection(player.position.future, monster->position.future);
 				if (monster->mtalkmsg != TEXT_NONE && monster->mtalkmsg != TEXT_VILE14) {
@@ -1672,8 +1672,8 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			}
 			break;
 		case ACTION_ATTACKPLR:
-			x = abs(player.position.tile.x - target->position.future.x);
-			y = abs(player.position.tile.y - target->position.future.y);
+			x = std::abs(player.position.tile.x - target->position.future.x);
+			y = std::abs(player.position.tile.y - target->position.future.y);
 			if (x <= 1 && y <= 1) {
 				d = GetDirection(player.position.future, target->position.future);
 				StartAttack(pnum, d);
@@ -1716,10 +1716,10 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			player.spellLevel = player.destParam2;
 			break;
 		case ACTION_OPERATE:
-			x = abs(player.position.tile.x - object->position.x);
-			y = abs(player.position.tile.y - object->position.y);
+			x = std::abs(player.position.tile.x - object->position.x);
+			y = std::abs(player.position.tile.y - object->position.y);
 			if (y > 1 && dObject[object->position.x][object->position.y - 1] == -(targetId + 1)) {
-				y = abs(player.position.tile.y - object->position.y + 1);
+				y = std::abs(player.position.tile.y - object->position.y + 1);
 			}
 			if (x <= 1 && y <= 1) {
 				if (object->_oBreak == 1) {
@@ -1731,10 +1731,10 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			}
 			break;
 		case ACTION_DISARM:
-			x = abs(player.position.tile.x - object->position.x);
-			y = abs(player.position.tile.y - object->position.y);
+			x = std::abs(player.position.tile.x - object->position.x);
+			y = std::abs(player.position.tile.y - object->position.y);
 			if (y > 1 && dObject[object->position.x][object->position.y - 1] == -(targetId + 1)) {
-				y = abs(player.position.tile.y - object->position.y + 1);
+				y = std::abs(player.position.tile.y - object->position.y + 1);
 			}
 			if (x <= 1 && y <= 1) {
 				if (object->_oBreak == 1) {
@@ -1753,8 +1753,8 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			break;
 		case ACTION_PICKUPITEM:
 			if (pnum == MyPlayerId) {
-				x = abs(player.position.tile.x - item->position.x);
-				y = abs(player.position.tile.y - item->position.y);
+				x = std::abs(player.position.tile.x - item->position.x);
+				y = std::abs(player.position.tile.y - item->position.y);
 				if (x <= 1 && y <= 1 && pcurs == CURSOR_HAND && !item->_iRequest) {
 					NetSendCmdGItem(true, CMD_REQUESTGITEM, MyPlayerId, MyPlayerId, targetId);
 					item->_iRequest = true;
@@ -1763,8 +1763,8 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 			break;
 		case ACTION_PICKUPAITEM:
 			if (pnum == MyPlayerId) {
-				x = abs(player.position.tile.x - item->position.x);
-				y = abs(player.position.tile.y - item->position.y);
+				x = std::abs(player.position.tile.x - item->position.x);
+				y = std::abs(player.position.tile.y - item->position.y);
 				if (x <= 1 && y <= 1 && pcurs == CURSOR_HAND) {
 					NetSendCmdGItem(true, CMD_REQUESTAGITEM, MyPlayerId, MyPlayerId, targetId);
 				}
@@ -2573,7 +2573,7 @@ void AddPlrExperience(int pnum, int lvl, int exp)
 
 	// Prevent power leveling
 	if (gbIsMultiplayer) {
-		const uint32_t clampedPlayerLevel = clamp(static_cast<int>(player._pLevel), 0, 50);
+		const uint32_t clampedPlayerLevel = std::clamp(static_cast<int>(player._pLevel), 0, 50);
 
 		// for low level characters experience gain is capped to 1/20 of current levels xp
 		// for high level characters experience gain is capped to 200 * current level - this is a smaller value than 1/20 of the exp needed for the next level after level 5.
@@ -3308,7 +3308,7 @@ bool PosOkPlayer(const Player &player, Point position)
 	if (!IsTileWalkable(position))
 		return false;
 	if (dPlayer[position.x][position.y] != 0) {
-		auto &otherPlayer = Players[abs(dPlayer[position.x][position.y]) - 1];
+		auto &otherPlayer = Players[std::abs(dPlayer[position.x][position.y]) - 1];
 		if (&otherPlayer != &player && otherPlayer._pHitPoints != 0) {
 			return false;
 		}
@@ -3564,16 +3564,16 @@ void CheckStats(Player &player)
 		int maxStatPoint = player.GetMaximumAttributeValue(attribute);
 		switch (attribute) {
 		case CharacterAttribute::Strength:
-			player._pBaseStr = clamp(player._pBaseStr, 0, maxStatPoint);
+			player._pBaseStr = std::clamp(player._pBaseStr, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Magic:
-			player._pBaseMag = clamp(player._pBaseMag, 0, maxStatPoint);
+			player._pBaseMag = std::clamp(player._pBaseMag, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Dexterity:
-			player._pBaseDex = clamp(player._pBaseDex, 0, maxStatPoint);
+			player._pBaseDex = std::clamp(player._pBaseDex, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Vitality:
-			player._pBaseVit = clamp(player._pBaseVit, 0, maxStatPoint);
+			player._pBaseVit = std::clamp(player._pBaseVit, 0, maxStatPoint);
 			break;
 		}
 	}
