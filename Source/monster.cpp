@@ -1468,7 +1468,7 @@ void MonsterAttackPlayer(int i, int pnum, int hit, Damage damage)
 		blkper = GenerateRnd(100);
 	}
 	int blk = player.GetBlockChance() - (monster.mLevel * 2);
-	blk = clamp(blk, 0, 100);
+	blk = std::clamp(blk, 0, 100);
 	if (hper >= hit)
 		return;
 	if (blkper < blk) {

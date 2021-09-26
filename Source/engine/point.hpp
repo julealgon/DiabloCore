@@ -1,10 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 
 #include "engine/direction.hpp"
 #include "engine/displacement.hpp"
-#include "utils/stdcompat/algorithm.hpp"
 
 namespace devilution {
 

@@ -15,7 +15,6 @@
 #include "palette.h"
 #include "player.h"
 #include "setmaps.h"
-#include "utils/stdcompat/algorithm.hpp"
 #include "utils/ui_fwd.h"
 
 namespace devilution {
@@ -269,11 +268,11 @@ void SearchAutomapItem(const Surface &out, const Displacement &myPlayerOffset)
 			tile.y++;
 	}
 
-	const int startX = clamp(tile.x - 8, 0, MAXDUNX);
-	const int startY = clamp(tile.y - 8, 0, MAXDUNY);
+	const int startX = std::clamp(tile.x - 8, 0, MAXDUNX);
+	const int startY = std::clamp(tile.y - 8, 0, MAXDUNY);
 
-	const int endX = clamp(tile.x + 8, 0, MAXDUNX);
-	const int endY = clamp(tile.y + 8, 0, MAXDUNY);
+	const int endX = std::clamp(tile.x + 8, 0, MAXDUNX);
+	const int endY = std::clamp(tile.y + 8, 0, MAXDUNY);
 
 	for (int i = startX; i < endX; i++) {
 		for (int j = startY; j < endY; j++) {

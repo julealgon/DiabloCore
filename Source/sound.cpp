@@ -23,7 +23,6 @@
 #include "utils/log.hpp"
 #include "utils/math.h"
 #include "utils/sdl_mutex.h"
-#include "utils/stdcompat/algorithm.hpp"
 #include "utils/stdcompat/optional.hpp"
 #include "utils/stdcompat/shared_ptr_array.hpp"
 #include "utils/stubs.h"
@@ -119,7 +118,7 @@ const char *const MusicTracks[NUM_MUSIC] = {
 
 int CapVolume(int volume)
 {
-	return clamp(volume, VOLUME_MIN, VOLUME_MAX);
+	return std::clamp(volume, VOLUME_MIN, VOLUME_MAX);
 }
 
 } // namespace

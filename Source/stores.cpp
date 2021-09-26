@@ -2214,7 +2214,7 @@ void SetupTownStores()
 		}
 	}
 
-	l = clamp(l + 2, 6, 16);
+	l = std::clamp(l + 2, 6, 16);
 	SpawnStoreGold();
 	SpawnSmith(l);
 	SpawnWitch(l);

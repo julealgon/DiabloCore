@@ -30,7 +30,6 @@
 #include "player.h"
 #include "stores.h"
 #include "utils/math.h"
-#include "utils/stdcompat/algorithm.hpp"
 
 namespace devilution {
 
@@ -2201,7 +2200,7 @@ void SpawnOnePremium(int i, int plvl, int playerId)
 	dexterity += dexterity / 5;
 	magic += magic / 5;
 
-	plvl = clamp(plvl, 1, 30);
+	plvl = std::clamp(plvl, 1, 30);
 
 	int count = 0;
 
@@ -2726,7 +2725,7 @@ void CalcPlrItemVals(Player &player, bool loadgfx)
 	player._pIBonusDamMod = dmod;
 	player._pIGetHit = ghit;
 
-	lrad = clamp(lrad, 2, 15);
+	lrad = std::clamp(lrad, 2, 15);
 
 	if (player._pLightRad != lrad && &player == &Players[MyPlayerId]) {
 		ChangeLightRadius(player._plid, lrad);
@@ -2810,9 +2809,9 @@ void CalcPlrItemVals(Player &player, bool loadgfx)
 		lr = 0;
 	}
 
-	player._pMagResist = clamp(mr, 0, MAXRESIST);
-	player._pFireResist = clamp(fr, 0, MAXRESIST);
-	player._pLghtResist = clamp(lr, 0, MAXRESIST);
+	player._pMagResist = std::clamp(mr, 0, MAXRESIST);
+	player._pFireResist = std::clamp(fr, 0, MAXRESIST);
+	player._pLghtResist = std::clamp(lr, 0, MAXRESIST);
 
 	if (player._pClass == HeroClass::Warrior) {
 		vadd *= 2;

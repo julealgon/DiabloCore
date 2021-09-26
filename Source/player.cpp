@@ -900,7 +900,7 @@ bool PlrHitMonst(int pnum, int m)
 	}
 
 	hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 
 	bool ret = false;
 	if (CheckMonsterHit(monster, &ret)) {
@@ -1089,7 +1089,7 @@ bool PlrHitPlr(int pnum, int8_t p)
 	int hit = GenerateRnd(100);
 
 	int hper = attacker.GetMeleeToHit() - target.GetArmor();
-	hper = clamp(hper, 5, 95);
+	hper = std::clamp(hper, 5, 95);
 
 	int blk = 100;
 	if ((target._pmode == PM_STAND || target._pmode == PM_ATTACK) && target._pBlockFlag) {
@@ -1097,7 +1097,7 @@ bool PlrHitPlr(int pnum, int8_t p)
 	}
 
 	int blkper = target.GetBlockChance() - (attacker._pLevel * 2);
-	blkper = clamp(blkper, 0, 100);
+	blkper = std::clamp(blkper, 0, 100);
 
 	if (hit >= hper) {
 		return false;
@@ -2573,7 +2573,7 @@ void AddPlrExperience(int pnum, int lvl, int exp)
 
 	// Prevent power leveling
 	if (gbIsMultiplayer) {
-		const uint32_t clampedPlayerLevel = clamp(static_cast<int>(player._pLevel), 0, 50);
+		const uint32_t clampedPlayerLevel = std::clamp(static_cast<int>(player._pLevel), 0, 50);
 
 		// for low level characters experience gain is capped to 1/20 of current levels xp
 		// for high level characters experience gain is capped to 200 * current level - this is a smaller value than 1/20 of the exp needed for the next level after level 5.
@@ -3564,16 +3564,16 @@ void CheckStats(Player &player)
 		int maxStatPoint = player.GetMaximumAttributeValue(attribute);
 		switch (attribute) {
 		case CharacterAttribute::Strength:
-			player._pBaseStr = clamp(player._pBaseStr, 0, maxStatPoint);
+			player._pBaseStr = std::clamp(player._pBaseStr, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Magic:
-			player._pBaseMag = clamp(player._pBaseMag, 0, maxStatPoint);
+			player._pBaseMag = std::clamp(player._pBaseMag, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Dexterity:
-			player._pBaseDex = clamp(player._pBaseDex, 0, maxStatPoint);
+			player._pBaseDex = std::clamp(player._pBaseDex, 0, maxStatPoint);
 			break;
 		case CharacterAttribute::Vitality:
-			player._pBaseVit = clamp(player._pBaseVit, 0, maxStatPoint);
+			player._pBaseVit = std::clamp(player._pBaseVit, 0, maxStatPoint);
 			break;
 		}
 	}
