@@ -1358,7 +1358,7 @@ void DrawInfoBox(const Surface &out)
 					PrintMonstHistory(monster.MType->mtype);
 				}
 			} else if (pcursitem == -1) {
-				string_view townerName = Towners[pcursmonst].name;
+				std::string_view townerName = Towners[pcursmonst].name;
 				strncpy(infostr, townerName.data(), townerName.length());
 				infostr[townerName.length()] = '\0';
 			}

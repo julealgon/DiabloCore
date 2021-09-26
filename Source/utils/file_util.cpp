@@ -19,7 +19,7 @@
 
 namespace devilution {
 
-std::unique_ptr<wchar_t[]> ToWideChar(string_view path)
+std::unique_ptr<wchar_t[]> ToWideChar(std::string_view path)
 {
 	constexpr std::uint32_t flags = MB_ERR_INVALID_CHARS;
 	const int utf16Size = ::MultiByteToWideChar(CP_UTF8, flags, path.data(), path.size(), nullptr, 0);

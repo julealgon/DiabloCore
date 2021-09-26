@@ -134,7 +134,7 @@ void SErrSetLastError(uint32_t dwErrCode)
 	::SetLastError(dwErrCode);
 }
 
-void SFileSetBasePath(string_view path)
+void SFileSetBasePath(std::string_view path)
 {
 	SBasePath.emplace(path);
 }

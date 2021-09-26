@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <memory>
-#include "utils/stdcompat/string_view.hpp"
 
 #include "items.h"
 #include "player.h"
@@ -52,7 +51,7 @@ struct Towner {
 	/** Current frame of animation. */
 	uint8_t _tAnimFrame;
 	uint8_t _tAnimFrameCnt;
-	string_view name;
+	std::string_view name;
 	/** Specifies the animation frame sequence. */
 	const uint8_t *animOrder; // unowned
 	std::size_t animOrderSize;

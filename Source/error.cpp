@@ -35,7 +35,7 @@ void InitNextLines()
 	strcpy(tempstr, message.data());
 
 	WordWrapString(tempstr, LineWidth, GameFont12, 1);
-	const string_view paragraphs = tempstr;
+	const std::string_view paragraphs = tempstr;
 
 	size_t previous = 0;
 	while (true) {

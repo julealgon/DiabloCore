@@ -11,7 +11,6 @@
 #include "init.h"
 #include "minitext.h"
 #include "stores.h"
-#include "utils/stdcompat/string_view.hpp"
 
 namespace devilution {
 
@@ -106,7 +105,7 @@ void InitHelp()
 		strcpy(tempString, text);
 
 		WordWrapString(tempString, 577);
-		const string_view paragraph = tempString;
+		const std::string_view paragraph = tempString;
 
 		size_t previous = 0;
 		while (true) {
