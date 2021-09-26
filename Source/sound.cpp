@@ -23,7 +23,6 @@
 #include "utils/log.hpp"
 #include "utils/math.h"
 #include "utils/sdl_mutex.h"
-#include "utils/stdcompat/shared_ptr_array.hpp"
 #include "utils/stubs.h"
 
 namespace devilution {
@@ -169,7 +168,7 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 			ErrDlg("SFileOpenFile failed", path, __FILE__, __LINE__);
 		}
 		size_t dwBytes = SFileGetFileSize(file);
-		auto waveFile = MakeArraySharedPtr<std::uint8_t>(dwBytes);
+		auto waveFile = std::shared_ptr<std::uint8_t[]>(new std::uint8_t[dwBytes]);
 		SFileReadFileThreadSafe(file, waveFile.get(), dwBytes);
 		int error = snd->DSB.SetChunk(waveFile, dwBytes);
 		SFileCloseFileThreadSafe(file);

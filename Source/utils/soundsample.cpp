@@ -129,7 +129,7 @@ int SoundSample::SetChunkStream(std::string filePath)
 }
 
 #ifndef STREAM_ALL_AUDIO
-int SoundSample::SetChunk(ArraySharedPtr<std::uint8_t> fileData, std::size_t dwBytes)
+int SoundSample::SetChunk(std::shared_ptr<std::uint8_t[]> fileData, std::size_t dwBytes)
 {
 	file_data_ = std::move(fileData);
 	file_data_size_ = dwBytes;
