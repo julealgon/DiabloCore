@@ -16,7 +16,7 @@ namespace devilution {
 static constexpr unsigned MaxCorpses = 31;
 
 struct Corpse {
-	std::array<const byte *, 8> data;
+	std::array<const std::byte *, 8> data;
 	int frame;
 	int width;
 	uint8_t translationPaletteIndex;

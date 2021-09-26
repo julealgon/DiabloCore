@@ -196,7 +196,7 @@ void SyncMonster(int pnum, const TSyncMonster *p)
 
 } // namespace
 
-uint32_t sync_all_monsters(const byte *pbBuf, uint32_t dwMaxLen)
+uint32_t sync_all_monsters(const std::byte *pbBuf, uint32_t dwMaxLen)
 {
 	if (ActiveMonsterCount < 1) {
 		return dwMaxLen;
@@ -235,7 +235,7 @@ uint32_t sync_all_monsters(const byte *pbBuf, uint32_t dwMaxLen)
 	return dwMaxLen;
 }
 
-uint32_t sync_update(int pnum, const byte *pbBuf)
+uint32_t sync_update(int pnum, const std::byte *pbBuf)
 {
 	uint16_t wLen;
 

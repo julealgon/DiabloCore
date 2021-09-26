@@ -465,7 +465,7 @@ _BLOCKENTRY *AddFile(const char *pszName, _BLOCKENTRY *pBlk, int blockIndex)
 	return pBlk;
 }
 
-bool WriteFileContents(const char *pszName, const byte *pbData, size_t dwLen, _BLOCKENTRY *pBlk)
+bool WriteFileContents(const char *pszName, const std::byte *pbData, size_t dwLen, _BLOCKENTRY *pBlk)
 {
 	const char *tmp;
 	while ((tmp = strchr(pszName, ':')) != nullptr)
@@ -510,7 +510,7 @@ bool WriteFileContents(const char *pszName, const byte *pbData, size_t dwLen, _B
 #endif
 
 	uint32_t destsize = offsetTableByteSize;
-	byte mpqBuf[SectorSize];
+	std::byte mpqBuf[SectorSize];
 	std::size_t curSector = 0;
 	while (true) {
 		uint32_t len = std::min(dwLen, SectorSize);
@@ -573,7 +573,7 @@ void mpqapi_remove_hash_entries(bool (*fnGetName)(uint8_t, char *))
 	}
 }
 
-bool mpqapi_write_file(const char *pszName, const byte *pbData, size_t dwLen)
+bool mpqapi_write_file(const char *pszName, const std::byte *pbData, size_t dwLen)
 {
 	_BLOCKENTRY *blockEntry;
 

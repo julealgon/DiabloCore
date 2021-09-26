@@ -20,7 +20,7 @@ namespace devilution {
  * @param ttbl Palette translation table
  * @param nCel Frame number in CL2 file
  */
-void Cl2ApplyTrans(byte *p, const std::array<uint8_t, 256> &ttbl, int nCel);
+void Cl2ApplyTrans(std::byte *p, const std::array<uint8_t, 256> &ttbl, int nCel);
 
 /**
  * @brief Blit CL2 sprite, to the back buffer at the given coordianates

@@ -451,7 +451,7 @@ void DrawPlayerIconHelper(const Surface &out, int pnum, missile_graphic_id missi
 	position.x += CalculateWidth2(Players[pnum].AnimInfo.pCelSprite->Width()) - MissileSpriteData[missileGraphicId].animWidth2;
 
 	int width = MissileSpriteData[missileGraphicId].animWidth;
-	byte *pCelBuff = MissileSpriteData[missileGraphicId].animData[0].get();
+	std::byte *pCelBuff = MissileSpriteData[missileGraphicId].animData[0].get();
 
 	CelSprite cel { pCelBuff, width };
 
@@ -606,7 +606,7 @@ void DrawObject(const Surface &out, Point tilePosition, Point targetBufferPositi
 
 	assert(bv >= 0 && bv < MAXOBJECTS);
 
-	byte *pCelBuff = Objects[bv]._oAnimData;
+	std::byte *pCelBuff = Objects[bv]._oAnimData;
 	if (pCelBuff == nullptr) {
 		Log("Draw Object type {}: NULL Cel Buffer", Objects[bv]._otype);
 		return;
@@ -844,7 +844,7 @@ void DrawDungeon(const Surface &out, Point tilePosition, Point targetBufferPosit
 		do {
 			Corpse *pDeadGuy = &Corpses[(bDead & 0x1F) - 1];
 			int px = targetBufferPosition.x - CalculateWidth2(pDeadGuy->width);
-			const byte *pCelBuff = pDeadGuy->data[(bDead >> 5) & 7];
+			const std::byte *pCelBuff = pDeadGuy->data[(bDead >> 5) & 7];
 			assert(pCelBuff != nullptr);
 			const auto *frameTable = reinterpret_cast<const uint32_t *>(pCelBuff);
 			int frames = SDL_SwapLE32(frameTable[0]);

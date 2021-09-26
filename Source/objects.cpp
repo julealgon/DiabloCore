@@ -81,7 +81,7 @@ enum shrine_type : uint8_t {
 
 int trapid;
 int trapdir;
-std::unique_ptr<byte[]> pObjCels[40];
+std::unique_ptr<std::byte[]> pObjCels[40];
 object_graphic_id ObjFileList[40];
 /** Specifies the number of active objects. */
 int leverid;

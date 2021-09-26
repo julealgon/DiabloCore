@@ -391,7 +391,7 @@ void StartWalk(int pnum, Displacement vel, Direction dir, bool pmWillBeCalled)
 	StartWalkAnimation(player, dir, pmWillBeCalled);
 }
 
-void SetPlayerGPtrs(const char *path, std::unique_ptr<byte[]> &data, std::array<std::optional<CelSprite>, 8> &anim, int width)
+void SetPlayerGPtrs(const char *path, std::unique_ptr<std::byte[]> &data, std::array<std::optional<CelSprite>, 8> &anim, int width)
 {
 	data = nullptr;
 	data = LoadFileInMem(path);
@@ -399,7 +399,7 @@ void SetPlayerGPtrs(const char *path, std::unique_ptr<byte[]> &data, std::array<
 		return;
 
 	for (int i = 0; i < 8; i++) {
-		byte *pCelStart = CelGetFrame(data.get(), i);
+		std::byte *pCelStart = CelGetFrame(data.get(), i);
 		anim[i].emplace(pCelStart, width);
 	}
 }

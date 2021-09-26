@@ -133,7 +133,7 @@ enum class LeaderRelation : uint8_t {
 };
 
 struct AnimStruct {
-	std::unique_ptr<byte[]> CMem;
+	std::unique_ptr<std::byte[]> CMem;
 	std::array<std::optional<CelSprite>, 8> CelSpritesForDirections;
 
 	inline const std::optional<CelSprite> &GetCelSpritesForDirection(Direction direction) const

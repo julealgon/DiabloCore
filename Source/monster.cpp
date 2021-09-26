@@ -3673,7 +3673,7 @@ void InitMonsterGFX(int monst)
 			char strBuff[256];
 			sprintf(strBuff, MonstersData[mtype].GraphicType, animletter[anim]);
 
-			byte *celBuf;
+			std::byte *celBuf;
 			{
 				auto celData = LoadFileInMem(strBuff);
 				celBuf = celData.get();
@@ -3682,7 +3682,7 @@ void InitMonsterGFX(int monst)
 
 			if (LevelMonsterTypes[monst].mtype != MT_GOLEM || (animletter[anim] != 's' && animletter[anim] != 'd')) {
 				for (int i = 0; i < 8; i++) {
-					byte *pCelStart = CelGetFrame(celBuf, i);
+					std::byte *pCelStart = CelGetFrame(celBuf, i);
 					LevelMonsterTypes[monst].Anims[anim].CelSpritesForDirections[i].emplace(pCelStart, width);
 				}
 			} else {

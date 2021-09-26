@@ -108,7 +108,7 @@ void SHA1ProcessMessageBlock(SHA1Context *context)
 	context->state[4] += e;
 }
 
-void SHA1Input(SHA1Context *context, const byte *messageArray, std::size_t len)
+void SHA1Input(SHA1Context *context, const std::byte *messageArray, std::size_t len)
 {
 	for (auto i = len / BlockSize; i != 0; i--) {
 		memcpy(context->buffer, messageArray, BlockSize);
@@ -124,7 +124,7 @@ void SHA1Clear()
 	memset(sgSHA1, 0, sizeof(sgSHA1));
 }
 
-void SHA1Result(int n, byte messageDigest[SHA1HashSize])
+void SHA1Result(int n, std::byte messageDigest[SHA1HashSize])
 {
 	std::uint32_t *messageDigestBlock = reinterpret_cast<std::uint32_t *>(messageDigest);
 	if (messageDigest != nullptr) {
@@ -135,7 +135,7 @@ void SHA1Result(int n, byte messageDigest[SHA1HashSize])
 	}
 }
 
-void SHA1Calculate(int n, const byte data[BlockSize], byte messageDigest[SHA1HashSize])
+void SHA1Calculate(int n, const std::byte data[BlockSize], std::byte messageDigest[SHA1HashSize])
 {
 	SHA1Input(&sgSHA1[n], data, BlockSize);
 	if (messageDigest != nullptr)

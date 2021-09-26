@@ -12,7 +12,6 @@
 #include "items.h"
 #include "player.h"
 #include "quests.h"
-#include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
 
@@ -36,9 +35,9 @@ enum _talker_id : uint8_t {
 };
 
 struct Towner {
-	byte *_tNAnim[8];
-	std::unique_ptr<byte[]> data;
-	byte *_tAnimData;
+	std::byte *_tNAnim[8];
+	std::unique_ptr<std::byte[]> data;
+	std::byte *_tAnimData;
 	/** Used to get a voice line and text related to active quests when the player speaks to a town npc */
 	int16_t seed;
 	/** Tile position of NPC */

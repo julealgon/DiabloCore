@@ -23,7 +23,6 @@
 #include "sync.h"
 #include "tmsg.h"
 #include "utils/endian.hpp"
-#include "utils/stdcompat/cstddef.hpp"
 
 namespace devilution {
 
@@ -72,27 +71,27 @@ uint32_t sgbSentThisCycle;
 void BufferInit(TBuffer *pBuf)
 {
 	pBuf->dwNextWriteOffset = 0;
-	pBuf->bData[0] = byte { 0 };
+	pBuf->bData[0] = std::byte { 0 };
 }
 
-void CopyPacket(TBuffer *buf, byte *packet, uint8_t size)
+void CopyPacket(TBuffer *buf, std::byte *packet, uint8_t size)
 {
 	if (buf->dwNextWriteOffset + size + 2 > 0x1000) {
 		return;
 	}
 
-	byte *p = &buf->bData[buf->dwNextWriteOffset];
+	std::byte *p = &buf->bData[buf->dwNextWriteOffset];
 	buf->dwNextWriteOffset += size + 1;
-	*p = static_cast<byte>(size);
+	*p = static_cast<std::byte>(size);
 	p++;
 	memcpy(p, packet, size);
-	p[size] = byte { 0 };
+	p[size] = std::byte { 0 };
 }
 
-byte *ReceivePacket(TBuffer *pBuf, byte *body, size_t *size)
+std::byte *ReceivePacket(TBuffer *pBuf, std::byte *body, size_t *size)
 {
 	if (pBuf->dwNextWriteOffset != 0) {
-		byte *srcPtr = pBuf->bData;
+		std::byte *srcPtr = pBuf->bData;
 		while (true) {
 			auto chunkSize = static_cast<uint8_t>(*srcPtr);
 			if (chunkSize == 0)
@@ -291,7 +290,7 @@ void BeginTimeout()
 	}
 }
 
-void HandleAllPackets(int pnum, byte *pData, size_t nSize)
+void HandleAllPackets(int pnum, std::byte *pData, size_t nSize)
 {
 	while (nSize != 0) {
 		int nLen = ParseCmd(pnum, (TCmd *)pData);
@@ -306,7 +305,7 @@ void HandleAllPackets(int pnum, byte *pData, size_t nSize)
 void ProcessTmsgs()
 {
 	uint8_t cnt;
-	std::unique_ptr<byte[]> msg;
+	std::unique_ptr<std::byte[]> msg;
 
 	while ((cnt = tmsg_get(&msg)) != 0)
 		HandleAllPackets(MyPlayerId, msg.get(), cnt);
@@ -315,7 +314,7 @@ void ProcessTmsgs()
 void SendPlayerInfo(int pnum, _cmd_id cmd)
 {
 	static_assert(alignof(PlayerPack) == 1, "Fix pkplr alignment");
-	std::unique_ptr<byte[]> pkplr { new byte[sizeof(PlayerPack)] };
+	std::unique_ptr<std::byte[]> pkplr { new std::byte[sizeof(PlayerPack)] };
 
 	PackPlayer(reinterpret_cast<PlayerPack *>(pkplr.get()), Players[MyPlayerId], true);
 	dthread_send_delta(pnum, cmd, std::move(pkplr), sizeof(PlayerPack));
@@ -462,14 +461,14 @@ bool InitMulti(GameData *gameData)
 
 } // namespace
 
-void multi_msg_add(byte *pbMsg, BYTE bLen)
+void multi_msg_add(std::byte *pbMsg, BYTE bLen)
 {
 	if (pbMsg != nullptr && bLen != 0) {
 		tmsg_add(pbMsg, bLen);
 	}
 }
 
-void NetSendLoPri(int playerId, byte *pbMsg, BYTE bLen)
+void NetSendLoPri(int playerId, std::byte *pbMsg, BYTE bLen)
 {
 	if (pbMsg != nullptr && bLen != 0) {
 		CopyPacket(&sgLoPriBuf, pbMsg, bLen);
@@ -477,7 +476,7 @@ void NetSendLoPri(int playerId, byte *pbMsg, BYTE bLen)
 	}
 }
 
-void NetSendHiPri(int playerId, byte *pbMsg, BYTE bLen)
+void NetSendHiPri(int playerId, std::byte *pbMsg, BYTE bLen)
 {
 	if (pbMsg != nullptr && bLen != 0) {
 		CopyPacket(&sgHiPriBuf, pbMsg, bLen);
@@ -488,8 +487,8 @@ void NetSendHiPri(int playerId, byte *pbMsg, BYTE bLen)
 		TPkt pkt;
 		NetReceivePlayerData(&pkt);
 		size_t size = gdwNormalMsgSize - sizeof(TPktHdr);
-		byte *hipriBody = ReceivePacket(&sgHiPriBuf, pkt.body, &size);
-		byte *lowpriBody = ReceivePacket(&sgLoPriBuf, hipriBody, &size);
+		std::byte *hipriBody = ReceivePacket(&sgHiPriBuf, pkt.body, &size);
+		std::byte *lowpriBody = ReceivePacket(&sgLoPriBuf, hipriBody, &size);
 		size = sync_all_monsters(lowpriBody, size);
 		size_t len = gdwNormalMsgSize - size;
 		pkt.hdr.wLen = len;
@@ -498,7 +497,7 @@ void NetSendHiPri(int playerId, byte *pbMsg, BYTE bLen)
 	}
 }
 
-void multi_send_msg_packet(uint32_t pmask, byte *src, BYTE len)
+void multi_send_msg_packet(uint32_t pmask, std::byte *src, BYTE len)
 {
 	TPkt pkt;
 	NetReceivePlayerData(&pkt);
@@ -629,13 +628,13 @@ void multi_process_network_packets()
 				}
 			}
 		}
-		HandleAllPackets(dwID, (byte *)(pkt + 1), dwMsgSize - sizeof(TPktHdr));
+		HandleAllPackets(dwID, (std::byte *)(pkt + 1), dwMsgSize - sizeof(TPktHdr));
 	}
 	if (SErrGetLastError() != STORM_ERROR_NO_MESSAGES_WAITING)
 		nthread_terminate_game("SNetReceiveMsg");
 }
 
-void multi_send_zero_packet(int pnum, _cmd_id bCmd, byte *pbSrc, DWORD dwLen)
+void multi_send_zero_packet(int pnum, _cmd_id bCmd, std::byte *pbSrc, DWORD dwLen)
 {
 	assert(pnum != MyPlayerId);
 	assert(pbSrc);

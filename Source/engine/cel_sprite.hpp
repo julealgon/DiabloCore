@@ -3,8 +3,6 @@
 #include <memory>
 #include <utility>
 
-#include "utils/stdcompat/cstddef.hpp"
-
 namespace devilution {
 
 /**
@@ -15,14 +13,14 @@ namespace devilution {
  */
 class CelSprite {
 public:
-	CelSprite(std::unique_ptr<byte[]> data, int width)
+	CelSprite(std::unique_ptr<std::byte[]> data, int width)
 	    : data_(std::move(data))
 	    , data_ptr_(data_.get())
 	    , width_(width)
 	{
 	}
 
-	CelSprite(std::unique_ptr<byte[]> data, const int *widths)
+	CelSprite(std::unique_ptr<std::byte[]> data, const int *widths)
 	    : data_(std::move(data))
 	    , data_ptr_(data_.get())
 	    , widths_(widths)
@@ -33,7 +31,7 @@ public:
 	 * Constructs an unowned sprite.
 	 * Ideally we'd like to remove all uses of this constructor.
 	 */
-	CelSprite(const byte *data, int width)
+	CelSprite(const std::byte *data, int width)
 	    : data_ptr_(data)
 	    , width_(width)
 	{
@@ -42,7 +40,7 @@ public:
 	CelSprite(CelSprite &&) noexcept = default;
 	CelSprite &operator=(CelSprite &&) noexcept = default;
 
-	[[nodiscard]] const byte *Data() const
+	[[nodiscard]] const std::byte *Data() const
 	{
 		return data_ptr_;
 	}
@@ -53,8 +51,8 @@ public:
 	}
 
 private:
-	std::unique_ptr<byte[]> data_;
-	const byte *data_ptr_;
+	std::unique_ptr<std::byte[]> data_;
+	const std::byte *data_ptr_;
 	int width_ = 0;
 	const int *widths_ = nullptr; // unowned
 };
