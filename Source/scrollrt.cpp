@@ -1207,7 +1207,7 @@ void DrawView(const Surface &out, Point startPosition)
 				auto DrawLine = [&out](Point from, Point to, uint8_t col) {
 					int dx = to.x - from.x;
 					int dy = to.y - from.y;
-					int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+					int steps = std::abs(dx) > std::abs(dy) ? std::abs(dx) : std::abs(dy);
 					float ix = dx / (float)steps;
 					float iy = dy / (float)steps;
 					float sx = from.x;

@@ -607,8 +607,8 @@ void multi_process_network_packets()
 			player._pBaseDex = pkt->bdex;
 			if (!cond && player.plractive && player._pHitPoints != 0) {
 				if (currlevel == player.plrlevel && !player._pLvlChanging) {
-					int dx = abs(player.position.tile.x - pkt->px);
-					int dy = abs(player.position.tile.y - pkt->py);
+					int dx = std::abs(player.position.tile.x - pkt->px);
+					int dy = std::abs(player.position.tile.y - pkt->py);
 					if ((dx > 3 || dy > 3) && dPlayer[pkt->px][pkt->py] == 0) {
 						FixPlrWalkTags(dwID);
 						player.position.old = player.position.tile;
@@ -617,8 +617,8 @@ void multi_process_network_packets()
 						player.position.future = { pkt->px, pkt->py };
 						dPlayer[player.position.tile.x][player.position.tile.y] = dwID + 1;
 					}
-					dx = abs(player.position.future.x - player.position.tile.x);
-					dy = abs(player.position.future.y - player.position.tile.y);
+					dx = std::abs(player.position.future.x - player.position.tile.x);
+					dy = std::abs(player.position.future.y - player.position.tile.y);
 					if (dx > 1 || dy > 1) {
 						player.position.future = player.position.tile;
 					}

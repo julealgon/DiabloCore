@@ -593,7 +593,7 @@ bool CouldMissileCollideWithSolidObject(Point tile)
 {
 	int oid = dObject[tile.x][tile.y];
 	if (oid != 0) {
-		oid = abs(oid) - 1;
+		oid = std::abs(oid) - 1;
 		if (!Objects[oid]._oMissFlag)
 			return true;
 	}
@@ -1457,7 +1457,7 @@ void AddStealPotions(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			int8_t pnum = dPlayer[target.x][target.y];
 			if (pnum == 0)
 				continue;
-			auto &player = Players[abs(pnum) - 1];
+			auto &player = Players[std::abs(pnum) - 1];
 
 			bool hasPlayedSFX = false;
 			for (int si = 0; si < MAXBELTITEMS; si++) {
@@ -1531,7 +1531,7 @@ void AddManaTrap(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			if (pid == 0)
 				continue;
 
-			auto &player = Players[abs(pid) - 1];
+			auto &player = Players[std::abs(pid) - 1];
 
 			player._pMana = 0;
 			player._pManaBase = player._pMana + player._pMaxManaBase - player._pMaxMana;
@@ -2340,7 +2340,7 @@ void AddStone(Missile &missile, Point dst, Direction /*midir*/)
 			int mid = dMonster[target.x][target.y];
 			if (mid == 0)
 				continue;
-			mid = abs(mid) - 1;
+			mid = std::abs(mid) - 1;
 			auto &monster = Monsters[mid];
 
 			if (monster.MType->mtype == AnyOf(MT_GOLEM, MT_DIABLO, MT_NAKRUL))

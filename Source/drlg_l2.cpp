@@ -2124,8 +2124,8 @@ void ConnectHall(const HALLNODE &node)
 				fInroom = true;
 			}
 		}
-		int nDx = abs(nX2 - nX1);
-		int nDy = abs(nY2 - nY1);
+		int nDx = std::abs(nX2 - nX1);
+		int nDy = std::abs(nY2 - nY1);
 		if (nDx > nDy) {
 			nRp = 2 * nDx;
 			if (nRp > 30) {

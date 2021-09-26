@@ -1,7 +1,5 @@
 #include "engine/random.hpp"
 
-#include "utils/stdcompat/abs.hpp"
-
 namespace devilution {
 
 /** Current game seed */
