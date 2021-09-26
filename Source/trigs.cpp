@@ -64,9 +64,6 @@ void InitNoTriggers()
 
 bool IsWarpOpen(dungeon_type type)
 {
-	if (gbIsMultiplayer && type != DTYPE_NEST) // Opening the nest is part of in town quest
-		return true;
-
 	auto &myPlayer = Players[MyPlayerId];
 
 	if (type == DTYPE_CATACOMBS && (myPlayer.pTownWarps & 1) != 0)
@@ -812,38 +809,6 @@ void CheckTriggers()
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, ReturnLevel);
 			break;
 		case WM_DIABTOWNWARP:
-			if (gbIsMultiplayer) {
-				bool abort = false;
-				diablo_message abortflag;
-
-				auto position = myPlayer.position.tile;
-				if (trigs[i]._tlvl == 5 && myPlayer._pLevel < 8) {
-					abort = true;
-					position.y += 1;
-					abortflag = EMSG_REQUIRES_LVL_8;
-				}
-
-				if (trigs[i]._tlvl == AnyOf(9, 17) && myPlayer._pLevel < 13) {
-					abort = true;
-					position.x += 1;
-					abortflag = EMSG_REQUIRES_LVL_13;
-				}
-
-				if (trigs[i]._tlvl == AnyOf(13, 21) && myPlayer._pLevel < 17) {
-					abort = true;
-					position.y += 1;
-					abortflag = EMSG_REQUIRES_LVL_17;
-				}
-
-				if (abort) {
-					myPlayer.Say(HeroSpeech::ICantGetThereFromHere);
-
-					InitDiabloMsg(abortflag);
-					NetSendCmdLoc(MyPlayerId, true, CMD_WALKXY, position);
-					return;
-				}
-			}
-
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, trigs[i]._tlvl);
 			break;
 		case WM_DIABTWARPUP:

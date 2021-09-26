@@ -46,13 +46,6 @@ void FreeDlg()
 
 	Terminating = true;
 	CleanupThreadId = this_sdl_thread::get_id();
-
-	if (gbIsMultiplayer) {
-		if (SNetLeaveGame(3))
-			SDL_Delay(2000);
-	}
-
-	SNetDestroy();
 }
 
 } // namespace

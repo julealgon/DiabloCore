@@ -30,7 +30,6 @@ enum _artLogo : uint8_t {
 enum _mainmenu_selections : uint8_t {
 	MAINMENU_NONE,
 	MAINMENU_SINGLE_PLAYER,
-	MAINMENU_MULTIPLAYER,
 	MAINMENU_REPLAY_INTRO,
 	MAINMENU_SHOW_SUPPORT,
 	MAINMENU_SHOW_CREDITS,
@@ -41,7 +40,6 @@ enum _mainmenu_selections : uint8_t {
 enum _selhero_selections : uint8_t {
 	SELHERO_NEW_DUNGEON,
 	SELHERO_CONTINUE,
-	SELHERO_CONNECT,
 	SELHERO_PREVIOUS,
 };
 
@@ -85,7 +83,6 @@ inline SDL_Surface *DiabloUiSurface()
 void UiDestroy();
 void UiTitleDialog();
 void UiInitialize();
-void UiSelHeroMultDialog(bool (*fninfo)(bool (*fninfofunc)(_uiheroinfo *)), bool (*fncreate)(_uiheroinfo *), bool (*fnremove)(_uiheroinfo *), void (*fnstats)(unsigned int, _uidefaultstats *), _selhero_selections *dlgresult, uint32_t *saveNumber);
 void UiSelHeroSingDialog(bool (*fninfo)(bool (*fninfofunc)(_uiheroinfo *)), bool (*fncreate)(_uiheroinfo *), bool (*fnremove)(_uiheroinfo *), void (*fnstats)(unsigned int, _uidefaultstats *), _selhero_selections *dlgresult, uint32_t *saveNumber, _difficulty *difficulty);
 bool UiCreditsDialog();
 bool UiSupportDialog();

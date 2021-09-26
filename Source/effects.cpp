@@ -1096,9 +1096,6 @@ void StreamUpdate()
 
 void PlaySfxPriv(TSFX *pSFX, bool loc, Point position)
 {
-	if (Players[MyPlayerId].pLvlLoad != 0 && gbIsMultiplayer) {
-		return;
-	}
 	if (!gbSndInited || !gbSoundOn || gbBufferMsgs != 0) {
 		return;
 	}
@@ -1306,30 +1303,23 @@ void effects_cleanup_sfx()
 void sound_init()
 {
 	uint8_t mask = sfx_MISC;
-	if (gbIsMultiplayer) {
+	switch (Players[MyPlayerId]._pClass) {
+	case HeroClass::Warrior:
+	case HeroClass::Barbarian:
 		mask |= sfx_WARRIOR;
-		mask |= (sfx_ROGUE | sfx_SORCERER);
-		if (gbIsHellfire)
-			mask |= sfx_MONK;
-	} else {
-		switch (Players[MyPlayerId]._pClass) {
-		case HeroClass::Warrior:
-		case HeroClass::Barbarian:
-			mask |= sfx_WARRIOR;
-			break;
-		case HeroClass::Rogue:
-		case HeroClass::Bard:
-			mask |= sfx_ROGUE;
-			break;
-		case HeroClass::Sorcerer:
-			mask |= sfx_SORCERER;
-			break;
-		case HeroClass::Monk:
-			mask |= sfx_MONK;
-			break;
-		default:
-			app_fatal("effects:1");
-		}
+		break;
+	case HeroClass::Rogue:
+	case HeroClass::Bard:
+		mask |= sfx_ROGUE;
+		break;
+	case HeroClass::Sorcerer:
+		mask |= sfx_SORCERER;
+		break;
+	case HeroClass::Monk:
+		mask |= sfx_MONK;
+		break;
+	default:
+		app_fatal("effects:1");
 	}
 
 	PrivSoundInit(mask);

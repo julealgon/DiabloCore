@@ -76,21 +76,12 @@ void nthread_terminate_game(const char *pszFcn)
 
 uint32_t nthread_send_and_recv_turn(uint32_t curTurn, int turnDelta)
 {
-	uint32_t curTurnsInTransit;
-	if (!SNetGetTurnsInTransit(&curTurnsInTransit)) {
-		nthread_terminate_game("SNetGetTurnsInTransit");
-		return 0;
-	}
+	uint32_t curTurnsInTransit = 0;
 	while (curTurnsInTransit++ < gdwTurnsInTransit) {
 
 		uint32_t turnTmp = turn_upper_bit | (curTurn & 0x7FFFFFFF);
 		turn_upper_bit = 0;
 		uint32_t turn = turnTmp;
-
-		if (!SNetSendTurn((char *)&turn, sizeof(turn))) {
-			nthread_terminate_game("SNetSendTurn");
-			return 0;
-		}
 
 		curTurn += turnDelta;
 		if (curTurn >= 0x7FFFFFFF)
@@ -116,7 +107,7 @@ bool nthread_recv_turns(bool *pfSendAsync)
 		last_tick += gnTickDelay;
 		return true;
 	}
-	if (!SNetReceiveTurns(MAX_PLRS, (char **)glpMsgTbl, gdwMsgLenTbl, &player_state[0])) {
+	if (!SNetReceiveTurns(MAX_PLRS, (char **)glpMsgTbl, gdwMsgLenTbl)) {
 		if (SErrGetLastError() != STORM_ERROR_NO_MESSAGES_WAITING)
 			nthread_terminate_game("SNetReceiveTurns");
 		sgbTicsOutOfSync = false;
@@ -178,12 +169,6 @@ void nthread_start(bool setTurnUpperBit)
 	}
 	if (gdwNormalMsgSize > largestMsgSize)
 		gdwNormalMsgSize = largestMsgSize;
-	if (gbIsMultiplayer) {
-		sgbThreadIsRunning = false;
-		MemCrit.lock();
-		nthread_should_run = true;
-		Thread = SdlThread { NthreadHandler };
-	}
 }
 
 void nthread_cleanup()
@@ -215,7 +200,7 @@ bool nthread_has_500ms_passed()
 {
 	int currentTickCount = SDL_GetTicks();
 	int ticksElapsed = currentTickCount - last_tick;
-	if (!gbIsMultiplayer && ticksElapsed > gnTickDelay * 10) {
+	if (ticksElapsed > gnTickDelay * 10) {
 		last_tick = currentTickCount;
 		ticksElapsed = 0;
 	}
@@ -224,7 +209,7 @@ bool nthread_has_500ms_passed()
 
 void nthread_UpdateProgressToNextGameTick()
 {
-	if (!gbRunGame || PauseMode != 0 || (!gbIsMultiplayer && gmenu_is_active()) || !gbProcessPlayers || demo::IsRunning()) // if game is not running or paused there is no next gametick in the near future
+	if (!gbRunGame || PauseMode != 0 || gmenu_is_active() || !gbProcessPlayers || demo::IsRunning()) // if game is not running or paused there is no next gametick in the near future
 		return;
 	int currentTickCount = SDL_GetTicks();
 	int ticksElapsed = last_tick - currentTickCount;

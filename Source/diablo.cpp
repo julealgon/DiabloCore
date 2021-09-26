@@ -171,7 +171,7 @@ bool ProcessInput()
 		return false;
 	}
 
-	if (!gbIsMultiplayer && gmenu_is_active()) {
+	if (gmenu_is_active()) {
 		force_redraw |= 1;
 		return false;
 	}
@@ -633,8 +633,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 	case WM_DIABTOWNWARP:
 	case WM_DIABTWARPUP:
 	case WM_DIABRETOWN:
-		if (gbIsMultiplayer)
-			pfile_write_hero();
 		nthread_ignore_mutex(true);
 		PaletteFadeOut(8);
 		sound_stop();
@@ -666,7 +664,6 @@ void RunGameLoop(interface_mode uMsg)
 	StartGame(uMsg);
 	assert(ghMainWnd);
 	saveProc = SetWindowProc(GameEventHandler);
-	run_delta_info();
 	gbRunGame = true;
 	gbProcessPlayers = true;
 	gbRunGameResult = true;
@@ -733,10 +730,6 @@ void RunGameLoop(interface_mode uMsg)
 	}
 
 	demo::NotifyGameLoopEnd();
-
-	if (gbIsMultiplayer) {
-		pfile_write_hero(/*writeGameData=*/false, /*clearTables=*/true);
-	}
 
 	PaletteFadeOut(8);
 	NewCursor(CURSOR_NONE);
@@ -1080,19 +1073,6 @@ void CreateLevel(lvl_entry lvldir)
 
 void UnstuckChargers()
 {
-	if (gbIsMultiplayer) {
-		for (auto &player : Players) {
-			if (!player.plractive)
-				continue;
-			if (player._pLvlChanging)
-				continue;
-			if (player.plrlevel != MyPlayer->plrlevel)
-				continue;
-			if (&player == MyPlayer)
-				continue;
-			return;
-		}
-	}
 	for (int i = 0; i < ActiveMonsterCount; i++) {
 		auto &monster = Monsters[ActiveMonsters[i]];
 		if (monster._mmode == MonsterMode::Charge)
@@ -1425,13 +1405,13 @@ void InitKeymapActions()
 	    "QuickSave",
 	    DVL_VK_F2,
 	    [] { gamemenu_save_game(false); },
-	    [&]() { return !gbIsMultiplayer && !IsPlayerDead(); },
+	    [&]() { return !IsPlayerDead(); },
 	});
 	keymapper.AddAction({
 	    "QuickLoad",
 	    DVL_VK_F3,
 	    [] { gamemenu_load_game(false); },
-	    [&]() { return !gbIsMultiplayer && gbValidSaveFile; },
+	    [&]() { return gbValidSaveFile; },
 	});
 	keymapper.AddAction({
 	    "QuitGame",
@@ -1486,14 +1466,14 @@ void FreeGameMem()
 	FreeTownerGFX();
 }
 
-bool StartGame(bool bNewGame, bool bSinglePlayer)
+bool StartGame(bool bNewGame)
 {
 	gbSelectProvider = true;
 
 	do {
 		gbLoadGame = false;
 
-		if (!NetInit(bSinglePlayer)) {
+		if (!NetInit()) {
 			gbRunGameResult = true;
 			break;
 		}
@@ -1525,7 +1505,6 @@ bool StartGame(bool bNewGame, bool bSinglePlayer)
 			UiInitialize();
 	} while (gbRunGameResult);
 
-	SNetDestroy();
 	return gbRunGameResult;
 }
 
@@ -1625,17 +1604,15 @@ bool TryIconCurs()
 
 void diablo_pause_game()
 {
-	if (!gbIsMultiplayer) {
-		if (PauseMode != 0) {
-			PauseMode = 0;
-		} else {
-			PauseMode = 2;
-			sound_stop();
-			LastMouseButtonAction = MouseActionType::None;
-		}
-
-		force_redraw = 255;
+	if (PauseMode != 0) {
+		PauseMode = 0;
+	} else {
+		PauseMode = 2;
+		sound_stop();
+		LastMouseButtonAction = MouseActionType::None;
 	}
+
+	force_redraw = 255;
 }
 
 bool GameWasAlreadyPaused = false;
@@ -1643,7 +1620,7 @@ bool MinimizePaused = false;
 
 void diablo_focus_pause()
 {
-	if (gbIsMultiplayer || MinimizePaused) {
+	if (MinimizePaused) {
 		return;
 	}
 
@@ -1662,7 +1639,7 @@ void diablo_focus_pause()
 
 void diablo_focus_unpause()
 {
-	if (gbIsMultiplayer || !MinimizePaused) {
+	if (!MinimizePaused) {
 		return;
 	}
 
@@ -1846,7 +1823,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		IncProgress();
 
 		bool visited = false;
-		int players = gbIsMultiplayer ? MAX_PLRS : 1;
+		int players = 1;
 		for (int i = 0; i < players; i++) {
 			auto &player = Players[i];
 			if (player.plractive)
@@ -1856,7 +1833,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		SetRndSeed(glSeedTbl[currlevel]);
 
 		if (leveltype != DTYPE_TOWN) {
-			if (firstflag || lvldir == ENTRY_LOAD || !myPlayer._pLvlVisited[currlevel] || gbIsMultiplayer) {
+			if (firstflag || lvldir == ENTRY_LOAD || !myPlayer._pLvlVisited[currlevel]) {
 				HoldThemeRooms();
 				uint32_t mid1Seed = GetLCGEngineState();
 				InitMonsters();
@@ -1873,9 +1850,6 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 #if _DEBUG
 				SetDebugLevelSeedInfos(mid1Seed, mid2Seed, mid3Seed, GetLCGEngineState());
 #endif
-
-				if (gbIsMultiplayer)
-					DeltaLoadLevel();
 
 				IncProgress();
 				SavePreLighting();
@@ -1900,17 +1874,12 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 			InitMissiles();
 			IncProgress();
 
-			if (!firstflag && lvldir != ENTRY_LOAD && myPlayer._pLvlVisited[currlevel] && !gbIsMultiplayer)
+			if (!firstflag && lvldir != ENTRY_LOAD && myPlayer._pLvlVisited[currlevel])
 				LoadLevel();
-			if (gbIsMultiplayer)
-				DeltaLoadLevel();
 
 			IncProgress();
 		}
-		if (!gbIsMultiplayer)
-			ResyncQuests();
-		else
-			ResyncMPQuests();
+		ResyncQuests();
 	} else {
 		LoadSetMap();
 		IncProgress();
@@ -1958,10 +1927,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		auto &player = Players[i];
 		if (player.plractive && player.plrlevel == currlevel && (!player._pLvlChanging || i == MyPlayerId)) {
 			if (player._pHitPoints > 0) {
-				if (!gbIsMultiplayer)
-					dPlayer[player.position.tile.x][player.position.tile.y] = i + 1;
-				else
-					SyncInitPlrPos(i);
+				dPlayer[player.position.tile.x][player.position.tile.y] = i + 1;
 			} else {
 				dFlags[player.position.tile.x][player.position.tile.y] |= BFLAG_DEAD_PLAYER;
 			}
@@ -2029,7 +1995,7 @@ void game_loop(bool bStartup)
 		TimeoutCursor(false);
 		GameLogic();
 
-		if (!gbRunGame || !gbIsMultiplayer || demo::IsRunning() || demo::IsRecording() || !nthread_has_500ms_passed())
+		if (!gbRunGame || demo::IsRunning() || demo::IsRecording() || !nthread_has_500ms_passed())
 			break;
 	}
 }

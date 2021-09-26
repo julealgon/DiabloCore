@@ -346,7 +346,7 @@ set(libdevilutionx_SRCS
   Source/DiabloUI/mainmenu.cpp
   Source/DiabloUI/progress.cpp
   Source/DiabloUI/scrollbar.cpp
-  Source/DiabloUI/selconn.cpp
+  
   Source/DiabloUI/selgame.cpp
   Source/DiabloUI/selhero.cpp
   Source/DiabloUI/selok.cpp
@@ -358,11 +358,10 @@ set(libdevilutionx_SRCS
   Source/panels/charpanel.cpp
   Source/panels/mainpanel.cpp
   Source/dvlnet/abstract_net.cpp
-  Source/dvlnet/base.cpp
-  Source/dvlnet/cdwrap.cpp  
-  Source/dvlnet/frame_queue.cpp
+    
+  
   Source/dvlnet/loopback.cpp
-  Source/dvlnet/packet.cpp  
+    
   Source/storm/storm.cpp
   
   Source/storm/storm_net.cpp

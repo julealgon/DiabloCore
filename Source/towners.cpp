@@ -517,31 +517,18 @@ void TalkToBoy(Player & /*player*/, Towner & /*boy*/)
 void TalkToStoryteller(Player &player, Towner & /*storyteller*/)
 {
 	auto &betrayerQuest = Quests[Q_BETRAYER];
-	if (!gbIsMultiplayer) {
-		if (betrayerQuest._qactive == QUEST_INIT && player.TryRemoveInvItemById(IDI_LAZSTAFF)) {
-			InitQTextMsg(TEXT_VILE1);
-			betrayerQuest._qlog = true;
-			betrayerQuest._qactive = QUEST_ACTIVE;
-			betrayerQuest._qvar1 = 2;
-			return;
-		}
-	} else {
-		if (betrayerQuest._qactive == QUEST_ACTIVE && !betrayerQuest._qlog) {
-			InitQTextMsg(TEXT_VILE1);
-			betrayerQuest._qlog = true;
-			NetSendCmdQuest(true, betrayerQuest);
-			return;
-		}
+	if (betrayerQuest._qactive == QUEST_INIT && player.TryRemoveInvItemById(IDI_LAZSTAFF)) {
+		InitQTextMsg(TEXT_VILE1);
+		betrayerQuest._qlog = true;
+		betrayerQuest._qactive = QUEST_ACTIVE;
+		betrayerQuest._qvar1 = 2;
+		return;
 	}
 	if (betrayerQuest._qactive == QUEST_DONE && betrayerQuest._qvar1 == 7) {
 		betrayerQuest._qvar1 = 8;
 		InitQTextMsg(TEXT_VILE3);
 		auto &diabloQuest = Quests[Q_DIABLO];
 		diabloQuest._qlog = true;
-		if (gbIsMultiplayer) {
-			NetSendCmdQuest(true, betrayerQuest);
-			NetSendCmdQuest(true, diabloQuest);
-		}
 		return;
 	}
 
@@ -588,8 +575,6 @@ void TalkToFarmer(Player &player, Towner &farmer)
 			quest._qvar1 = 1;
 			quest._qmsg = TEXT_FARMER1;
 			quest._qlog = true;
-			if (gbIsMultiplayer)
-				NetSendCmdQuest(true, quest);
 			break;
 		}
 
@@ -611,8 +596,6 @@ void TalkToFarmer(Player &player, Towner &farmer)
 		quest._qlog = true;
 		quest._qmsg = TEXT_FARMER1;
 		SpawnRuneBomb(farmer.position + Displacement { 1, 0 });
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	case QUEST_ACTIVE:
 		InitQTextMsg(player.HasItem(IDI_RUNEBOMB) ? TEXT_FARMER2 : TEXT_FARMER3);
@@ -622,8 +605,6 @@ void TalkToFarmer(Player &player, Towner &farmer)
 		SpawnRewardItem(IDI_AURIC, farmer.position + Displacement { 1, 0 });
 		quest._qactive = QUEST_HIVE_DONE;
 		quest._qlog = false;
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	case QUEST_HIVE_DONE:
 		break;
@@ -666,8 +647,6 @@ void TalkToCowFarmer(Player &player, Towner &cowFarmer)
 	case QUEST_INIT:
 		InitQTextMsg(TEXT_JERSEY1);
 		quest._qactive = QUEST_HIVE_TEASE1;
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	case QUEST_ACTIVE:
 		InitQTextMsg(TEXT_JERSEY5);
@@ -678,14 +657,10 @@ void TalkToCowFarmer(Player &player, Towner &cowFarmer)
 	case QUEST_HIVE_TEASE1:
 		InitQTextMsg(TEXT_JERSEY2);
 		quest._qactive = QUEST_HIVE_TEASE2;
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	case QUEST_HIVE_TEASE2:
 		InitQTextMsg(TEXT_JERSEY3);
 		quest._qactive = QUEST_HIVE_ACTIVE;
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	case QUEST_HIVE_ACTIVE:
 		if (!player._pLvlVisited[9] && player._pLevel < 15) {
@@ -711,8 +686,6 @@ void TalkToCowFarmer(Player &player, Towner &cowFarmer)
 		quest._qmsg = TEXT_JERSEY4;
 		quest._qlog = true;
 		SpawnRuneBomb(cowFarmer.position + Displacement { 1, 0 });
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		break;
 	default:
 		InitQTextMsg(TEXT_JERSEY5);
@@ -732,8 +705,6 @@ void TalkToGirl(Player &player, Towner &girl)
 		auto curFrame = girl._tAnimFrame;
 		LoadTownerAnimations(girl, "Towners\\Girl\\Girls1.CEL", 20, 6);
 		girl._tAnimFrame = std::min(curFrame, girl._tAnimLen);
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		return;
 	}
 
@@ -745,8 +716,6 @@ void TalkToGirl(Player &player, Towner &girl)
 		quest._qvar1 = 1;
 		quest._qlog = true;
 		quest._qmsg = TEXT_GIRL2;
-		if (gbIsMultiplayer)
-			NetSendCmdQuest(true, quest);
 		return;
 	case QUEST_ACTIVE:
 		InitQTextMsg(TEXT_GIRL3);

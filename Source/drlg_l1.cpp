@@ -947,7 +947,7 @@ void LoadQuestSetPieces()
 	if (Quests[Q_BUTCHER].IsAvailable()) {
 		L5pSetPiece = LoadFileInMem<uint16_t>("Levels\\L1Data\\rnd6.DUN");
 		L5setloadflag = true;
-	} else if (Quests[Q_SKELKING].IsAvailable() && !gbIsMultiplayer) {
+	} else if (Quests[Q_SKELKING].IsAvailable()) {
 		L5pSetPiece = LoadFileInMem<uint16_t>("Levels\\L1Data\\SKngDO.DUN");
 		L5setloadflag = true;
 	} else if (Quests[Q_LTBANNER].IsAvailable()) {

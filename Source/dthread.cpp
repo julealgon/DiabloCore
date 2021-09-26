@@ -68,8 +68,7 @@ void dthread_remove_player(uint8_t pnum)
 
 void dthread_send_delta(int pnum, _cmd_id cmd, std::unique_ptr<std::byte[]> data, uint32_t len)
 {
-	if (!gbIsMultiplayer)
-		return;
+	return;
 
 	DThreadPkt pkt { pnum, cmd, std::move(data), len };
 
@@ -80,8 +79,7 @@ void dthread_send_delta(int pnum, _cmd_id cmd, std::unique_ptr<std::byte[]> data
 
 void dthread_start()
 {
-	if (!gbIsMultiplayer)
-		return;
+	return;
 
 	DthreadRunning = true;
 	DthreadMutex.emplace();

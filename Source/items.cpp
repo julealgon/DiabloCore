@@ -697,14 +697,10 @@ void GetBookSpell(Item &item, int lvl)
 			bs = static_cast<spell_id>(s);
 		}
 		s++;
-		if (!gbIsMultiplayer) {
-			if (s == SPL_RESURRECT)
-				s = SPL_TELEKINESIS;
-		}
-		if (!gbIsMultiplayer) {
-			if (s == SPL_HEALOTHER)
-				s = SPL_FLARE;
-		}
+		if (s == SPL_RESURRECT)
+			s = SPL_TELEKINESIS;
+		if (s == SPL_HEALOTHER)
+			s = SPL_FLARE;
 		if (s == maxSpells)
 			s = 1;
 	}
@@ -1288,9 +1284,9 @@ void GetStaffSpell(Item &item, int lvl, bool onlygood)
 			bs = static_cast<spell_id>(s);
 		}
 		s++;
-		if (!gbIsMultiplayer && s == SPL_RESURRECT)
+		if (s == SPL_RESURRECT)
 			s = SPL_TELEKINESIS;
-		if (!gbIsMultiplayer && s == SPL_HEALOTHER)
+		if (s == SPL_HEALOTHER)
 			s = SPL_FLARE;
 		if (s == maxSpells)
 			s = SPL_FIREBOLT;
@@ -1321,16 +1317,14 @@ void GetOilType(Item &item, int maxLvl)
 	int cnt = 2;
 	int8_t rnd[32] = { 5, 6 };
 
-	if (!gbIsMultiplayer) {
-		if (maxLvl == 0)
-			maxLvl = 1;
+	if (maxLvl == 0)
+		maxLvl = 1;
 
-		cnt = 0;
-		for (size_t j = 0; j < sizeof(OilLevels) / sizeof(OilLevels[0]); j++) {
-			if (OilLevels[j] <= maxLvl) {
-				rnd[cnt] = j;
-				cnt++;
-			}
+	cnt = 0;
+	for (size_t j = 0; j < sizeof(OilLevels) / sizeof(OilLevels[0]); j++) {
+		if (OilLevels[j] <= maxLvl) {
+			rnd[cnt] = j;
+			cnt++;
 		}
 	}
 
@@ -1385,7 +1379,7 @@ void GetItemBonus(Item &item, int minlvl, int maxlvl, bool onlygood, bool allows
 
 int RndUItem(Monster *monster)
 {
-	if (monster != nullptr && (monster->MData->mTreasure & T_UNIQ) != 0 && !gbIsMultiplayer)
+	if (monster != nullptr && (monster->MData->mTreasure & T_UNIQ) != 0)
 		return -((monster->MData->mTreasure & T_MASK) + 1);
 
 	int ril[512];
@@ -1412,9 +1406,9 @@ int RndUItem(Monster *monster)
 			okflag = false;
 		if (AllItemsList[i].iMiscId == IMISC_BOOK)
 			okflag = true;
-		if (AllItemsList[i].iSpell == SPL_RESURRECT && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_RESURRECT)
 			okflag = false;
-		if (AllItemsList[i].iSpell == SPL_HEALOTHER && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_HEALOTHER)
 			okflag = false;
 		if (okflag && ri < 512) {
 			ril[ri] = i;
@@ -1442,9 +1436,9 @@ int RndAllItems()
 			ril[ri] = i;
 			ri++;
 		}
-		if (AllItemsList[i].iSpell == SPL_RESURRECT && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_RESURRECT)
 			ri--;
-		if (AllItemsList[i].iSpell == SPL_HEALOTHER && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_HEALOTHER)
 			ri--;
 	}
 
@@ -1491,7 +1485,7 @@ _unique_items CheckUnique(Item &item, int lvl, int uper, bool recreate)
 			break;
 		if (UniqueItems[j].UIItemId == AllItemsList[item.IDidx].iItemId
 		    && lvl >= UniqueItems[j].UIMinLvl
-		    && (recreate || !UniqueItemFlags[j] || gbIsMultiplayer)) {
+		    && (recreate || !UniqueItemFlags[j])) {
 			uok[j] = true;
 			numu++;
 		}
@@ -1701,26 +1695,6 @@ void SpawnRock()
 	item._iSelFlag = 2;
 	item._iPostDraw = true;
 	item.AnimInfo.CurrentFrame = 11;
-}
-
-void ItemDoppel()
-{
-	if (!gbIsMultiplayer)
-		return;
-
-	static int idoppely = 16;
-
-	for (int idoppelx = 16; idoppelx < 96; idoppelx++) {
-		if (dItem[idoppelx][idoppely] != 0) {
-			Item *i = &Items[dItem[idoppelx][idoppely] - 1];
-			if (i->position.x != idoppelx || i->position.y != idoppely)
-				dItem[idoppelx][idoppely] = 0;
-		}
-	}
-
-	idoppely++;
-	if (idoppely == 96)
-		idoppely = 16;
 }
 
 void RepairItem(Item &item, int lvl)
@@ -2161,16 +2135,7 @@ bool PremiumItemOk(int i)
 		return false;
 	if (!gbIsHellfire && AllItemsList[i].itype == ItemType::Staff)
 		return false;
-
-	if (gbIsMultiplayer) {
-		if (AllItemsList[i].iMiscId == IMISC_OILOF)
-			return false;
-		if (AllItemsList[i].itype == ItemType::Ring)
-			return false;
-		if (AllItemsList[i].itype == ItemType::Amulet)
-			return false;
-	}
-
+	
 	return true;
 }
 
@@ -2280,9 +2245,9 @@ bool WitchItemOk(int i)
 		return false;
 	if (AllItemsList[i].iMiscId > IMISC_OILFIRST && AllItemsList[i].iMiscId < IMISC_OILLAST)
 		return false;
-	if (AllItemsList[i].iSpell == SPL_RESURRECT && !gbIsMultiplayer)
+	if (AllItemsList[i].iSpell == SPL_RESURRECT)
 		return false;
-	if (AllItemsList[i].iSpell == SPL_HEALOTHER && !gbIsMultiplayer)
+	if (AllItemsList[i].iSpell == SPL_HEALOTHER)
 		return false;
 
 	return true;
@@ -2306,20 +2271,18 @@ bool HealerItemOk(int i)
 	if (AllItemsList[i].iMiscId == IMISC_SCROLL)
 		return AllItemsList[i].iSpell == SPL_HEAL;
 	if (AllItemsList[i].iMiscId == IMISC_SCROLLT)
-		return AllItemsList[i].iSpell == SPL_HEALOTHER && gbIsMultiplayer;
+		return false;
 
-	if (!gbIsMultiplayer) {
-		auto &myPlayer = Players[MyPlayerId];
+	auto &myPlayer = Players[MyPlayerId];
 
-		if (AllItemsList[i].iMiscId == IMISC_ELIXSTR)
-			return !gbIsHellfire || myPlayer._pBaseStr < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Strength);
-		if (AllItemsList[i].iMiscId == IMISC_ELIXMAG)
-			return !gbIsHellfire || myPlayer._pBaseMag < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Magic);
-		if (AllItemsList[i].iMiscId == IMISC_ELIXDEX)
-			return !gbIsHellfire || myPlayer._pBaseDex < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Dexterity);
-		if (AllItemsList[i].iMiscId == IMISC_ELIXVIT)
-			return !gbIsHellfire || myPlayer._pBaseVit < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Vitality);
-	}
+	if (AllItemsList[i].iMiscId == IMISC_ELIXSTR)
+		return !gbIsHellfire || myPlayer._pBaseStr < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Strength);
+	if (AllItemsList[i].iMiscId == IMISC_ELIXMAG)
+		return !gbIsHellfire || myPlayer._pBaseMag < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Magic);
+	if (AllItemsList[i].iMiscId == IMISC_ELIXDEX)
+		return !gbIsHellfire || myPlayer._pBaseDex < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Dexterity);
+	if (AllItemsList[i].iMiscId == IMISC_ELIXVIT)
+		return !gbIsHellfire || myPlayer._pBaseVit < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Vitality);
 
 	if (AllItemsList[i].iMiscId == IMISC_REJUV)
 		return true;
@@ -3312,9 +3275,9 @@ int RndItem(const Monster &monster)
 			ril[ri] = i;
 			ri++;
 		}
-		if (AllItemsList[i].iSpell == SPL_RESURRECT && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_RESURRECT)
 			ri--;
-		if (AllItemsList[i].iSpell == SPL_HEALOTHER && !gbIsMultiplayer)
+		if (AllItemsList[i].iSpell == SPL_HEALOTHER)
 			ri--;
 	}
 
@@ -3346,7 +3309,7 @@ void SpawnItem(Monster &monster, Point position, bool sendmsg)
 	int idx;
 	bool onlygood = true;
 
-	if (monster._uniqtype != 0 || ((monster.MData->mTreasure & T_UNIQ) != 0 && gbIsMultiplayer)) {
+	if (monster._uniqtype != 0) {
 		idx = RndUItem(&monster);
 		if (idx < 0) {
 			SpawnUnique((_unique_items) - (idx + 1), position);
@@ -3686,7 +3649,6 @@ void ProcessItems()
 			}
 		}
 	}
-	ItemDoppel();
 }
 
 void FreeItemGFX()
@@ -4672,17 +4634,7 @@ void SpawnHealer(int lvl)
 	healitem[1]._iCreateInfo = lvl;
 	healitem[1]._iStatFlag = true;
 
-	if (gbIsMultiplayer) {
-		memset(&Items[0], 0, sizeof(*Items));
-		GetItemAttrs(Items[0], IDI_RESURRECT, 1);
-		healitem[2] = Items[0];
-		healitem[2]._iCreateInfo = lvl;
-		healitem[2]._iStatFlag = true;
-
-		srnd = 3;
-	} else {
-		srnd = 2;
-	}
+	srnd = 2;
 	int nsi = GenerateRnd(gbIsHellfire ? 10 : 8) + 10;
 	for (int i = srnd; i < nsi; i++) {
 		memset(&Items[0], 0, sizeof(*Items));

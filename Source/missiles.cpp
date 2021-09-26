@@ -2753,7 +2753,7 @@ void AddRportal(Missile &missile, Point /*dst*/, Direction /*midir*/)
 
 void AddDiabApoca(Missile &missile, Point /*dst*/, Direction /*midir*/)
 {
-	int players = gbIsMultiplayer ? MAX_PLRS : 1;
+	int players = 1;
 	for (int pnum = 0; pnum < players; pnum++) {
 		auto &player = Players[pnum];
 		if (!player.plractive)

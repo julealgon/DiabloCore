@@ -94,7 +94,6 @@ void SetReturnLvlPos();
 void GetReturnLvlPos();
 void LoadPWaterPalette();
 void UpdatePWaterPalette();
-void ResyncMPQuests();
 void ResyncQuests();
 void DrawQuestLog(const Surface &out);
 void StartQuestlog();

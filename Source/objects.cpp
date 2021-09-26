@@ -1222,9 +1222,7 @@ void AddShrine(int i)
 
 	for (int j = 0; j < shrines; j++) {
 		slist[j] = currlevel >= shrinemin[j] && currlevel <= shrinemax[j];
-		if (gbIsMultiplayer && shrineavail[j] == ShrineTypeSingle) {
-			slist[j] = false;
-		} else if (!gbIsMultiplayer && shrineavail[j] == ShrineTypeMulti) {
+		if (shrineavail[j] == ShrineTypeMulti) {
 			slist[j] = false;
 		}
 	}
@@ -3817,17 +3815,9 @@ int FindValidShrine()
 			done = true;
 		}
 		if (done) {
-			if (gbIsMultiplayer) {
-				if (shrineavail[rv] == ShrineTypeSingle) {
-					done = false;
-					continue;
-				}
-			}
-			if (!gbIsMultiplayer) {
-				if (shrineavail[rv] == ShrineTypeMulti) {
-					done = false;
-					continue;
-				}
+			if (shrineavail[rv] == ShrineTypeMulti) {
+				done = false;
+				continue;
 			}
 			done = true;
 		}
@@ -4440,7 +4430,7 @@ void InitObjects()
 	} else {
 		ApplyObjectLighting = true;
 		AdvanceRndSeed();
-		if (currlevel == 9 && !gbIsMultiplayer)
+		if (currlevel == 9)
 			AddSlainHero();
 		if (currlevel == Quests[Q_MUSHROOM]._qlevel && Quests[Q_MUSHROOM]._qactive == QUEST_INIT)
 			AddMushPatch();
@@ -4565,7 +4555,7 @@ void InitObjects()
 				AddBookLever({ { setpc_x, setpc_y }, { setpc_w, setpc_h } }, spId);
 				LoadMapObjs("Levels\\L4Data\\Warlord.DUN", { 2 * setpc_x, 2 * setpc_y });
 			}
-			if (Quests[Q_BETRAYER].IsAvailable() && !gbIsMultiplayer)
+			if (Quests[Q_BETRAYER].IsAvailable())
 				AddLazStand();
 			InitRndBarrels();
 			AddL4Goodies();

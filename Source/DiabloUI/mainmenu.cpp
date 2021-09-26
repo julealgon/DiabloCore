@@ -33,7 +33,6 @@ void MainmenuLoad(const char *name, void (*fnSound)(const char *file))
 	gfnSoundFunction = fnSound;
 
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Single Player", MAINMENU_SINGLE_PLAYER));
-	vecMenuItems.push_back(std::make_unique<UiListItem>("Multi Player", MAINMENU_MULTIPLAYER));
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Replay Intro", MAINMENU_REPLAY_INTRO));
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Support", MAINMENU_SHOW_SUPPORT));
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Show Credits", MAINMENU_SHOW_CREDITS));

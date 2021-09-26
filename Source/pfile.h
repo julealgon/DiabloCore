@@ -17,7 +17,7 @@ extern bool gbValidSaveFile;
 class PFileScopedArchiveWriter {
 public:
 	// Opens the player save file for writing
-	PFileScopedArchiveWriter(bool clearTables = !gbIsMultiplayer);
+	PFileScopedArchiveWriter(bool clearTables = true);
 
 	// Finishes writing and closes the player save file.
 	~PFileScopedArchiveWriter();
@@ -28,7 +28,7 @@ private:
 };
 
 const char *pfile_get_password();
-void pfile_write_hero(bool writeGameData = false, bool clearTables = !gbIsMultiplayer);
+void pfile_write_hero(bool writeGameData = false, bool clearTables = true);
 bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *));
 void pfile_ui_set_class_stats(unsigned int playerClass, _uidefaultstats *classStats);
 uint32_t pfile_ui_get_first_unused_save_num();

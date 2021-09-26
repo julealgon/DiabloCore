@@ -1773,26 +1773,17 @@ void HealerBuyItem()
 	auto &item = myPlayer.HoldItem;
 
 	int idx = stextvhold + ((stextlhold - stextup) / 4);
-	if (!gbIsMultiplayer) {
-		if (idx < 2)
-			item._iSeed = AdvanceRndSeed();
-	} else {
-		if (idx < 3)
-			item._iSeed = AdvanceRndSeed();
-	}
+	if (idx < 2)
+		item._iSeed = AdvanceRndSeed();
 
 	TakePlrsMoney(item._iIvalue);
 	if (item._iMagical == ITEM_QUALITY_NORMAL)
 		item._iIdentified = false;
 	StoreAutoPlace();
 
-	if (!gbIsMultiplayer) {
-		if (idx < 2)
-			return;
-	} else {
-		if (idx < 3)
-			return;
-	}
+	if (idx < 2)
+		return;
+
 	idx = stextvhold + ((stextlhold - stextup) / 4);
 	if (idx == 19) {
 		healitem[19]._itype = ItemType::None;
@@ -2196,13 +2187,10 @@ void SetupTownStores()
 {
 	auto &myPlayer = Players[MyPlayerId];
 
-	int l = myPlayer._pLevel / 2;
-	if (!gbIsMultiplayer) {
-		l = 0;
-		for (int i = 0; i < NUMLEVELS; i++) {
-			if (myPlayer._pLvlVisited[i])
-				l = i;
-		}
+	int l = 0;
+	for (int i = 0; i < NUMLEVELS; i++) {
+		if (myPlayer._pLvlVisited[i])
+			l = i;
 	}
 
 	l = std::clamp(l + 2, 6, 16);
