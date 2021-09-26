@@ -289,9 +289,6 @@ void LoadItemData(LoadHelper &file, Item &item)
 	file.Skip(1); // Alignment
 	item._iStatFlag = file.NextBool32();
 	item.IDidx = static_cast<_item_indexes>(file.NextLE<int32_t>());
-	if (gbIsSpawn) {
-		item.IDidx = RemapItemIdxFromSpawn(item.IDidx);
-	}
 	if (!gbIsHellfireSaveGame) {
 		item.IDidx = RemapItemIdxFromDiablo(item.IDidx);
 	}
@@ -897,8 +894,6 @@ void SaveItem(SaveHelper &file, const Item &item)
 	auto idx = item.IDidx;
 	if (!gbIsHellfire)
 		idx = RemapItemIdxToDiablo(idx);
-	if (gbIsSpawn)
-		idx = RemapItemIdxToSpawn(idx);
 	ItemType iType = item._itype;
 	if (idx == -1) {
 		idx = _item_indexes::IDI_GOLD;
@@ -1520,68 +1515,6 @@ _item_indexes RemapItemIdxToDiablo(_item_indexes i)
 	return static_cast<_item_indexes>(GetItemIdValue(i));
 }
 
-_item_indexes RemapItemIdxFromSpawn(_item_indexes i)
-{
-	constexpr auto GetItemIdValue = [](int i) {
-		if (i >= 62) {
-			i += 9; // Medium and heavy armors
-		}
-		if (i >= 96) {
-			i += 1; // Scroll of Stone Curse
-		}
-		if (i >= 98) {
-			i += 1; // Scroll of Guardian
-		}
-		if (i >= 99) {
-			i += 1; // Scroll of ...
-		}
-		if (i >= 101) {
-			i += 1; // Scroll of Golem
-		}
-		if (i >= 102) {
-			i += 1; // Scroll of None
-		}
-		if (i >= 104) {
-			i += 1; // Scroll of Apocalypse
-		}
-
-		return i;
-	};
-
-	return static_cast<_item_indexes>(GetItemIdValue(i));
-}
-
-_item_indexes RemapItemIdxToSpawn(_item_indexes i)
-{
-	constexpr auto GetItemIdValue = [](int i) {
-		if (i >= 104) {
-			i -= 1; // Scroll of Apocalypse
-		}
-		if (i >= 102) {
-			i -= 1; // Scroll of None
-		}
-		if (i >= 101) {
-			i -= 1; // Scroll of Golem
-		}
-		if (i >= 99) {
-			i -= 1; // Scroll of ...
-		}
-		if (i >= 98) {
-			i -= 1; // Scroll of Guardian
-		}
-		if (i >= 96) {
-			i -= 1; // Scroll of Stone Curse
-		}
-		if (i >= 71) {
-			i -= 9; // Medium and heavy armors
-		}
-
-		return i;
-	};
-
-	return static_cast<_item_indexes>(GetItemIdValue(i));
-}
-
 bool IsHeaderValid(uint32_t magicNumber)
 {
 	gbIsHellfireSaveGame = false;
@@ -1592,10 +1525,10 @@ bool IsHeaderValid(uint32_t magicNumber)
 		gbIsHellfireSaveGame = true;
 		return true;
 	}
-	if (!gbIsSpawn && magicNumber == LoadLE32("RETL")) {
+	if (magicNumber == LoadLE32("RETL")) {
 		return true;
 	}
-	if (!gbIsSpawn && magicNumber == LoadLE32("HELF")) {
+	if (magicNumber == LoadLE32("HELF")) {
 		gbIsHellfireSaveGame = true;
 		return true;
 	}
@@ -1892,13 +1825,9 @@ void SaveGameData()
 {
 	SaveHelper file("game", FILEBUFF);
 
-	if (gbIsSpawn && !gbIsHellfire)
-		file.WriteLE<uint32_t>(LoadLE32("SHAR"));
-	else if (gbIsSpawn && gbIsHellfire)
-		file.WriteLE<uint32_t>(LoadLE32("SHLF"));
-	else if (!gbIsSpawn && gbIsHellfire)
+	if (gbIsHellfire)
 		file.WriteLE<uint32_t>(LoadLE32("HELF"));
-	else if (!gbIsSpawn && !gbIsHellfire)
+	else if (!gbIsHellfire)
 		file.WriteLE<uint32_t>(LoadLE32("RETL"));
 	else
 		app_fatal("%s", "Invalid game state");

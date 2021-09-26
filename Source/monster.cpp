@@ -3565,10 +3565,7 @@ void GetLevelMTypes()
 
 	int nt; // number of types
 
-	if (gbIsSpawn)
-		mamask = 1; // monster availability mask
-	else
-		mamask = 3; // monster availability mask
+	mamask = 3; // monster availability mask
 
 	AddMonsterType(MT_GOLEM, PLACE_SPECIAL);
 	if (currlevel == 16) {
@@ -3774,7 +3771,7 @@ void InitMonsters()
 			AddMonster(GolemHoldingCell, Direction::South, 0, false);
 	}
 
-	if (!gbIsSpawn && !setlevel && currlevel == 16)
+	if (!setlevel && currlevel == 16)
 		LoadDiabMonsts();
 
 	int nt = numtrigs;
@@ -3786,11 +3783,9 @@ void InitMonsters()
 				DoVision(trigs[i].position + Displacement { s, t }, 15, false, false);
 		}
 	}
-	if (!gbIsSpawn)
-		PlaceQuestMonsters();
+	PlaceQuestMonsters();
 	if (!setlevel) {
-		if (!gbIsSpawn)
-			PlaceUniqueMonsters();
+		PlaceUniqueMonsters();
 		int na = 0;
 		for (int s = 16; s < 96; s++) {
 			for (int t = 16; t < 96; t++) {
@@ -4058,9 +4053,6 @@ void DoEnding()
 	if (gbIsMultiplayer) {
 		SDL_Delay(1000);
 	}
-
-	if (gbIsSpawn)
-		return;
 
 	switch (Players[MyPlayerId]._pClass) {
 	case HeroClass::Sorcerer:
