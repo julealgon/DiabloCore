@@ -1,8 +1,9 @@
 #pragma once
 
+#include <optional>
+
 #include "engine/cel_sprite.hpp"
 #include "engine/surface.hpp"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 

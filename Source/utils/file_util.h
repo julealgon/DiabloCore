@@ -4,9 +4,9 @@
 #include <cstdio>
 #include <fstream>
 #include <memory>
+#include <optional>
 
 #include "utils/stdcompat/string_view.hpp"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 

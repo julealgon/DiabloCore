@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <array>
 #include <functional>
+#include <optional>
 
 #include "damage.hpp"
 #include "engine.h"
@@ -16,7 +17,6 @@
 #include "engine/cel_sprite.hpp"
 #include "engine/point.hpp"
 #include "miniwin/miniwin.h"
-#include "utils/stdcompat/optional.hpp"
 #include "monstdat.h"
 #include "sound.h"
 #include "spelldat.h"

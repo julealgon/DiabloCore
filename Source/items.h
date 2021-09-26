@@ -14,7 +14,6 @@
 #include "engine.h"
 #include "itemdat.h"
 #include "monster.h"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 

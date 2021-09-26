@@ -21,7 +21,6 @@
 #include "stores.h"
 #include "towners.h"
 #include "utils/sdl_geometry.h"
-#include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
 

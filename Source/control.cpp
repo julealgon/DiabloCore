@@ -34,7 +34,6 @@
 #include "towners.h"
 #include "trigs.h"
 #include "utils/sdl_geometry.h"
-#include "utils/stdcompat/optional.hpp"
 #include "options.h"
 
 #ifdef _DEBUG

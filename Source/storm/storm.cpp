@@ -13,7 +13,6 @@
 #include "utils/paths.h"
 #include "utils/sdl_mutex.h"
 #include "utils/stubs.h"
-#include "utils/stdcompat/optional.hpp"
 
 // Include Windows headers for Get/SetLastError.
 // Suppress definitions of `min` and `max` macros by <windows.h>:
