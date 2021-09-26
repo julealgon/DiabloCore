@@ -30,7 +30,6 @@ option(NOSOUND "Disable sound support" OFF)
 
 if(NOT NONET)
   option(DISABLE_TCP "Disable TCP multiplayer option" OFF)
-  option(DISABLE_ZERO_TIER "Disable ZeroTier multiplayer option" OFF)
 endif()
 
 option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
@@ -413,12 +412,6 @@ if(NOT NONET)
       Source/dvlnet/tcp_client.cpp
       Source/dvlnet/tcp_server.cpp)
   endif()
-  if(NOT DISABLE_ZERO_TIER)
-    list(APPEND libdevilutionx_SRCS
-      Source/dvlnet/protocol_zt.cpp
-      Source/dvlnet/zerotier_native.cpp
-      Source/dvlnet/zerotier_lwip.cpp)
-  endif()
 endif()
 
 set(BIN_TARGET devilutionx)
@@ -499,7 +492,6 @@ foreach(
   NONET
   PREFILL_PLAYER_NAME
   DISABLE_TCP
-  DISABLE_ZERO_TIER
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
   GPERF
@@ -759,9 +751,4 @@ if(CPACK)
   set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
   set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
   include(CPack)
-endif()
-
-if(NOT NONET AND NOT DISABLE_ZERO_TIER)
-  add_subdirectory(3rdParty/libzt)
-  target_link_libraries(libdevilutionx PUBLIC zt-static)
 endif()
