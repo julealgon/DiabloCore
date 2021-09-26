@@ -28,10 +28,6 @@ option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 option(NONET "Disable network support" OFF)
 option(NOSOUND "Disable sound support" OFF)
 
-if(NOT NONET)
-  option(DISABLE_TCP "Disable TCP multiplayer option" OFF)
-endif()
-
 option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
 mark_as_advanced(DISABLE_STREAMING_MUSIC)
 option(DISABLE_STREAMING_SOUNDS "Disable streaming sounds (to work around broken platform implementations)" OFF)
@@ -218,10 +214,6 @@ else()
 endif()
 find_package(SDL2_ttf REQUIRED)
 
-if(NOT NONET AND NOT DISABLE_TCP)
-  add_subdirectory(3rdParty/asio)
-endif()
-
 add_subdirectory(3rdParty/SDL_image)
 
 if(NOT NOSOUND)
@@ -406,14 +398,6 @@ else()
     Source/utils/soundsample.cpp)
 endif()
 
-if(NOT NONET)
-  if(NOT DISABLE_TCP)
-    list(APPEND libdevilutionx_SRCS
-      Source/dvlnet/tcp_client.cpp
-      Source/dvlnet/tcp_server.cpp)
-  endif()
-endif()
-
 set(BIN_TARGET devilutionx)
 
 add_library(libdevilutionx OBJECT ${libdevilutionx_SRCS})
@@ -469,9 +453,6 @@ if(WIN32)
 endif()
 
 if(NOT NONET)
-  if(NOT DISABLE_TCP)
-    target_link_libraries(libdevilutionx PUBLIC asio)
-  endif()
   target_link_libraries(libdevilutionx PUBLIC sodium)
 endif()
 
@@ -481,17 +462,12 @@ target_link_libraries(libdevilutionx PUBLIC PNG::PNG)
 genex_for_option(DEBUG)
 target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 
-if(NOT NONET AND NOT DISABLE_TCP)
-  target_compile_definitions(libdevilutionx PUBLIC ASIO_STANDALONE)
-endif()
-
 # Defines without value
 foreach(
   def_name
   NOSOUND
   NONET
   PREFILL_PLAYER_NAME
-  DISABLE_TCP
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
   GPERF
