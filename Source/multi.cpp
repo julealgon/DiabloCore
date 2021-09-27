@@ -384,8 +384,6 @@ void NetSendHiPri(int playerId, std::byte *pbMsg, BYTE bLen)
 		size = sync_all_monsters(lowpriBody, size);
 		size_t len = gdwNormalMsgSize - size;
 		pkt.hdr.wLen = len;
-		if (!SNetSendMessage(-2, &pkt.hdr, len))
-			nthread_terminate_game("SNetSendMessage");
 	}
 }
 
@@ -617,7 +615,6 @@ bool NetInit()
 		gbSomebodyWonGameKludge = false;
 		nthread_send_and_recv_turn(0, 0);
 		SetupLocalPositions();
-		SendPlayerInfo(-2, CMD_SEND_PLRINFO);
 
 		auto &myPlayer = Players[MyPlayerId];
 		ResetPlayerGFX(myPlayer);

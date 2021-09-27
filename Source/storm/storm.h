@@ -98,7 +98,6 @@ bool SNetReceiveTurns(int arraysize, char **arraydata, size_t *arraydatabytes);
  *  playerID:   The player index of the player to receive the data.
  *              Conversely, this field can be one of the following constants:
  *                  SNPLAYER_ALL      | Sends the message to all players, including oneself.
- *                  SNPLAYER_OTHERS   | Sends the message to all players, except for oneself.
  *  data:       A pointer to the data.
  *  databytes:  The amount of bytes that the data pointer contains.
  *
@@ -108,7 +107,6 @@ bool SNetSendMessage(int playerID, void *data, unsigned int databytes);
 
 // Macro values to target specific players
 #define SNPLAYER_ALL -1
-#define SNPLAYER_OTHERS -2
 
 #define MPQ_OPEN_READ_ONLY 0x00000100
 #define SFILE_OPEN_FROM_MPQ 0
