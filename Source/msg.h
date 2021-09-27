@@ -419,7 +419,6 @@ struct TBuffer {
 	std::byte bData[4096];
 };
 
-extern bool deltaload;
 extern BYTE gbBufferMsgs;
 extern int dwRecCount;
 

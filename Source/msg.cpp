@@ -33,7 +33,6 @@
 
 namespace devilution {
 
-bool deltaload;
 BYTE gbBufferMsgs;
 int dwRecCount;
 
@@ -1780,7 +1779,6 @@ void delta_init()
 	memset(&sgJunk, 0xFF, sizeof(sgJunk));
 	memset(sgLevels, 0xFF, sizeof(sgLevels));
 	memset(sgLocals, 0, sizeof(sgLocals));
-	deltaload = false;
 }
 
 bool delta_portal_inited(int i)
