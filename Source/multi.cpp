@@ -288,7 +288,6 @@ void SendPlayerInfo(int pnum, _cmd_id cmd)
 	std::unique_ptr<std::byte[]> pkplr { new std::byte[sizeof(PlayerPack)] };
 
 	PackPlayer(reinterpret_cast<PlayerPack *>(pkplr.get()), Players[MyPlayerId], true);
-	dthread_send_delta(pnum, cmd, std::move(pkplr), sizeof(PlayerPack));
 }
 
 dungeon_type InitLevelType(int l)

@@ -66,17 +66,6 @@ void dthread_remove_player(uint8_t pnum)
 	});
 }
 
-void dthread_send_delta(int pnum, _cmd_id cmd, std::unique_ptr<std::byte[]> data, uint32_t len)
-{
-	return;
-
-	DThreadPkt pkt { pnum, cmd, std::move(data), len };
-
-	std::lock_guard<SdlMutex> lock(*DthreadMutex);
-	InfoList.push_back(std::move(pkt));
-	WorkToDo->signal();
-}
-
 void dthread_start()
 {
 	return;

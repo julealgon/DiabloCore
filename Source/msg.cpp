@@ -1759,18 +1759,15 @@ void DeltaExportData(int pnum)
 			dstEnd = DeltaExportObject(dstEnd, sgLevels[i].object);
 			dstEnd = DeltaExportMonster(dstEnd, sgLevels[i].monster);
 			int size = CompressData(dst.get(), dstEnd);
-			dthread_send_delta(pnum, static_cast<_cmd_id>(i + CMD_DLEVEL_0), std::move(dst), size);
 		}
 
 		std::unique_ptr<std::byte[]> dst { new std::byte[sizeof(DJunk) + 1] };
 		std::byte *dstEnd = &dst.get()[1];
 		dstEnd = DeltaExportJunk(dstEnd);
 		int size = CompressData(dst.get(), dstEnd);
-		dthread_send_delta(pnum, CMD_DLEVEL_JUNK, std::move(dst), size);
 	}
 
 	std::unique_ptr<std::byte[]> src { new std::byte[1] { static_cast<std::byte>(0) } };
-	dthread_send_delta(pnum, CMD_DLEVEL_END, std::move(src), 1);
 }
 
 void delta_init()
