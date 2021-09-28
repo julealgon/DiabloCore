@@ -38,24 +38,6 @@ std::optional<SdlCond> WorkToDo;
 /* rdata */
 SdlThread Thread;
 
-void DthreadHandler()
-{
-	std::lock_guard<SdlMutex> lock(*DthreadMutex);
-	while (true) {
-		while (!InfoList.empty()) {
-			DThreadPkt pkt = std::move(InfoList.front());
-			InfoList.pop_front();
-
-			DthreadMutex->unlock();
-			multi_send_zero_packet(pkt.pnum, pkt.cmd, pkt.data.get(), pkt.len);
-			DthreadMutex->lock();
-		}
-		if (!DthreadRunning)
-			return;
-		WorkToDo->wait(*DthreadMutex);
-	}
-}
-
 } // namespace
 
 void dthread_remove_player(uint8_t pnum)
