@@ -50,7 +50,6 @@ void multi_net_ping();
  */
 bool multi_handle_delta();
 void multi_process_network_packets();
-void multi_send_zero_packet(int pnum, _cmd_id bCmd, std::byte *pbSrc, DWORD dwLen);
 void NetClose();
 bool NetInit();
 void recv_plrinfo(int pnum, TCmdPlrInfoHdr *p, bool recv);
