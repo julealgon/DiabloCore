@@ -66,16 +66,6 @@ void dthread_remove_player(uint8_t pnum)
 	});
 }
 
-void dthread_start()
-{
-	return;
-
-	DthreadRunning = true;
-	DthreadMutex.emplace();
-	WorkToDo.emplace();
-	Thread = SdlThread { DthreadHandler };
-}
-
 void DThreadCleanup()
 {
 	if (!DthreadRunning)

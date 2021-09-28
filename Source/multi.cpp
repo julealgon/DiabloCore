@@ -606,7 +606,6 @@ bool NetInit()
 		gbShouldValidatePackage = false;
 		sync_init();
 		nthread_start(sgbPlayerTurnBitTbl[MyPlayerId]);
-		dthread_start();
 		tmsg_start();
 		sgdwGameLoops = 0;
 		sgbSentThisCycle = 0;
