@@ -1,13 +1,13 @@
 #include <memory>
 
-#include "dvlnet/abstract_net.h"
+#include "dvlnet/loopback.h"
 #include "menu.h"
 #include "options.h"
 #include "utils/stubs.h"
 
 namespace devilution {
 
-static std::unique_ptr<net::abstract_net> dvlnet_inst;
+static std::unique_ptr<net::loopback> dvlnet_inst;
 
 bool SNetReceiveMessage(int *senderplayerid, void **data, uint32_t *databytes)
 {
@@ -45,7 +45,7 @@ void SNetGetProviderCaps(struct _SNETCAPS *caps)
  */
 bool SNetInitializeProvider(uint32_t provider, struct GameData *gameData)
 {
-	dvlnet_inst = net::abstract_net::MakeNet(provider);
+	dvlnet_inst = std::make_unique<net::loopback>();
 	return mainmenu_select_hero_dialog(gameData);
 }
 

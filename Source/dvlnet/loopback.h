@@ -3,12 +3,15 @@
 #include <queue>
 #include <string>
 
-#include "dvlnet/abstract_net.h"
+#include "storm/storm.h"
 
 namespace devilution {
 namespace net {
 
-class loopback : public abstract_net {
+typedef std::vector<unsigned char> buffer_t;
+typedef unsigned long provider_t;
+
+class loopback {
 private:
 	std::queue<buffer_t> message_queue;
 	buffer_t message_last;
