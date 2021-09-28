@@ -11,7 +11,6 @@
 
 #include "DiabloUI/diabloui.h"
 #include "diablo.h"
-#include "dthread.h"
 #include "engine/point.hpp"
 #include "engine/random.hpp"
 #include "menu.h"
@@ -569,7 +568,6 @@ void NetClose()
 
 	sgbNetInited = false;
 	nthread_cleanup();
-	DThreadCleanup();
 	tmsg_cleanup();
 }
 
