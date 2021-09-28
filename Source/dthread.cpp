@@ -40,14 +40,6 @@ SdlThread Thread;
 
 } // namespace
 
-void dthread_remove_player(uint8_t pnum)
-{
-	std::lock_guard<SdlMutex> lock(*DthreadMutex);
-	InfoList.remove_if([&](auto &pkt) {
-		return pkt.pnum == pnum;
-	});
-}
-
 void DThreadCleanup()
 {
 	if (!DthreadRunning)

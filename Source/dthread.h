@@ -9,7 +9,6 @@
 
 namespace devilution {
 
-void dthread_remove_player(uint8_t pnum);
 void DThreadCleanup();
 
 } // namespace devilution
