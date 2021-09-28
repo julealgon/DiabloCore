@@ -49,7 +49,6 @@ enum _cmd_id : uint8_t {
 	CMD_OPOBJT,
 	CMD_KNOCKBACK,
 	CMD_TALKXY,
-	CMD_NEWLVL,
 	CMD_WARP,
 	CMD_CHEAT_EXPERIENCE,
 	CMD_CHEAT_SPELL_LEVEL,
@@ -420,23 +419,16 @@ struct TBuffer {
 	std::byte bData[4096];
 };
 
-extern bool deltaload;
 extern BYTE gbBufferMsgs;
 extern int dwRecCount;
 
 void msg_send_drop_pkt(int pnum, int reason);
 bool msg_wait_resync();
-void run_delta_info();
 void DeltaExportData(int pnum);
 void delta_init();
-void delta_kill_monster(int mi, Point position, BYTE bLevel);
-void delta_monster_hp(int mi, int hp, BYTE bLevel);
-void delta_sync_monster(const TSyncMonster *pSync, BYTE bLevel);
 bool delta_portal_inited(int i);
 bool delta_quest_inited(int i);
 void DeltaAddItem(int ii);
-void DeltaSaveLevel();
-void DeltaLoadLevel();
 void NetSendCmd(bool bHiPri, _cmd_id bCmd);
 void NetSendCmdGolem(BYTE mx, BYTE my, Direction dir, BYTE menemy, int hp, BYTE cl);
 void NetSendCmdLoc(int playerId, bool bHiPri, _cmd_id bCmd, Point position);

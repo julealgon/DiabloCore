@@ -652,7 +652,7 @@ bool IsChatAvailable()
 #ifdef _DEBUG
 	return true;
 #else
-	return gbIsMultiplayer;
+	return false;
 #endif
 }
 
@@ -1125,7 +1125,7 @@ void control_check_btn_press()
 
 void DoAutoMap()
 {
-	if (currlevel != 0 || gbIsMultiplayer) {
+	if (currlevel != 0) {
 		if (!AutomapActive)
 			StartAutomap();
 		else

@@ -70,10 +70,6 @@ HANDLE LoadMPQ(const std::vector<std::string> &paths, const char *mpqName)
 
 void init_cleanup()
 {
-	if (gbIsMultiplayer && gbRunGame) {
-		pfile_write_hero(/*writeGameData=*/false, /*clearTables=*/true);
-	}
-
 	if (diabdat_mpq != nullptr) {
 		SFileCloseArchive(diabdat_mpq);
 		diabdat_mpq = nullptr;

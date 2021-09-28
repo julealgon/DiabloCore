@@ -259,7 +259,6 @@ uint32_t sync_update(int pnum, const std::byte *pbBuf)
 		if (currlevel == pHdr->bLevel) {
 			SyncMonster(pnum, (TSyncMonster *)pbBuf);
 		}
-		delta_sync_monster((TSyncMonster *)pbBuf, pHdr->bLevel);
 		pbBuf += sizeof(TSyncMonster);
 	}
 

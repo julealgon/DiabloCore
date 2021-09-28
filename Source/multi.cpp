@@ -11,7 +11,6 @@
 
 #include "DiabloUI/diabloui.h"
 #include "diablo.h"
-#include "dthread.h"
 #include "engine/point.hpp"
 #include "engine/random.hpp"
 #include "menu.h"
@@ -43,26 +42,10 @@ int sglTimeoutStart;
 int sgdwPlayerLeftReasonTbl[MAX_PLRS];
 TBuffer sgLoPriBuf;
 DWORD sgdwGameLoops;
-/**
- * Specifies the maximum number of players in a game, where 1
- * represents a single player game and 4 represents a multi player game.
- */
-bool gbIsMultiplayer;
 bool sgbTimeout;
-char szPlayerName[128];
 BYTE gbDeltaSender;
 bool sgbNetInited;
 uint32_t player_state[MAX_PLRS];
-
-/**
- * Contains the set of supported event types supported by the multiplayer
- * event handler.
- */
-const event_type EventTypes[3] = {
-	EVENT_TYPE_PLAYER_LEAVE_GAME,
-	EVENT_TYPE_PLAYER_CREATE_GAME,
-	EVENT_TYPE_PLAYER_MESSAGE
-};
 
 namespace {
 
@@ -223,15 +206,6 @@ void ClearPlayerLeftState()
 	}
 }
 
-void CheckDropPlayer()
-{
-	for (int i = 0; i < MAX_PLRS; i++) {
-		if ((player_state[i] & PS_ACTIVE) == 0 && (player_state[i] & PS_CONNECTED) != 0) {
-			SNetDropPlayer(i, LEAVE_DROP);
-		}
-	}
-}
-
 void BeginTimeout()
 {
 	if (!sgbTimeout) {
@@ -282,11 +256,7 @@ void BeginTimeout()
 	} else if (bGroupPlayers == bGroupCount) {
 		if (nLowestPlayer != nLowestActive) {
 			gbGameDestroyed = true;
-		} else if (nLowestActive == MyPlayerId) {
-			CheckDropPlayer();
 		}
-	} else if (nLowestActive == MyPlayerId) {
-		CheckDropPlayer();
 	}
 }
 
@@ -317,7 +287,6 @@ void SendPlayerInfo(int pnum, _cmd_id cmd)
 	std::unique_ptr<std::byte[]> pkplr { new std::byte[sizeof(PlayerPack)] };
 
 	PackPlayer(reinterpret_cast<PlayerPack *>(pkplr.get()), Players[MyPlayerId], true);
-	dthread_send_delta(pnum, cmd, std::move(pkplr), sizeof(PlayerPack));
 }
 
 dungeon_type InitLevelType(int l)
@@ -363,55 +332,6 @@ void SetupLocalPositions()
 	myPlayer.destAction = ACTION_NONE;
 }
 
-void HandleEvents(_SNETEVENT *pEvt)
-{
-	DWORD leftReason;
-
-	switch (pEvt->eventid) {
-	case EVENT_TYPE_PLAYER_CREATE_GAME: {
-		auto *gameData = (GameData *)pEvt->data;
-		if (gameData->size != sizeof(GameData))
-			app_fatal("Invalid size of game data: %i", gameData->size);
-		sgGameInitInfo = *gameData;
-		sgbPlayerTurnBitTbl[pEvt->playerid] = true;
-		break;
-	}
-	case EVENT_TYPE_PLAYER_LEAVE_GAME:
-		sgbPlayerLeftGameTbl[pEvt->playerid] = true;
-		sgbPlayerTurnBitTbl[pEvt->playerid] = false;
-
-		leftReason = 0;
-		if (pEvt->data != nullptr && pEvt->databytes >= sizeof(DWORD))
-			leftReason = *(DWORD *)pEvt->data;
-		sgdwPlayerLeftReasonTbl[pEvt->playerid] = leftReason;
-		if (leftReason == LEAVE_ENDING)
-			gbSomebodyWonGameKludge = true;
-
-		sgbSendDeltaTbl[pEvt->playerid] = false;
-		dthread_remove_player(pEvt->playerid);
-
-		if (gbDeltaSender == pEvt->playerid)
-			gbDeltaSender = MAX_PLRS;
-		break;
-	case EVENT_TYPE_PLAYER_MESSAGE:
-		ErrorPlrMsg((char *)pEvt->data);
-		break;
-	}
-}
-
-void EventHandler(bool add)
-{
-	for (auto eventType : EventTypes) {
-		if (add) {
-			if (!SNetRegisterEventHandler(eventType, HandleEvents)) {
-				app_fatal("SNetRegisterEventHandler:\n%s", SDL_GetError());
-			}
-		} else {
-			SNetUnregisterEventHandler(eventType);
-		}
-	}
-}
-
 bool InitSingle(GameData *gameData)
 {
 	if (!SNetInitializeProvider(SELCONN_LOOPBACK, gameData)) {
@@ -419,42 +339,12 @@ bool InitSingle(GameData *gameData)
 		return false;
 	}
 
-	int unused = 0;
-	if (!SNetCreateGame("local", "local", (char *)&sgGameInitInfo, sizeof(sgGameInitInfo), &unused)) {
+	if (!SNetCreateGame((char *)&sgGameInitInfo, sizeof(sgGameInitInfo))) {
 		app_fatal("SNetCreateGame1:\n%s", SDL_GetError());
 	}
 
 	MyPlayerId = 0;
 	MyPlayer = &Players[MyPlayerId];
-	gbIsMultiplayer = false;
-
-	return true;
-}
-
-bool InitMulti(GameData *gameData)
-{
-	int playerId;
-
-	while (true) {
-		if (gbSelectProvider && !UiSelectProvider(gameData)) {
-			return false;
-		}
-
-		EventHandler(true);
-		if (UiSelectGame(gameData, &playerId))
-			break;
-
-		gbSelectProvider = true;
-	}
-
-	if ((DWORD)playerId >= MAX_PLRS) {
-		return false;
-	}
-	MyPlayerId = playerId;
-	MyPlayer = &Players[MyPlayerId];
-	gbIsMultiplayer = true;
-
-	pfile_read_player_from_save(gSaveNumber, *MyPlayer);
 
 	return true;
 }
@@ -492,8 +382,6 @@ void NetSendHiPri(int playerId, std::byte *pbMsg, BYTE bLen)
 		size = sync_all_monsters(lowpriBody, size);
 		size_t len = gdwNormalMsgSize - size;
 		pkt.hdr.wLen = len;
-		if (!SNetSendMessage(-2, &pkt.hdr, len))
-			nthread_terminate_game("SNetSendMessage");
 	}
 }
 
@@ -523,13 +411,6 @@ void multi_msg_countdown()
 				ParseTurn(i, *(DWORD *)glpMsgTbl[i]);
 		}
 	}
-}
-
-void multi_player_left(int pnum, int reason)
-{
-	sgbPlayerLeftGameTbl[pnum] = true;
-	sgdwPlayerLeftReasonTbl[pnum] = reason;
-	ClearPlayerLeftState();
 }
 
 void multi_net_ping()
@@ -634,51 +515,6 @@ void multi_process_network_packets()
 		nthread_terminate_game("SNetReceiveMsg");
 }
 
-void multi_send_zero_packet(int pnum, _cmd_id bCmd, std::byte *pbSrc, DWORD dwLen)
-{
-	assert(pnum != MyPlayerId);
-	assert(pbSrc);
-	assert(dwLen <= 0x0ffff);
-
-	uint32_t dwOffset = 0;
-
-	while (dwLen != 0) {
-		TPkt pkt;
-		pkt.hdr.wCheck = LoadBE32("\0\0ip");
-		pkt.hdr.px = 0;
-		pkt.hdr.py = 0;
-		pkt.hdr.targx = 0;
-		pkt.hdr.targy = 0;
-		pkt.hdr.php = 0;
-		pkt.hdr.pmhp = 0;
-		pkt.hdr.bstr = 0;
-		pkt.hdr.bmag = 0;
-		pkt.hdr.bdex = 0;
-		auto *p = (TCmdPlrInfoHdr *)pkt.body;
-		p->bCmd = bCmd;
-		p->wOffset = dwOffset;
-		size_t dwBody = gdwLargestMsgSize - sizeof(pkt.hdr) - sizeof(*p);
-		if (dwLen < dwBody) {
-			dwBody = dwLen;
-		}
-		assert(dwBody <= 0x0ffff);
-		p->wBytes = dwBody;
-		memcpy(&pkt.body[sizeof(*p)], pbSrc, p->wBytes);
-		size_t dwMsg = sizeof(pkt.hdr);
-		dwMsg += sizeof(*p);
-		dwMsg += p->wBytes;
-		pkt.hdr.wLen = dwMsg;
-		if (!SNetSendMessage(pnum, &pkt, dwMsg)) {
-			nthread_terminate_game("SNetSendMessage2");
-			return;
-		}
-
-		pbSrc += p->wBytes;
-		dwLen -= p->wBytes;
-		dwOffset += p->wBytes;
-	}
-}
-
 void NetClose()
 {
 	if (!sgbNetInited) {
@@ -687,24 +523,16 @@ void NetClose()
 
 	sgbNetInited = false;
 	nthread_cleanup();
-	DThreadCleanup();
 	tmsg_cleanup();
-	EventHandler(false);
-	SNetLeaveGame(3);
-	if (gbIsMultiplayer)
-		SDL_Delay(2000);
 }
 
-bool NetInit(bool bSinglePlayer)
+bool NetInit()
 {
 	while (true) {
 		SetRndSeed(0);
 		sgGameInitInfo.size = sizeof(sgGameInitInfo);
 		sgGameInitInfo.dwSeed = time(nullptr);
 		sgGameInitInfo.programid = GAME_ID;
-		sgGameInitInfo.versionMajor = PROJECT_VERSION_MAJOR;
-		sgGameInitInfo.versionMinor = PROJECT_VERSION_MINOR;
-		sgGameInitInfo.versionPatch = PROJECT_VERSION_PATCH;
 		sgGameInitInfo.nTickRate = sgOptions.Gameplay.nTickRate;
 		sgGameInitInfo.bRunInTown = sgOptions.Gameplay.bRunInTown ? 1 : 0;
 		sgGameInitInfo.bTheoQuest = sgOptions.Gameplay.bTheoQuest ? 1 : 0;
@@ -719,14 +547,9 @@ bool NetInit(bool bSinglePlayer)
 			player.Reset();
 		}
 		memset(sgwPackPlrOffsetTbl, 0, sizeof(sgwPackPlrOffsetTbl));
-		SNetSetBasePlayer(0);
-		if (bSinglePlayer) {
-			if (!InitSingle(&sgGameInitInfo))
-				return false;
-		} else {
-			if (!InitMulti(&sgGameInitInfo))
-				return false;
-		}
+		if (!InitSingle(&sgGameInitInfo))
+			return false;
+			
 		sgbNetInited = true;
 		sgbTimeout = false;
 		delta_init();
@@ -736,7 +559,6 @@ bool NetInit(bool bSinglePlayer)
 		gbShouldValidatePackage = false;
 		sync_init();
 		nthread_start(sgbPlayerTurnBitTbl[MyPlayerId]);
-		dthread_start();
 		tmsg_start();
 		sgdwGameLoops = 0;
 		sgbSentThisCycle = 0;
@@ -744,7 +566,6 @@ bool NetInit(bool bSinglePlayer)
 		gbSomebodyWonGameKludge = false;
 		nthread_send_and_recv_turn(0, 0);
 		SetupLocalPositions();
-		SendPlayerInfo(-2, CMD_SEND_PLRINFO);
 
 		auto &myPlayer = Players[MyPlayerId];
 		ResetPlayerGFX(myPlayer);
@@ -763,10 +584,6 @@ bool NetInit(bool bSinglePlayer)
 		glSeedTbl[i] = AdvanceRndSeed();
 		gnLevelTypeTbl[i] = InitLevelType(i);
 	}
-	if (!SNetGetGameInfo(GAMEINFO_NAME, szPlayerName, 128))
-		nthread_terminate_game("SNetGetGameInfo1");
-	if (!SNetGetGameInfo(GAMEINFO_PASSWORD, szPlayerDescript, 128))
-		nthread_terminate_game("SNetGetGameInfo2");
 
 	return true;
 }

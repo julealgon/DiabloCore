@@ -173,8 +173,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 		monster.mLevel -= 15;
 	}
 
-	if (!gbIsMultiplayer)
-		monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
+	monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
 
 	monster._mhitpoints = monster._mmaxhp;
 	monster._mAi = monster.MData->mAi;
@@ -212,10 +211,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 
 	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
 		monster._mmaxhp = 3 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 100 : 50) << 6;
-		else
-			monster._mmaxhp += 64;
+		monster._mmaxhp += 64;
 		monster._mhitpoints = monster._mmaxhp;
 		monster.mLevel += 15;
 		monster.mExp = 2 * (monster.mExp + 1000);
@@ -229,7 +225,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
 		monster._mmaxhp = 4 * monster._mmaxhp;
 		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 200 : 100) << 6;
+			monster._mmaxhp += 100 << 6;
 		else
 			monster._mmaxhp += 192;
 		monster._mhitpoints = monster._mmaxhp;
@@ -426,36 +422,21 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 			}
 		}
 	}
-	if (!gbIsMultiplayer) {
-		if (uniqindex == UMT_LAZARUS) {
-			xp = 32;
-			yp = 46;
-		}
-		if (uniqindex == UMT_RED_VEX) {
-			xp = 40;
-			yp = 45;
-		}
-		if (uniqindex == UMT_BLACKJADE) {
-			xp = 38;
-			yp = 49;
-		}
-		if (uniqindex == UMT_SKELKING) {
-			xp = 35;
-			yp = 47;
-		}
-	} else {
-		if (uniqindex == UMT_LAZARUS) {
-			xp = 2 * setpc_x + 19;
-			yp = 2 * setpc_y + 22;
-		}
-		if (uniqindex == UMT_RED_VEX) {
-			xp = 2 * setpc_x + 21;
-			yp = 2 * setpc_y + 19;
-		}
-		if (uniqindex == UMT_BLACKJADE) {
-			xp = 2 * setpc_x + 21;
-			yp = 2 * setpc_y + 25;
-		}
+	if (uniqindex == UMT_LAZARUS) {
+		xp = 32;
+		yp = 46;
+	}
+	if (uniqindex == UMT_RED_VEX) {
+		xp = 40;
+		yp = 45;
+	}
+	if (uniqindex == UMT_BLACKJADE) {
+		xp = 38;
+		yp = 49;
+	}
+	if (uniqindex == UMT_SKELKING) {
+		xp = 35;
+		yp = 47;
 	}
 	if (uniqindex == UMT_BUTCHER) {
 		bool done = false;
@@ -487,10 +468,7 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	monster.mExp *= 2;
 	monster.mName = uniqueMonsterData.mName;
 	monster._mmaxhp = uniqueMonsterData.mmaxhp << 6;
-
-	if (!gbIsMultiplayer)
-		monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
-
+	monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
 	monster._mhitpoints = monster._mmaxhp;
 	monster._mAi = uniqueMonsterData.mAi;
 	monster._mint = uniqueMonsterData.mint;
@@ -503,22 +481,14 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	else
 		monster.mlid = AddLight(monster.position.tile, 3);
 
-	if (gbIsMultiplayer) {
-		if (monster._mAi == AI_LAZHELP)
-			monster.mtalkmsg = TEXT_NONE;
-		if (monster._mAi == AI_LAZARUS && Quests[Q_BETRAYER]._qvar1 > 3) {
-			monster._mgoal = MGOAL_NORMAL;
-		} else if (monster.mtalkmsg != TEXT_NONE) {
-			monster._mgoal = MGOAL_INQUIRING;
-		}
-	} else if (monster.mtalkmsg != TEXT_NONE) {
+	if (monster.mtalkmsg != TEXT_NONE) {
 		monster._mgoal = MGOAL_INQUIRING;
 	}
 
 	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
 		monster._mmaxhp = 3 * monster._mmaxhp;
 		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 100 : 50) << 6;
+			monster._mmaxhp += 50 << 6;
 		else
 			monster._mmaxhp += 64;
 		monster.mLevel += 15;
@@ -531,7 +501,7 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
 		monster._mmaxhp = 4 * monster._mmaxhp;
 		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 200 : 100) << 6;
+			monster._mmaxhp += 100 << 6;
 		else
 			monster._mmaxhp += 192;
 		monster.mLevel += 30;
@@ -676,18 +646,6 @@ void PlaceQuestMonsters()
 			PlaceUniqueMonst(UMT_BUTCHER, 0, 0);
 		}
 
-		if (currlevel == Quests[Q_SKELKING]._qlevel && gbIsMultiplayer) {
-			skeltype = 0;
-
-			for (skeltype = 0; skeltype < LevelMonsterTypeCount; skeltype++) {
-				if (IsSkel(LevelMonsterTypes[skeltype].mtype)) {
-					break;
-				}
-			}
-
-			PlaceUniqueMonst(UMT_SKELKING, skeltype, 30);
-		}
-
 		if (Quests[Q_LTBANNER].IsAvailable()) {
 			auto dunData = LoadFileInMem<uint16_t>("Levels\\L1Data\\Banner1.DUN");
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
@@ -715,17 +673,7 @@ void PlaceQuestMonsters()
 		if (Quests[Q_ZHAR].IsAvailable() && zharlib == -1) {
 			Quests[Q_ZHAR]._qactive = QUEST_NOTAVAIL;
 		}
-
-		if (currlevel == Quests[Q_BETRAYER]._qlevel && gbIsMultiplayer) {
-			AddMonsterType(UniqueMonstersData[UMT_LAZARUS].mtype, PLACE_UNIQUE);
-			AddMonsterType(UniqueMonstersData[UMT_RED_VEX].mtype, PLACE_UNIQUE);
-			PlaceUniqueMonst(UMT_LAZARUS, 0, 0);
-			PlaceUniqueMonst(UMT_RED_VEX, 0, 0);
-			PlaceUniqueMonst(UMT_BLACKJADE, 0, 0);
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\Vile1.DUN");
-			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
-		}
-
+		
 		if (currlevel == 24) {
 			UberDiabloMonsterIndex = -1;
 			int i1;
@@ -817,8 +765,7 @@ void UpdateEnemy(Monster &monster)
 	if ((monster._mFlags & MFLAG_BERSERK) != 0 || (monster._mFlags & MFLAG_GOLEM) == 0) {
 		for (int pnum = 0; pnum < MAX_PLRS; pnum++) {
 			auto &player = Players[pnum];
-			if (!player.plractive || currlevel != player.plrlevel || player._pLvlChanging
-			    || (((player._pHitPoints >> 6) == 0) && gbIsMultiplayer))
+			if (!player.plractive || currlevel != player.plrlevel || player._pLvlChanging)
 				continue;
 			bool sameroom = (dTransVal[position.x][position.y] == dTransVal[player.position.tile.x][player.position.tile.y]);
 			int dist = position.WalkingDistance(player.position.tile);
@@ -1159,7 +1106,6 @@ void MonsterHitMonster(int mid, int i, int dam)
 	if (i >= 0 && i < MAX_PLRS)
 		monster.mWhoHit |= 1 << i;
 
-	delta_monster_hp(mid, monster._mhitpoints, currlevel);
 	NetSendCmdMonDmg(false, mid, dam);
 	PlayEffect(monster, 1);
 
@@ -1225,7 +1171,6 @@ void StartDeathFromMonster(int i, int mid)
 	auto &monster = Monsters[mid];
 	assert(monster.MType != nullptr);
 
-	delta_kill_monster(mid, monster.position.tile, currlevel);
 	NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, mid);
 
 	if (i < MAX_PLRS) {
@@ -1510,8 +1455,7 @@ void MonsterAttackPlayer(int i, int pnum, int hit, Damage damage)
 		else
 			M_StartHit(i, pnum, mdam);
 	}
-	if ((monster._mFlags & MFLAG_NOLIFESTEAL) == 0 && monster.MType->mtype == MT_SKING && gbIsMultiplayer)
-		monster._mhitpoints += dam;
+	
 	if (player._pHitPoints >> 6 <= 0) {
 		if (gbIsHellfire)
 			M_StartStand(monster, monster._mdir);
@@ -1761,12 +1705,7 @@ bool MonsterTalk(Monster &monster)
 	}
 	if (monster._uniqtype - 1 == UMT_WARLORD)
 		Quests[Q_WARLORD]._qvar1 = 2;
-	if (monster._uniqtype - 1 == UMT_LAZARUS && gbIsMultiplayer) {
-		Quests[Q_BETRAYER]._qvar1 = 6;
-		monster._mgoal = MGOAL_NORMAL;
-		monster._msquelch = UINT8_MAX;
-		monster.mtalkmsg = TEXT_NONE;
-	}
+	
 	return false;
 }
 
@@ -2676,8 +2615,7 @@ void LeoricAi(int i)
 		monster._mgoal = MGOAL_NORMAL;
 	}
 	if (monster._mgoal == MGOAL_NORMAL) {
-		if (!gbIsMultiplayer
-		    && ((dist >= 3 && v < 4 * monster._mint + 35) || v < 6)
+		if (((dist >= 3 && v < 4 * monster._mint + 35) || v < 6)
 		    && LineClearMissile(monster.position.tile, { fx, fy })) {
 			Point newPosition = monster.position.tile + md;
 			if (IsTileAvailable(monster, newPosition) && ActiveMonsterCount < MAXMONSTERS) {
@@ -3241,31 +3179,25 @@ void LazarusAi(int i)
 	int my = monster.position.tile.y;
 	Direction md = GetMonsterDirection(monster);
 	if ((dFlags[mx][my] & BFLAG_VISIBLE) != 0) {
-		if (!gbIsMultiplayer) {
-			auto &myPlayer = Players[MyPlayerId];
-			if (monster.mtalkmsg == TEXT_VILE13 && monster._mgoal == MGOAL_INQUIRING && myPlayer.position.tile.x == 35 && myPlayer.position.tile.y == 46) {
-				PlayInGameMovie("gendata\\fprst3.smk");
-				monster._mmode = MonsterMode::Talk;
-				Quests[Q_BETRAYER]._qvar1 = 5;
-			}
-
-			if (monster.mtalkmsg == TEXT_VILE13 && !effect_is_playing(USFX_LAZ1) && monster._mgoal == MGOAL_TALKING) {
-				ObjChangeMapResync(1, 18, 20, 24);
-				RedoPlayerVision();
-				Quests[Q_BETRAYER]._qvar1 = 6;
-				monster._mgoal = MGOAL_NORMAL;
-				monster._msquelch = UINT8_MAX;
-				monster.mtalkmsg = TEXT_NONE;
-			}
+		auto &myPlayer = Players[MyPlayerId];
+		if (monster.mtalkmsg == TEXT_VILE13 && monster._mgoal == MGOAL_INQUIRING && myPlayer.position.tile.x == 35 && myPlayer.position.tile.y == 46) {
+			PlayInGameMovie("gendata\\fprst3.smk");
+			monster._mmode = MonsterMode::Talk;
+			Quests[Q_BETRAYER]._qvar1 = 5;
 		}
 
-		if (gbIsMultiplayer && monster.mtalkmsg == TEXT_VILE13 && monster._mgoal == MGOAL_INQUIRING && Quests[Q_BETRAYER]._qvar1 <= 3) {
-			monster._mmode = MonsterMode::Talk;
+		if (monster.mtalkmsg == TEXT_VILE13 && !effect_is_playing(USFX_LAZ1) && monster._mgoal == MGOAL_TALKING) {
+			ObjChangeMapResync(1, 18, 20, 24);
+			RedoPlayerVision();
+			Quests[Q_BETRAYER]._qvar1 = 6;
+			monster._mgoal = MGOAL_NORMAL;
+			monster._msquelch = UINT8_MAX;
+			monster.mtalkmsg = TEXT_NONE;
 		}
 	}
 
 	if (monster._mgoal == MGOAL_NORMAL || monster._mgoal == MGOAL_RETREAT || monster._mgoal == MGOAL_MOVE) {
-		if (!gbIsMultiplayer && Quests[Q_BETRAYER]._qvar1 == 4 && monster.mtalkmsg == TEXT_NONE) { // Fix save games affected by teleport bug
+		if (Quests[Q_BETRAYER]._qvar1 == 4 && monster.mtalkmsg == TEXT_NONE) { // Fix save games affected by teleport bug
 			ObjChangeMapResync(1, 18, 20, 24);
 			RedoPlayerVision();
 			Quests[Q_BETRAYER]._qvar1 = 6;
@@ -3290,15 +3222,12 @@ void LazarusMinionAi(int i)
 	Direction md = GetMonsterDirection(monster);
 
 	if ((dFlags[mx][my] & BFLAG_VISIBLE) != 0) {
-		if (!gbIsMultiplayer) {
-			if (Quests[Q_BETRAYER]._qvar1 <= 5) {
-				monster._mgoal = MGOAL_INQUIRING;
-			} else {
-				monster._mgoal = MGOAL_NORMAL;
-				monster.mtalkmsg = TEXT_NONE;
-			}
-		} else
+		if (Quests[Q_BETRAYER]._qvar1 <= 5) {
+			monster._mgoal = MGOAL_INQUIRING;
+		} else {
 			monster._mgoal = MGOAL_NORMAL;
+			monster.mtalkmsg = TEXT_NONE;
+		}
 	}
 	if (monster._mgoal == MGOAL_NORMAL)
 		SuccubusAi(i);
@@ -3602,26 +3531,6 @@ void GetLevelMTypes()
 		if (Quests[Q_WARLORD].IsAvailable())
 			AddMonsterType(UniqueMonstersData[UMT_WARLORD].mtype, PLACE_UNIQUE);
 
-		if (gbIsMultiplayer && currlevel == Quests[Q_SKELKING]._qlevel) {
-
-			AddMonsterType(MT_SKING, PLACE_UNIQUE);
-
-			nt = 0;
-			for (int i = MT_WSKELAX; i <= MT_WSKELAX + numskeltypes; i++) {
-				if (IsSkel(i)) {
-					minl = 15 * MonstersData[i].mMinDLvl / 30 + 1;
-					maxl = 15 * MonstersData[i].mMaxDLvl / 30 + 1;
-
-					if (currlevel >= minl && currlevel <= maxl) {
-						if ((MonstAvailTbl[i] & mamask) != 0) {
-							skeltypes[nt++] = (_monster_id)i;
-						}
-					}
-				}
-			}
-			AddMonsterType(skeltypes[GenerateRnd(nt)], PLACE_SCATTER);
-		}
-
 		nt = 0;
 		for (int i = MT_NZOMBIE; i < NUM_MTYPES; i++) {
 			minl = 15 * MonstersData[i].mMinDLvl / 30 + 1;
@@ -3794,8 +3703,6 @@ void InitMonsters()
 			}
 		}
 		int numplacemonsters = na / 30;
-		if (gbIsMultiplayer)
-			numplacemonsters += numplacemonsters / 2;
 		if (ActiveMonsterCount + numplacemonsters > MAXMONSTERS - 10)
 			numplacemonsters = MAXMONSTERS - 10 - ActiveMonsterCount;
 		totalmonsters = ActiveMonsterCount + numplacemonsters;
@@ -3961,7 +3868,6 @@ void M_StartHit(int i, int pnum, int dam)
 	if (pnum >= 0)
 		monster.mWhoHit |= 1 << pnum;
 	if (pnum == MyPlayerId) {
-		delta_monster_hp(i, monster._mhitpoints, currlevel);
 		NetSendCmdMonDmg(false, i, dam);
 	}
 	PlayEffect(monster, 1);
@@ -3992,7 +3898,6 @@ void M_StartKill(int i, int pnum)
 	auto &monster = Monsters[i];
 
 	if (MyPlayerId == pnum) {
-		delta_kill_monster(i, monster.position.tile, currlevel);
 		if (i != pnum) {
 			NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, i);
 		} else {
@@ -4044,15 +3949,7 @@ void M_UpdateLeader(int i)
 
 void DoEnding()
 {
-	if (gbIsMultiplayer) {
-		SNetLeaveGame(LEAVE_ENDING);
-	}
-
 	music_stop();
-
-	if (gbIsMultiplayer) {
-		SDL_Delay(1000);
-	}
 
 	switch (Players[MyPlayerId]._pClass) {
 	case HeroClass::Sorcerer:
@@ -4099,12 +3996,6 @@ void PrepDoEnding()
 	for (auto &player : Players) {
 		player._pmode = PM_QUIT;
 		player._pInvincible = true;
-		if (gbIsMultiplayer) {
-			if (player._pHitPoints >> 6 == 0)
-				player._pHitPoints = 64;
-			if (player._pMana >> 6 == 0)
-				player._pMana = 64;
-		}
 	}
 }
 
@@ -4236,10 +4127,6 @@ void ProcessMonsters()
 		int mi = ActiveMonsters[i];
 		auto &monster = Monsters[mi];
 		bool raflag = false;
-		if (gbIsMultiplayer) {
-			SetRndSeed(monster._mAISeed);
-			monster._mAISeed = AdvanceRndSeed();
-		}
 		if ((monster._mFlags & MFLAG_NOHEAL) == 0 && monster._mhitpoints < monster._mmaxhp && monster._mhitpoints >> 6 > 0) {
 			if (monster.mLevel > 1) {
 				monster._mhitpoints += monster.mLevel / 2;
@@ -4607,10 +4494,8 @@ void PrintMonstHistory(int mt)
 			minHP -= 2000;
 			maxHP -= 2000;
 		}
-		if (!gbIsMultiplayer) {
-			minHP /= 2;
-			maxHP /= 2;
-		}
+		minHP /= 2;
+		maxHP /= 2;
 		if (minHP < 1)
 			minHP = 1;
 		if (maxHP < 1)
@@ -4619,8 +4504,8 @@ void PrintMonstHistory(int mt)
 		int hpBonusNightmare = 1;
 		int hpBonusHell = 3;
 		if (gbIsHellfire) {
-			hpBonusNightmare = (!gbIsMultiplayer ? 50 : 100);
-			hpBonusHell = (!gbIsMultiplayer ? 100 : 200);
+			hpBonusNightmare = 50;
+			hpBonusHell = 100;
 		}
 		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
 			minHP = 3 * minHP + hpBonusNightmare;

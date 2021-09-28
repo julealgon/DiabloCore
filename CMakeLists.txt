@@ -256,7 +256,6 @@ set(libdevilutionx_SRCS
   Source/drlg_l2.cpp
   Source/drlg_l3.cpp
   Source/drlg_l4.cpp
-  Source/dthread.cpp
   Source/dx.cpp
   Source/encrypt.cpp
   Source/engine.cpp
@@ -346,7 +345,7 @@ set(libdevilutionx_SRCS
   Source/DiabloUI/mainmenu.cpp
   Source/DiabloUI/progress.cpp
   Source/DiabloUI/scrollbar.cpp
-  Source/DiabloUI/selconn.cpp
+  
   Source/DiabloUI/selgame.cpp
   Source/DiabloUI/selhero.cpp
   Source/DiabloUI/selok.cpp
@@ -357,12 +356,10 @@ set(libdevilutionx_SRCS
   Source/DiabloUI/ttf_render_wrapped.cpp
   Source/panels/charpanel.cpp
   Source/panels/mainpanel.cpp
-  Source/dvlnet/abstract_net.cpp
-  Source/dvlnet/base.cpp
-  Source/dvlnet/cdwrap.cpp  
-  Source/dvlnet/frame_queue.cpp
+    
+  
   Source/dvlnet/loopback.cpp
-  Source/dvlnet/packet.cpp  
+    
   Source/storm/storm.cpp
   
   Source/storm/storm_net.cpp

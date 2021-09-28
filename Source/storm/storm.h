@@ -17,8 +17,6 @@ enum game_info : uint8_t {
 };
 
 enum conn_type : uint8_t {
-	SELCONN_ZT,
-	SELCONN_TCP,
 	SELCONN_LOOPBACK,
 };
 
@@ -86,61 +84,10 @@ struct _SNETEVENT {
 extern "C" {
 #endif
 
-bool SNetCreateGame(const char *pszGameName, const char *pszGamePassword, char *GameTemplateData, int GameTemplateSize, int *playerID);
-bool SNetDestroy();
-
-/*  SNetDropPlayer @ 106
- *
- *  Drops a player from the current game.
- *
- *  playerid:     The player ID for the player to be dropped.
- *  flags:
- *
- *  Returns true if the function was called successfully and false otherwise.
- */
-bool SNetDropPlayer(int playerid, uint32_t flags);
-
-/*  SNetGetGameInfo @ 107
- *
- *  Retrieves specific game information from Storm, such as name, password,
- *  stats, mode, game template, and players.
- *
- *  type:         The type of data to retrieve. See GAMEINFO_ flags.
- *  dst:          The destination buffer for the data.
- *  length:       The maximum size of the destination buffer.
- *
- *  Returns true if the function was called successfully and false otherwise.
- */
-bool SNetGetGameInfo(game_info type, void *dst, unsigned int length);
-
-/*  SNetGetTurnsInTransit @ 115
- *
- *  Retrieves the number of turns (buffers) that have been queued
- *  before sending them over the network.
- *
- *  turns: A pointer to an integer that will receive the value.
- *
- *  Returns true if the function was called successfully and false otherwise.
- */
-bool SNetGetTurnsInTransit(uint32_t *turns);
-
-bool SNetJoinGame(char *gameName, char *gamePassword, int *playerid);
-
-/*  SNetLeaveGame @ 119
- *
- *  Notifies Storm that the player has left the game. Storm will
- *  notify all connected peers through the network provider.
- *
- *  type: The leave type. It doesn't appear to be important, no documentation available.
- *
- *  Returns true if the function was called successfully and false otherwise.
- */
-bool SNetLeaveGame(int type);
+bool SNetCreateGame(char *GameTemplateData, int GameTemplateSize);
 
 bool SNetReceiveMessage(int *senderplayerid, void **data, uint32_t *databytes);
-bool SNetReceiveTurns(int arraysize, char **arraydata, size_t *arraydatabytes, uint32_t *arrayplayerstatus);
-
-typedef void (*SEVTHANDLER)(struct _SNETEVENT *);
+bool SNetReceiveTurns(int arraysize, char **arraydata, size_t *arraydatabytes);
 
 /*  SNetSendMessage @ 127
  *
@@ -151,7 +98,6 @@ typedef void (*SEVTHANDLER)(struct _SNETEVENT *);
  *  playerID:   The player index of the player to receive the data.
  *              Conversely, this field can be one of the following constants:
  *                  SNPLAYER_ALL      | Sends the message to all players, including oneself.
- *                  SNPLAYER_OTHERS   | Sends the message to all players, except for oneself.
  *  data:       A pointer to the data.
  *  databytes:  The amount of bytes that the data pointer contains.
  *
@@ -161,24 +107,10 @@ bool SNetSendMessage(int playerID, void *data, unsigned int databytes);
 
 // Macro values to target specific players
 #define SNPLAYER_ALL -1
-#define SNPLAYER_OTHERS -2
 
 #define MPQ_OPEN_READ_ONLY 0x00000100
 #define SFILE_OPEN_FROM_MPQ 0
 #define SFILE_OPEN_LOCAL_FILE 0xFFFFFFFF
-
-/*  SNetSendTurn @ 128
- *
- *  Sends a turn (data packet) to all players in the game. Network data
- *  is sent using class 02 and is retrieved by the other client using
- *  SNetReceiveTurns().
- *
- *  data:       A pointer to the data.
- *  databytes:  The amount of bytes that the data pointer contains.
- *
- *  Returns true if the function was called successfully and false otherwise.
- */
-bool SNetSendTurn(char *data, unsigned int databytes);
 
 bool SFileOpenFile(const char *filename, HANDLE *phFile);
 
@@ -234,9 +166,6 @@ void SStrCopy(char *dest, const char *src, int max_length);
 
 void SFileSetBasePath(std::string_view path);
 bool SNetGetOwnerTurnsWaiting(uint32_t *);
-bool SNetUnregisterEventHandler(event_type);
-bool SNetRegisterEventHandler(event_type, SEVTHANDLER);
-bool SNetSetBasePlayer(int);
 bool SNetInitializeProvider(uint32_t provider, struct GameData *gameData);
 void SNetGetProviderCaps(struct _SNETCAPS *);
 bool SFileEnableDirectAccess(bool enable);

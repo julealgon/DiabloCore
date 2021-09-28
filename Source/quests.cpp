@@ -300,20 +300,11 @@ void InitQuests()
 		quest._qvar2 = 0;
 		quest._qlog = false;
 		quest._qmsg = questData._qdmsg;
-
-		if (!gbIsMultiplayer) {
-			quest._qlevel = questData._qdlvl;
-			quest._qactive = QUEST_INIT;
-		} else if (!questData.isSinglePlayerOnly) {
-			quest._qlevel = questData._qdmultlvl;
-			if (!delta_quest_inited(initiatedQuests)) {
-				quest._qactive = QUEST_INIT;
-			}
-			initiatedQuests++;
-		}
+		quest._qlevel = questData._qdlvl;
+		quest._qactive = QUEST_INIT;
 	}
 
-	if (!gbIsMultiplayer && sgOptions.Gameplay.bRandomizeQuests) {
+	if (sgOptions.Gameplay.bRandomizeQuests) {
 		// Quests are set from the seed used to generate level 16.
 		InitialiseQuestPools(glSeedTbl[15], Quests);
 	}
@@ -323,8 +314,6 @@ void InitQuests()
 	if (Quests[Q_ROCK]._qactive == QUEST_NOTAVAIL)
 		Quests[Q_ROCK]._qvar2 = 2;
 	Quests[Q_LTBANNER]._qvar1 = 1;
-	if (gbIsMultiplayer)
-		Quests[Q_BETRAYER]._qvar1 = 2;
 }
 
 void InitialiseQuestPools(uint32_t seed, Quest quests[])
@@ -359,15 +348,6 @@ void InitialiseQuestPools(uint32_t seed, Quest quests[])
 void CheckQuests()
 {
 	auto &quest = Quests[Q_BETRAYER];
-	if (quest.IsAvailable() && gbIsMultiplayer && quest._qvar1 == 2) {
-		AddObject(OBJ_ALTBOY, { 2 * setpc_x + 20, 2 * setpc_y + 22 });
-		quest._qvar1 = 3;
-		NetSendCmdQuest(true, quest);
-	}
-
-	if (gbIsMultiplayer) {
-		return;
-	}
 
 	if (currlevel == quest._qlevel
 	    && !setlevel
@@ -424,10 +404,6 @@ void CheckQuests()
 
 bool ForceQuests()
 {
-	if (gbIsMultiplayer) {
-		return false;
-	}
-
 	for (auto &quest : Quests) {
 		if (quest._qidx != Q_BETRAYER && currlevel == quest._qlevel && quest._qslvl != 0) {
 			int ql = quest._qslvl - 1;
@@ -466,28 +442,7 @@ void CheckQuestKill(const Monster &monster, bool sendmsg)
 	} else if (monster._uniqtype - 1 == UMT_ZHAR) { //"Zhar the Mad"
 		Quests[Q_ZHAR]._qactive = QUEST_DONE;
 		myPlayer.Say(HeroSpeech::ImSorryDidIBreakYourConcentration, 30);
-	} else if (monster._uniqtype - 1 == UMT_LAZARUS && gbIsMultiplayer) { //"Arch-Bishop Lazarus"
-		auto &betrayerQuest = Quests[Q_BETRAYER];
-		auto &diabloQuest = Quests[Q_DIABLO];
-		betrayerQuest._qactive = QUEST_DONE;
-		betrayerQuest._qvar1 = 7;
-		diabloQuest._qactive = QUEST_ACTIVE;
-
-		for (int j = 0; j < MAXDUNY; j++) {
-			for (int i = 0; i < MAXDUNX; i++) {
-				if (dPiece[i][j] == 370) {
-					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABNEXTLVL;
-					numtrigs++;
-				}
-			}
-		}
-		myPlayer.Say(HeroSpeech::YourMadnessEndsHereBetrayer, 30);
-		if (sendmsg) {
-			NetSendCmdQuest(true, betrayerQuest);
-			NetSendCmdQuest(true, diabloQuest);
-		}
-	} else if (monster._uniqtype - 1 == UMT_LAZARUS && !gbIsMultiplayer) { //"Arch-Bishop Lazarus"
+	} else if (monster._uniqtype - 1 == UMT_LAZARUS) { //"Arch-Bishop Lazarus"
 		Quests[Q_BETRAYER]._qactive = QUEST_DONE;
 		InitVPTriggers();
 		Quests[Q_BETRAYER]._qvar1 = 7;
@@ -592,57 +547,6 @@ void UpdatePWaterPalette()
 		return;
 	}
 	palette_update_caves();
-}
-
-void ResyncMPQuests()
-{
-	auto &kingQuest = Quests[Q_SKELKING];
-	if (kingQuest._qactive == QUEST_INIT
-	    && currlevel >= kingQuest._qlevel - 1
-	    && currlevel <= kingQuest._qlevel + 1) {
-		kingQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, kingQuest);
-	}
-
-	auto &butcherQuest = Quests[Q_BUTCHER];
-	if (butcherQuest._qactive == QUEST_INIT
-	    && currlevel >= butcherQuest._qlevel - 1
-	    && currlevel <= butcherQuest._qlevel + 1) {
-		butcherQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, butcherQuest);
-	}
-
-	auto &betrayerQuest = Quests[Q_BETRAYER];
-	if (betrayerQuest._qactive == QUEST_INIT && currlevel == betrayerQuest._qlevel - 1) {
-		betrayerQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, betrayerQuest);
-	}
-	if (betrayerQuest.IsAvailable())
-		AddObject(OBJ_ALTBOY, { 2 * setpc_x + 20, 2 * setpc_y + 22 });
-
-	auto &cryptQuest = Quests[Q_GRAVE];
-	if (cryptQuest._qactive == QUEST_INIT && currlevel == cryptQuest._qlevel - 1) {
-		cryptQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, cryptQuest);
-	}
-
-	auto &defilerQuest = Quests[Q_DEFILER];
-	if (defilerQuest._qactive == QUEST_INIT && currlevel == defilerQuest._qlevel - 1) {
-		defilerQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, defilerQuest);
-	}
-
-	auto &nakrulQuest = Quests[Q_NAKRUL];
-	if (nakrulQuest._qactive == QUEST_INIT && currlevel == nakrulQuest._qlevel - 1) {
-		nakrulQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, nakrulQuest);
-	}
-
-	auto &cowQuest = Quests[Q_JERSEY];
-	if (cowQuest._qactive == QUEST_INIT && currlevel == cowQuest._qlevel - 1) {
-		cowQuest._qactive = QUEST_ACTIVE;
-		NetSendCmdQuest(true, cowQuest);
-	}
 }
 
 void ResyncQuests()
@@ -849,8 +753,6 @@ bool Quest::IsAvailable()
 	if (currlevel != _qlevel)
 		return false;
 	if (_qactive == QUEST_NOTAVAIL)
-		return false;
-	if (gbIsMultiplayer && QuestsData[_qidx].isSinglePlayerOnly)
 		return false;
 
 	return true;

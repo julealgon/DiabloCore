@@ -14,11 +14,6 @@ For a full list of changes see our changelog: https://github.com/diasurgical/dev
  - To run the Diablo: Hellfire expansion you will need to also copy hellfire.mpq, hfmonk.mpq, hfmusic.mpq, hfvoice.mpq.
  - Run devilutionx.exe
 
-# Multiplayer
- - TCP/IP requires the host to expose port 6112.
-
-All games are encrypted and password protected.
-
 # Save Games and configurations
 The configurations and save games are located in:
 C:\Users\[username]\AppData\Roaming\diasurgical\devilution

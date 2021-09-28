@@ -461,20 +461,6 @@ void DrawAutomapText(const Surface &out)
 	char desc[256];
 	Point linePosition { 8, 8 };
 
-	if (gbIsMultiplayer) {
-		if (strcasecmp("0.0.0.0", szPlayerName) != 0) {
-			strcat(strcpy(desc, "game: "), szPlayerName);
-			DrawString(out, desc, linePosition);
-			linePosition.y += 15;
-		}
-
-		if (szPlayerDescript[0] != '\0') {
-			strcat(strcpy(desc, "password: "), szPlayerDescript);
-			DrawString(out, desc, linePosition);
-			linePosition.y += 15;
-		}
-	}
-
 	if (setlevel) {
 		DrawString(out, QuestLevelNames[setlvlnum], linePosition);
 		return;

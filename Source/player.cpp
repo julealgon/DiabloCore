@@ -1501,9 +1501,7 @@ bool DoDeath(int pnum)
 			deathdelay--;
 			if (deathdelay == 1) {
 				MyPlayerIsDead = true;
-				if (!gbIsMultiplayer) {
-					gamemenu_on();
-				}
+				gamemenu_on();
 			}
 		}
 
@@ -2517,9 +2515,7 @@ void NextPlrLevel(int pnum)
 	player._pNextExper = ExpLvlsTbl[player._pLevel];
 
 	int hp = player._pClass == HeroClass::Sorcerer ? 64 : 128;
-	if (!gbIsMultiplayer) {
-		hp++;
-	}
+	hp++;
 	player._pMaxHP += hp;
 	player._pHitPoints = player._pMaxHP;
 	player._pMaxHPBase += hp;
@@ -2535,9 +2531,7 @@ void NextPlrLevel(int pnum)
 	else if (player._pClass == HeroClass::Barbarian)
 		mana = 0;
 
-	if (!gbIsMultiplayer) {
-		mana++;
-	}
+	mana++;
 	player._pMaxMana += mana;
 	player._pMaxManaBase += mana;
 
@@ -2570,15 +2564,6 @@ void AddPlrExperience(int pnum, int lvl, int exp)
 
 	// Adjust xp based on difference in level between player and monster
 	uint32_t clampedExp = std::max(static_cast<int>(exp * (1 + (lvl - player._pLevel) / 10.0)), 0);
-
-	// Prevent power leveling
-	if (gbIsMultiplayer) {
-		const uint32_t clampedPlayerLevel = std::clamp(static_cast<int>(player._pLevel), 0, 50);
-
-		// for low level characters experience gain is capped to 1/20 of current levels xp
-		// for high level characters experience gain is capped to 200 * current level - this is a smaller value than 1/20 of the exp needed for the next level after level 5.
-		clampedExp = std::min({ clampedExp, /* level 0-5: */ ExpLvlsTbl[clampedPlayerLevel] / 20U, /* level 6-50: */ 200U * clampedPlayerLevel });
-	}
 
 	constexpr uint32_t MaxExperience = 2000000000U;
 
@@ -2913,8 +2898,6 @@ StartPlayerKill(int pnum, int earflag)
 		NetSendCmdParam1(true, CMD_PLRDEAD, earflag);
 	}
 
-	bool diablolevel = gbIsMultiplayer && player.plrlevel == 16;
-
 	player.Say(HeroSpeech::OofAh);
 
 	if (player._pgfxnum != 0) {
@@ -2931,7 +2914,7 @@ StartPlayerKill(int pnum, int earflag)
 	SetPlayerHitPoints(player, 0);
 	player.deathFrame = 1;
 
-	if (pnum != MyPlayerId && earflag == 0 && !diablolevel) {
+	if (pnum != MyPlayerId && earflag == 0) {
 		for (auto &item : player.InvBody) {
 			item._itype = ItemType::None;
 		}
@@ -2953,44 +2936,42 @@ StartPlayerKill(int pnum, int earflag)
 				NewCursor(CURSOR_HAND);
 			}
 
-			if (!diablolevel) {
-				DropHalfPlayersGold(pnum);
-				if (earflag != -1) {
-					if (earflag != 0) {
-						Item ear;
-						SetPlrHandItem(ear, IDI_EAR);
-						strcpy(ear._iName, fmt::format("Ear of {:s}", player._pName).c_str());
-						switch (player._pClass) {
-						case HeroClass::Sorcerer:
-							ear._iCurs = ICURS_EAR_SORCERER;
-							break;
-						case HeroClass::Warrior:
-							ear._iCurs = ICURS_EAR_WARRIOR;
-							break;
-						case HeroClass::Rogue:
-						case HeroClass::Monk:
-						case HeroClass::Bard:
-						case HeroClass::Barbarian:
-							ear._iCurs = ICURS_EAR_ROGUE;
-							break;
-						}
-
-						ear._iCreateInfo = player._pName[0] << 8 | player._pName[1];
-						ear._iSeed = player._pName[2] << 24 | player._pName[3] << 16 | player._pName[4] << 8 | player._pName[5];
-						ear._ivalue = player._pLevel;
-
-						if (FindGetItem(IDI_EAR, ear._iCreateInfo, ear._iSeed) == -1) {
-							DeadItem(player, &ear, { 0, 0 });
-						}
-					} else {
-						Direction pdd = player._pdir;
-						for (auto &item : player.InvBody) {
-							pdd = Left(pdd);
-							DeadItem(player, &item, Displacement(pdd));
-						}
-
-						CalcPlrInv(player, false);
+			DropHalfPlayersGold(pnum);
+			if (earflag != -1) {
+				if (earflag != 0) {
+					Item ear;
+					SetPlrHandItem(ear, IDI_EAR);
+					strcpy(ear._iName, fmt::format("Ear of {:s}", player._pName).c_str());
+					switch (player._pClass) {
+					case HeroClass::Sorcerer:
+						ear._iCurs = ICURS_EAR_SORCERER;
+						break;
+					case HeroClass::Warrior:
+						ear._iCurs = ICURS_EAR_WARRIOR;
+						break;
+					case HeroClass::Rogue:
+					case HeroClass::Monk:
+					case HeroClass::Bard:
+					case HeroClass::Barbarian:
+						ear._iCurs = ICURS_EAR_ROGUE;
+						break;
 					}
+
+					ear._iCreateInfo = player._pName[0] << 8 | player._pName[1];
+					ear._iSeed = player._pName[2] << 24 | player._pName[3] << 16 | player._pName[4] << 8 | player._pName[5];
+					ear._ivalue = player._pLevel;
+
+					if (FindGetItem(IDI_EAR, ear._iCreateInfo, ear._iSeed) == -1) {
+						DeadItem(player, &ear, { 0, 0 });
+					}
+				} else {
+					Direction pdd = player._pdir;
+					for (auto &item : player.InvBody) {
+						pdd = Left(pdd);
+						DeadItem(player, &item, Displacement(pdd));
+					}
+
+					CalcPlrInv(player, false);
 				}
 			}
 		}
@@ -3138,9 +3119,6 @@ StartNewLvl(int pnum, interface_mode fom, int lvl)
 		player._pmode = PM_NEWLVL;
 		player._pInvincible = true;
 		PostMessage(fom, 0, 0);
-		if (gbIsMultiplayer) {
-			NetSendCmdParam2(true, CMD_NEWLVL, fom, lvl);
-		}
 	}
 }
 
@@ -3174,14 +3152,6 @@ void StartWarpLvl(int pnum, int pidx)
 	auto &player = Players[pnum];
 
 	InitLevelChange(pnum);
-
-	if (gbIsMultiplayer) {
-		if (player.plrlevel != 0) {
-			player.plrlevel = 0;
-		} else {
-			player.plrlevel = Portals[pidx].level;
-		}
-	}
 
 	if (pnum == MyPlayerId) {
 		SetCurrentPortal(pidx);
@@ -3511,7 +3481,7 @@ void SyncInitPlrPos(int pnum)
 {
 	auto &player = Players[pnum];
 
-	if (!gbIsMultiplayer || player.plrlevel != currlevel) {
+	if (player.plrlevel != currlevel) {
 		return;
 	}
 
@@ -3765,34 +3735,34 @@ void PlayDungMsgs()
 	}
 	auto &myPlayer = Players[MyPlayerId];
 
-	if (currlevel == 1 && !myPlayer._pLvlVisited[1] && !gbIsMultiplayer && (myPlayer.pDungMsgs & DungMsgCathedral) == 0) {
+	if (currlevel == 1 && !myPlayer._pLvlVisited[1] && (myPlayer.pDungMsgs & DungMsgCathedral) == 0) {
 		myPlayer.Say(HeroSpeech::TheSanctityOfThisPlaceHasBeenFouled, 40);
 		myPlayer.pDungMsgs = myPlayer.pDungMsgs | DungMsgCathedral;
-	} else if (currlevel == 5 && !myPlayer._pLvlVisited[5] && !gbIsMultiplayer && (myPlayer.pDungMsgs & DungMsgCatacombs) == 0) {
+	} else if (currlevel == 5 && !myPlayer._pLvlVisited[5] && (myPlayer.pDungMsgs & DungMsgCatacombs) == 0) {
 		myPlayer.Say(HeroSpeech::TheSmellOfDeathSurroundsMe, 40);
 		myPlayer.pDungMsgs |= DungMsgCatacombs;
-	} else if (currlevel == 9 && !myPlayer._pLvlVisited[9] && !gbIsMultiplayer && (myPlayer.pDungMsgs & DungMsgCaves) == 0) {
+	} else if (currlevel == 9 && !myPlayer._pLvlVisited[9] && (myPlayer.pDungMsgs & DungMsgCaves) == 0) {
 		myPlayer.Say(HeroSpeech::ItsHotDownHere, 40);
 		myPlayer.pDungMsgs |= DungMsgCaves;
-	} else if (currlevel == 13 && !myPlayer._pLvlVisited[13] && !gbIsMultiplayer && (myPlayer.pDungMsgs & DungMsgHell) == 0) {
+	} else if (currlevel == 13 && !myPlayer._pLvlVisited[13] && (myPlayer.pDungMsgs & DungMsgHell) == 0) {
 		myPlayer.Say(HeroSpeech::IMustBeGettingClose, 40);
 		myPlayer.pDungMsgs |= DungMsgHell;
-	} else if (currlevel == 16 && !myPlayer._pLvlVisited[15] && !gbIsMultiplayer && (myPlayer.pDungMsgs & DungMsgDiablo) == 0) { // BUGFIX: _pLvlVisited should check 16 or this message will never play
+	} else if (currlevel == 16 && !myPlayer._pLvlVisited[15] && (myPlayer.pDungMsgs & DungMsgDiablo) == 0) { // BUGFIX: _pLvlVisited should check 16 or this message will never play
 		sfxdelay = 40;
 		sfxdnum = PS_DIABLVLINT;
 		myPlayer.pDungMsgs |= DungMsgDiablo;
-	} else if (currlevel == 17 && !myPlayer._pLvlVisited[17] && !gbIsMultiplayer && (myPlayer.pDungMsgs2 & 1) == 0) {
+	} else if (currlevel == 17 && !myPlayer._pLvlVisited[17] && (myPlayer.pDungMsgs2 & 1) == 0) {
 		sfxdelay = 10;
 		sfxdnum = USFX_DEFILER1;
 		Quests[Q_DEFILER]._qactive = QUEST_ACTIVE;
 		Quests[Q_DEFILER]._qlog = true;
 		Quests[Q_DEFILER]._qmsg = TEXT_DEFILER1;
 		myPlayer.pDungMsgs2 |= 1;
-	} else if (currlevel == 19 && !myPlayer._pLvlVisited[19] && !gbIsMultiplayer && (myPlayer.pDungMsgs2 & 4) == 0) {
+	} else if (currlevel == 19 && !myPlayer._pLvlVisited[19] && (myPlayer.pDungMsgs2 & 4) == 0) {
 		sfxdelay = 10;
 		sfxdnum = USFX_DEFILER3;
 		myPlayer.pDungMsgs2 |= 4;
-	} else if (currlevel == 21 && !myPlayer._pLvlVisited[21] && !gbIsMultiplayer && (myPlayer.pDungMsgs & 32) == 0) {
+	} else if (currlevel == 21 && !myPlayer._pLvlVisited[21] && (myPlayer.pDungMsgs & 32) == 0) {
 		myPlayer.Say(HeroSpeech::ThisIsAPlaceOfGreatPower, 30);
 		myPlayer.pDungMsgs |= 32;
 	} else {

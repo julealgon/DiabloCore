@@ -21,9 +21,6 @@
 
 namespace devilution {
 
-#define PASSWORD_SINGLE "xrgyrkj1"
-#define PASSWORD_MULTI "szqnlsk1"
-
 bool gbValidSaveFile;
 
 namespace {
@@ -38,11 +35,7 @@ std::string GetSavePath(uint32_t saveNum)
 	if (gbIsHellfire)
 		ext = ".hsv";
 
-	if (!gbIsMultiplayer) {
-		path.append("single_");
-	} else {
-		path.append("multi_");
-	}
+	path.append("single_");
 
 	char saveNumStr[21];
 	snprintf(saveNumStr, sizeof(saveNumStr) / sizeof(char), "%i", saveNum);
@@ -196,32 +189,24 @@ bool GetFileName(uint8_t lvl, char *dst)
 {
 	const char *fmt;
 
-	if (gbIsMultiplayer) {
-		if (lvl != 0)
-			return false;
+	if (lvl < giNumberOfLevels)
+		fmt = "perml%02d";
+	else if (lvl < giNumberOfLevels * 2) {
+		lvl -= giNumberOfLevels;
+		fmt = "perms%02d";
+	} else if (lvl == giNumberOfLevels * 2)
+		fmt = "game";
+	else if (lvl == giNumberOfLevels * 2 + 1)
 		fmt = "hero";
-	} else {
-		if (lvl < giNumberOfLevels)
-			fmt = "perml%02d";
-		else if (lvl < giNumberOfLevels * 2) {
-			lvl -= giNumberOfLevels;
-			fmt = "perms%02d";
-		} else if (lvl == giNumberOfLevels * 2)
-			fmt = "game";
-		else if (lvl == giNumberOfLevels * 2 + 1)
-			fmt = "hero";
-		else
-			return false;
-	}
+	else
+		return false;
+	
 	sprintf(dst, fmt, lvl);
 	return true;
 }
 
 bool ArchiveContainsGame(HANDLE hsArchive)
 {
-	if (gbIsMultiplayer)
-		return false;
-
 	auto gameData = ReadArchive(hsArchive, "game");
 	if (gameData == nullptr)
 		return false;
@@ -235,7 +220,7 @@ bool ArchiveContainsGame(HANDLE hsArchive)
 
 const char *pfile_get_password()
 {
-	return gbIsMultiplayer ? PASSWORD_MULTI : PASSWORD_SINGLE;
+	return "xrgyrkj1";
 }
 
 PFileScopedArchiveWriter::PFileScopedArchiveWriter(bool clearTables)
@@ -261,7 +246,7 @@ void pfile_write_hero(bool writeGameData, bool clearTables)
 	PlayerPack pkplr;
 	auto &myPlayer = Players[MyPlayerId];
 
-	PackPlayer(&pkplr, myPlayer, !gbIsMultiplayer);
+	PackPlayer(&pkplr, myPlayer, true);
 	EncodeHero(&pkplr);
 	if (!gbVanilla) {
 		SaveHotkeys();
@@ -427,9 +412,6 @@ void GetPermLevelNames(char *szPerm)
 
 void pfile_remove_temp_files()
 {
-	if (gbIsMultiplayer)
-		return;
-
 	uint32_t saveNum = gSaveNumber;
 	if (!OpenArchive(saveNum))
 		app_fatal("%s", "Unable to write to save file archive");
@@ -458,8 +440,7 @@ void pfile_update(bool forceSave)
 {
 	static Uint32 prevTick;
 
-	if (!gbIsMultiplayer)
-		return;
+	return;
 
 	Uint32 tick = SDL_GetTicks();
 	if (!forceSave && tick - prevTick <= 60000)

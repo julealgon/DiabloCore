@@ -41,7 +41,7 @@ bool InitMenu(_selhero_selections type)
 
 	music_stop();
 
-	success = StartGame(type != SELHERO_CONTINUE, type != SELHERO_CONNECT);
+	success = StartGame(type != SELHERO_CONTINUE);
 	if (success)
 		RefreshMusic();
 
@@ -50,14 +50,7 @@ bool InitMenu(_selhero_selections type)
 
 bool InitSinglePlayerMenu()
 {
-	gbIsMultiplayer = false;
 	return InitMenu(SELHERO_NEW_DUNGEON);
-}
-
-bool InitMultiPlayerMenu()
-{
-	gbIsMultiplayer = true;
-	return InitMenu(SELHERO_CONNECT);
 }
 
 void PlayIntro()
@@ -83,7 +76,7 @@ bool mainmenu_select_hero_dialog(GameData *gameData)
 	if (demo::IsRunning()) {
 		pfile_ui_set_hero_infos(DummyGetHeroInfo);
 		gbLoadGame = true;
-	} else if (!gbIsMultiplayer) {
+	} else {
 		UiSelHeroSingDialog(
 		    pfile_ui_set_hero_infos,
 		    pfile_ui_save_create,
@@ -94,14 +87,6 @@ bool mainmenu_select_hero_dialog(GameData *gameData)
 		    &gameData->nDifficulty);
 
 		gbLoadGame = (dlgresult == SELHERO_CONTINUE);
-	} else {
-		UiSelHeroMultDialog(
-		    pfile_ui_set_hero_infos,
-		    pfile_ui_save_create,
-		    pfile_delete_save,
-		    pfile_ui_set_class_stats,
-		    &dlgresult,
-		    &gSaveNumber);
 	}
 	if (dlgresult == SELHERO_PREVIOUS) {
 		SErrSetLastError(1223);
@@ -133,10 +118,6 @@ void mainmenu_loop()
 			break;
 		case MAINMENU_SINGLE_PLAYER:
 			if (!InitSinglePlayerMenu())
-				done = true;
-			break;
-		case MAINMENU_MULTIPLAYER:
-			if (!InitMultiPlayerMenu())
 				done = true;
 			break;
 		case MAINMENU_ATTRACT_MODE:

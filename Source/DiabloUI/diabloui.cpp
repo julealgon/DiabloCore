@@ -494,42 +494,6 @@ void UiDestroy()
 	UnloadUiGFX();
 }
 
-bool UiValidPlayerName(const char *name)
-{
-	if (strlen(name) == 0)
-		return false;
-
-	if (strpbrk(name, ",<>%&\\\"?*#/:") != nullptr || strpbrk(name, " ") != nullptr)
-		return false;
-
-	for (BYTE *letter = (BYTE *)name; *letter != '\0'; letter++)
-		if (*letter < 0x20 || (*letter > 0x7E && *letter < 0xC0))
-			return false;
-
-	const char *const bannedNames[] = {
-		"gvdl",
-		"dvou",
-		"tiju",
-		"cjudi",
-		"bttipmf",
-		"ojhhfs",
-		"cmj{{bse",
-		"benjo",
-	};
-
-	char tmpname[PLR_NAME_LEN];
-	strncpy(tmpname, name, PLR_NAME_LEN - 1);
-	for (size_t i = 0, n = strlen(tmpname); i < n; i++)
-		tmpname[i]++;
-
-	for (const auto *bannedName : bannedNames) {
-		if (strstr(tmpname, bannedName) != nullptr)
-			return false;
-	}
-
-	return true;
-}
-
 Sint16 GetCenterOffset(Sint16 w, Sint16 bw)
 {
 	if (bw == 0) {

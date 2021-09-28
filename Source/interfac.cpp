@@ -260,11 +260,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABNEXTLVL:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		setlevel = false;
@@ -276,11 +272,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABPREVLVL:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		currlevel--;
@@ -293,11 +285,7 @@ void ShowProgress(interface_mode uMsg)
 	case WM_DIABSETLVL:
 		SetReturnLvlPos();
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		setlevel = true;
 		leveltype = setlvltype;
@@ -308,11 +296,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABRTNLVL:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		setlevel = false;
 		FreeGameMem();
@@ -323,11 +307,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABWARPLVL:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		GetPortalLevel();
@@ -337,11 +317,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABTOWNWARP:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		setlevel = false;
@@ -353,11 +329,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABTWARPUP:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		currlevel = myPlayer.plrlevel;
@@ -368,11 +340,7 @@ void ShowProgress(interface_mode uMsg)
 		break;
 	case WM_DIABRETOWN:
 		IncProgress();
-		if (!gbIsMultiplayer) {
-			SaveLevel();
-		} else {
-			DeltaSaveLevel();
-		}
+		SaveLevel();
 		IncProgress();
 		FreeGameMem();
 		currlevel = myPlayer.plrlevel;

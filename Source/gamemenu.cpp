@@ -39,17 +39,7 @@ TMenuItem sgSingleMenu[] = {
 	{ GMENU_ENABLED, nullptr,              nullptr             }
 	// clang-format on
 };
-/** Contains the game menu items of the multi player menu. */
-TMenuItem sgMultiMenu[] = {
-	// clang-format off
-    // dwFlags,      pszStr,                fnMenu
-	{ GMENU_ENABLED, "Options",         &GamemenuOptions      },
-	{ GMENU_ENABLED, "New Game",        &GamemenuNewGame     },
-	{ GMENU_ENABLED, "Restart In Town", &GamemenuRestartTown },
-	{ GMENU_ENABLED, "Quit Game",       &gamemenu_quit_game    },
-	{ GMENU_ENABLED, nullptr,                nullptr               },
-	// clang-format on
-};
+
 TMenuItem sgOptionsMenu[] = {
 	// clang-format off
     // dwFlags,                     pszStr,              fnMenu
@@ -79,11 +69,6 @@ void GamemenuUpdateSingle()
 	bool enable = Players[MyPlayerId]._pmode != PM_DEATH && !MyPlayerIsDead;
 
 	gmenu_enable(&sgSingleMenu[0], enable);
-}
-
-void GamemenuUpdateMulti()
-{
-	gmenu_enable(&sgMultiMenu[2], MyPlayerIsDead);
 }
 
 void GamemenuPrevious(bool /*bActivate*/)
@@ -148,19 +133,6 @@ void GamemenuGetGamma()
 
 void GamemenuGetSpeed()
 {
-	if (gbIsMultiplayer) {
-		sgOptionsMenu[3].dwFlags &= ~(GMENU_ENABLED | GMENU_SLIDER);
-		if (sgGameInitInfo.nTickRate >= 50)
-			sgOptionsMenu[3].pszStr = "Speed: Fastest";
-		else if (sgGameInitInfo.nTickRate >= 40)
-			sgOptionsMenu[3].pszStr = "Speed: Faster";
-		else if (sgGameInitInfo.nTickRate >= 30)
-			sgOptionsMenu[3].pszStr = "Speed: Fast";
-		else if (sgGameInitInfo.nTickRate == 20)
-			sgOptionsMenu[3].pszStr = "Speed: Normal";
-		return;
-	}
-
 	sgOptionsMenu[3].dwFlags |= GMENU_ENABLED | GMENU_SLIDER;
 
 	sgOptionsMenu[3].pszStr = "Speed";
@@ -347,11 +319,7 @@ void gamemenu_save_game(bool /*bActivate*/)
 
 void gamemenu_on()
 {
-	if (!gbIsMultiplayer) {
-		gmenu_set_items(sgSingleMenu, GamemenuUpdateSingle);
-	} else {
-		gmenu_set_items(sgMultiMenu, GamemenuUpdateMulti);
-	}
+	gmenu_set_items(sgSingleMenu, GamemenuUpdateSingle);
 	PressEscKey();
 }
 

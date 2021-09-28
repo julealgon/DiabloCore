@@ -19,7 +19,6 @@
 namespace devilution {
 
 bool selhero_endMenu;
-bool selhero_isMultiPlayer;
 
 bool (*gfnHeroInfo)(bool (*fninfofunc)(_uiheroinfo *));
 bool (*gfnHeroCreate)(_uiheroinfo *);
@@ -190,7 +189,7 @@ void SelheroListSelect(int value)
 		memset(&selhero_heroInfo.name, 0, sizeof(selhero_heroInfo.name));
 		selhero_heroInfo.saveNumber = pfile_ui_get_first_unused_save_num();
 		SelheroSetStats();
-		title = selhero_isMultiPlayer ? "New Multi Player Hero" : "New Single Player Hero";
+		title = "New Hero";
 		return;
 	}
 
@@ -212,7 +211,7 @@ void SelheroListSelect(int value)
 		vecSelDlgItems.push_back(std::make_unique<UiArtTextButton>("Cancel", &UiFocusNavigationEsc, rect3, UiFlags::AlignCenter | UiFlags::VerticalCenter | UiFlags::FontSize30 | UiFlags::ColorUiGold));
 
 		UiInitList(vecSelHeroDlgItems.size(), SelheroLoadFocus, SelheroLoadSelect, selhero_List_Init, vecSelDlgItems, true);
-		title = "Single Player Characters";
+		title = "Characters";
 		return;
 	}
 
@@ -257,7 +256,7 @@ void SelheroClassSelectorSelect(int value)
 {
 	auto hClass = static_cast<HeroClass>(vecSelHeroDlgItems[value]->m_value);
 
-	title = selhero_isMultiPlayer ? "New Multi Player Hero" : "New Single Player Hero";
+	title = "New Hero";
 	memset(selhero_heroInfo.name, '\0', sizeof(selhero_heroInfo.name));
 	if (ShouldPrefillHeroName())
 		strncpy(selhero_heroInfo.name, SelheroGenerateName(selhero_heroInfo.heroclass), sizeof(selhero_heroInfo.name) - 1);
@@ -292,18 +291,11 @@ void SelheroClassSelectorEsc()
 
 void SelheroNameSelect(int /*value*/)
 {
-	// only check names in multiplayer, we don't care about them in single
-	if (selhero_isMultiPlayer && !UiValidPlayerName(selhero_heroInfo.name)) {
-		ArtBackground.Unload();
-		UiSelOkDialog(title, "Invalid name. A name cannot contain spaces, reserved characters, or reserved words.\n", false);
-		LoadBackgroundArt("ui_art\\selhero.pcx");
-	} else {
-		if (gfnHeroCreate(&selhero_heroInfo)) {
-			SelheroLoadSelect(1);
-			return;
-		}
-		UiErrorOkDialog("Unable to create character.", vecSelDlgItems);
+	if (gfnHeroCreate(&selhero_heroInfo)) {
+		SelheroLoadSelect(1);
+		return;
 	}
+	UiErrorOkDialog("Unable to create character.", vecSelDlgItems);
 
 	memset(selhero_heroInfo.name, '\0', sizeof(selhero_heroInfo.name));
 	SelheroClassSelectorSelect(0);
@@ -327,20 +319,18 @@ void SelheroLoadSelect(int value)
 		return;
 	}
 
-	if (!selhero_isMultiPlayer) {
-		// This is part of a dangerous hack to enable difficulty selection in single-player.
-		// FIXME: Dialogs should not refer to each other's variables.
+	// This is part of a dangerous hack to enable difficulty selection in single-player.
+	// FIXME: Dialogs should not refer to each other's variables.
 
-		// We disable `selhero_endMenu` and replace the background and art
-		// and the item list with the difficulty selection ones.
-		//
-		// This means selhero's render loop will render selgame's items,
-		// which happens to work because the render loops are similar.
-		selhero_endMenu = false;
-		SelheroFree();
-		LoadBackgroundArt("ui_art\\selgame.pcx");
-		selgame_GameSelection_Select(0);
-	}
+	// We disable `selhero_endMenu` and replace the background and art
+	// and the item list with the difficulty selection ones.
+	//
+	// This means selhero's render loop will render selgame's items,
+	// which happens to work because the render loops are similar.
+	selhero_endMenu = false;
+	SelheroFree();
+	LoadBackgroundArt("ui_art\\selgame.pcx");
+	selgame_GameSelection_Select();
 
 	selhero_result = SELHERO_NEW_DUNGEON;
 }
@@ -526,11 +516,7 @@ void selhero_List_Init()
 
 	UiInitList(selhero_SaveCount + 1, SelheroListFocus, SelheroListSelect, SelheroListEsc, vecSelDlgItems, false, SelheroListDeleteYesNo);
 	UiInitScrollBar(scrollBar, MaxViewportItems, &listOffset);
-	if (selhero_isMultiPlayer) {
-		title = "Multi Player Characters";
-	} else {
-		title = "Single Player Characters";
-	}
+	title = "Characters";
 }
 
 static void UiSelHeroDialog(
@@ -568,11 +554,7 @@ static void UiSelHeroDialog(
 		if (selhero_navigateYesNo) {
 			char dialogTitle[32];
 			char dialogText[256];
-			if (selhero_isMultiPlayer) {
-				strncpy(dialogTitle, "Delete Multi Player Hero", sizeof(dialogTitle) - 1);
-			} else {
-				strncpy(dialogTitle, "Delete Single Player Hero", sizeof(dialogTitle) - 1);
-			}
+			strncpy(dialogTitle, "Delete Hero", sizeof(dialogTitle) - 1);
 			strncpy(dialogText, fmt::format("Are you sure you want to delete the character \"{:s}\"?", selhero_heroInfo.name).c_str(), sizeof(dialogText));
 
 			if (UiSelHeroYesNoDialog(dialogTitle, dialogText))
@@ -593,21 +575,8 @@ void UiSelHeroSingDialog(
     uint32_t *saveNumber,
     _difficulty *difficulty)
 {
-	selhero_isMultiPlayer = false;
 	UiSelHeroDialog(fninfo, fncreate, fnstats, fnremove, dlgresult, saveNumber);
 	*difficulty = nDifficulty;
-}
-
-void UiSelHeroMultDialog(
-    bool (*fninfo)(bool (*fninfofunc)(_uiheroinfo *)),
-    bool (*fncreate)(_uiheroinfo *),
-    bool (*fnremove)(_uiheroinfo *),
-    void (*fnstats)(unsigned int, _uidefaultstats *),
-    _selhero_selections *dlgresult,
-    uint32_t *saveNumber)
-{
-	selhero_isMultiPlayer = true;
-	UiSelHeroDialog(fninfo, fncreate, fnstats, fnremove, dlgresult, saveNumber);
 }
 
 } // namespace devilution

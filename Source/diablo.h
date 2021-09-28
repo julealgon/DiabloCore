@@ -84,7 +84,7 @@ extern char gszProductName[64];
 extern MouseActionType LastMouseButtonAction;
 
 void FreeGameMem();
-bool StartGame(bool bNewGame, bool bSinglePlayer);
+bool StartGame(bool bNewGame);
 [[noreturn]] void diablo_quit(int exitStatus);
 int DiabloMain(int argc, char **argv);
 bool TryIconCurs();

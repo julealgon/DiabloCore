@@ -127,7 +127,7 @@ void PackPlayer(PlayerPack *pPack, const Player &player, bool manashield)
 	pPack->pDiabloKillLevel = SDL_SwapLE32(player.pDiabloKillLevel);
 	pPack->bIsHellfire = gbIsHellfire ? 1 : 0;
 
-	if (!gbIsMultiplayer || manashield)
+	if (manashield)
 		pPack->pManaShield = SDL_SwapLE32(player.pManaShield);
 	else
 		pPack->pManaShield = 0;

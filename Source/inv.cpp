@@ -1732,19 +1732,12 @@ int InvPutItem(Player &player, Point position)
 			NetSendCmdLocParam2(false, CMD_OPENHIVE, player.position.tile, relativePosition.deltaX, relativePosition.deltaY);
 			auto &quest = Quests[Q_FARMER];
 			quest._qactive = QUEST_DONE;
-			if (gbIsMultiplayer) {
-				NetSendCmdQuest(true, quest);
-				return -1;
-			}
 			return -1;
 		}
 		if (player.HoldItem.IDidx == IDI_MAPOFDOOM && xp >= 35 && xp <= 38 && yp >= 20 && yp <= 24) {
 			NetSendCmd(false, CMD_OPENCRYPT);
 			auto &quest = Quests[Q_GRAVE];
 			quest._qactive = QUEST_DONE;
-			if (gbIsMultiplayer) {
-				NetSendCmdQuest(true, quest);
-			}
 			return -1;
 		}
 	}

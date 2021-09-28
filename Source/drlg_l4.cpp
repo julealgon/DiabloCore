@@ -257,10 +257,6 @@ void LoadQuestSetPieces()
 		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L4Data\\Warlord.DUN");
 		setloadflag = true;
 	}
-	if (currlevel == 15 && gbIsMultiplayer) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L4Data\\Vile1.DUN");
-		setloadflag = true;
-	}
 }
 
 void FreeQuestSetPieces()
@@ -394,10 +390,6 @@ void FirstRoom()
 	int h = 14;
 	if (currlevel != 16) {
 		if (currlevel == Quests[Q_WARLORD]._qlevel && Quests[Q_WARLORD]._qactive != QUEST_NOTAVAIL) {
-			assert(!gbIsMultiplayer);
-			w = 11;
-			h = 11;
-		} else if (currlevel == Quests[Q_BETRAYER]._qlevel && gbIsMultiplayer) {
 			w = 11;
 			h = 11;
 		} else {
@@ -418,7 +410,7 @@ void FirstRoom()
 		l4holdx = x;
 		l4holdy = y;
 	}
-	if (Quests[Q_WARLORD].IsAvailable() || (currlevel == Quests[Q_BETRAYER]._qlevel && gbIsMultiplayer)) {
+	if (Quests[Q_WARLORD].IsAvailable()) {
 		SP4x1 = x + 1;
 		SP4y1 = y + 1;
 		SP4x2 = SP4x1 + w;
@@ -1315,7 +1307,7 @@ void GenerateLevel(lvl_entry entry)
 		if (currlevel == 16) {
 			SaveQuads();
 		}
-		if (Quests[Q_WARLORD].IsAvailable() || (currlevel == Quests[Q_BETRAYER]._qlevel && gbIsMultiplayer)) {
+		if (Quests[Q_WARLORD].IsAvailable()) {
 			for (int spi = SP4x1; spi < SP4x2; spi++) {
 				for (int spj = SP4y1; spj < SP4y2; spj++) {
 					dflags[spi][spj] = 1;
@@ -1384,7 +1376,7 @@ void GenerateLevel(lvl_entry entry)
 			if (entry == ENTRY_MAIN) {
 				doneflag = PlaceMiniSet(L4USTAIRS, 1, 1, -1, -1, true);
 				if (doneflag) {
-					if (!gbIsMultiplayer && Quests[Q_DIABLO]._qactive != QUEST_ACTIVE) {
+					if (Quests[Q_DIABLO]._qactive != QUEST_ACTIVE) {
 						doneflag = PlaceMiniSet(L4PENTA, 1, 1, -1, -1, false);
 					} else {
 						doneflag = PlaceMiniSet(L4PENTA2, 1, 1, -1, -1, false);
@@ -1394,7 +1386,7 @@ void GenerateLevel(lvl_entry entry)
 			} else {
 				doneflag = PlaceMiniSet(L4USTAIRS, 1, 1, -1, -1, false);
 				if (doneflag) {
-					if (!gbIsMultiplayer && Quests[Q_DIABLO]._qactive != QUEST_ACTIVE) {
+					if (Quests[Q_DIABLO]._qactive != QUEST_ACTIVE) {
 						doneflag = PlaceMiniSet(L4PENTA, 1, 1, -1, -1, true);
 					} else {
 						doneflag = PlaceMiniSet(L4PENTA2, 1, 1, -1, -1, true);

@@ -3145,22 +3145,20 @@ void LoadPreL2Dungeon(const char *path)
 
 void CreateL2Dungeon(uint32_t rseed, lvl_entry entry)
 {
-	if (!gbIsMultiplayer) {
-		if (currlevel == 7 && Quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
+	if (currlevel == 7 && Quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
+		currlevel = 6;
+		CreateL2Dungeon(glSeedTbl[6], ENTRY_LOAD);
+		currlevel = 7;
+	}
+	if (currlevel == 8) {
+		if (Quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
 			currlevel = 6;
 			CreateL2Dungeon(glSeedTbl[6], ENTRY_LOAD);
+			currlevel = 8;
+		} else {
 			currlevel = 7;
-		}
-		if (currlevel == 8) {
-			if (Quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
-				currlevel = 6;
-				CreateL2Dungeon(glSeedTbl[6], ENTRY_LOAD);
-				currlevel = 8;
-			} else {
-				currlevel = 7;
-				CreateL2Dungeon(glSeedTbl[7], ENTRY_LOAD);
-				currlevel = 8;
-			}
+			CreateL2Dungeon(glSeedTbl[7], ENTRY_LOAD);
+			currlevel = 8;
 		}
 	}
 
