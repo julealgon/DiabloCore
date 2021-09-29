@@ -73,8 +73,7 @@ bool mainmenu_select_hero_dialog(GameData *gameData)
 		pfile_delete_save,
 		pfile_ui_set_class_stats,
 		&dlgresult,
-		&gSaveNumber,
-		&gameData->nDifficulty);
+		&gSaveNumber);
 
 	gbLoadGame = (dlgresult == SELHERO_CONTINUE);
 

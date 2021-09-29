@@ -182,7 +182,6 @@ void Game2UiPlayer(const Player &player, _uiheroinfo *heroinfo, bool bHasSaveFil
 	heroinfo->dexterity = player._pDexterity;
 	heroinfo->vitality = player._pVitality;
 	heroinfo->hassaved = bHasSaveFile;
-	heroinfo->herorank = player.pDiabloKillLevel;
 }
 
 bool GetFileName(uint8_t lvl, char *dst)

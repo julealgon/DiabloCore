@@ -50,12 +50,6 @@ bool sgbSaveSoundOn;
 
 namespace {
 
-#define NIGHTMARE_TO_HIT_BONUS 85
-#define HELL_TO_HIT_BONUS 120
-
-#define NIGHTMARE_AC_BONUS 50
-#define HELL_AC_BONUS 80
-
 /** Tracks which missile files are already loaded */
 int totalmonsters;
 int monstimgtot;
@@ -207,38 +201,6 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 		monster.AnimInfo.CurrentFrame = 1;
 		monster._mFlags |= MFLAG_ALLOW_SPECIAL;
 		monster._mmode = MonsterMode::SpecialMeleeAttack;
-	}
-
-	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-		monster._mmaxhp = 3 * monster._mmaxhp;
-		monster._mmaxhp += 64;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mLevel += 15;
-		monster.mExp = 2 * (monster.mExp + 1000);
-		monster.mHit += NIGHTMARE_TO_HIT_BONUS;
-		monster.mDamage += { 2 };
-		monster.mDamage *= 2;
-		monster.mHit2 += NIGHTMARE_TO_HIT_BONUS;
-		monster.mDamage2 += { 2 };
-		monster.mDamage2 *= 2;
-		monster.mArmorClass += NIGHTMARE_AC_BONUS;
-	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-		monster._mmaxhp = 4 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += 100 << 6;
-		else
-			monster._mmaxhp += 192;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mLevel += 30;
-		monster.mExp = 4 * (monster.mExp + 1000);
-		monster.mHit += HELL_TO_HIT_BONUS;
-		monster.mDamage *= 4;
-		monster.mDamage += { 6 };
-		monster.mHit2 += HELL_TO_HIT_BONUS;
-		monster.mDamage2 *= 4;
-		monster.mDamage2 += { 6 };
-		monster.mArmorClass += HELL_AC_BONUS;
-		monster.mMagicRes = monster.MData->mMagicRes2;
 	}
 }
 
@@ -485,34 +447,6 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 		monster._mgoal = MGOAL_INQUIRING;
 	}
 
-	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-		monster._mmaxhp = 3 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += 50 << 6;
-		else
-			monster._mmaxhp += 64;
-		monster.mLevel += 15;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mExp = 2 * (monster.mExp + 1000);
-		monster.mDamage += { 2 };
-		monster.mDamage *= 2;
-		monster.mDamage2 += { 2 };
-		monster.mDamage2 *= 2;
-	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-		monster._mmaxhp = 4 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += 100 << 6;
-		else
-			monster._mmaxhp += 192;
-		monster.mLevel += 30;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mExp = 4 * (monster.mExp + 1000);
-		monster.mDamage *= 4;
-		monster.mDamage += { 6 };
-		monster.mDamage2 *= 4;
-		monster.mDamage2 += { 6 };
-	}
-
 	char filestr[64];
 	sprintf(filestr, "Monsters\\Monsters\\%s.TRN", uniqueMonsterData.mTrnName);
 	LoadFileInMem(filestr, &LightTables[256 * (uniquetrans + 19)], 256);
@@ -522,23 +456,9 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	if (uniqueMonsterData.customHitpoints != 0) {
 		monster.mHit = uniqueMonsterData.customHitpoints;
 		monster.mHit2 = uniqueMonsterData.customHitpoints;
-
-		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-			monster.mHit += NIGHTMARE_TO_HIT_BONUS;
-			monster.mHit2 += NIGHTMARE_TO_HIT_BONUS;
-		} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-			monster.mHit += HELL_TO_HIT_BONUS;
-			monster.mHit2 += HELL_TO_HIT_BONUS;
-		}
 	}
 	if (uniqueMonsterData.customArmorClass != 0) {
 		monster.mArmorClass = uniqueMonsterData.customArmorClass;
-
-		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-			monster.mArmorClass += NIGHTMARE_AC_BONUS;
-		} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-			monster.mArmorClass += HELL_AC_BONUS;
-		}
 	}
 
 	ActiveMonsterCount++;
@@ -2365,7 +2285,7 @@ void ScavengerAi(int i)
 			StartEating(monster);
 			if ((monster._mFlags & MFLAG_NOHEAL) == 0) {
 				if (gbIsHellfire) {
-					int mMaxHP = monster._mmaxhp; // BUGFIX use _mmaxhp or we loose health when difficulty isn't normal (fixed)
+					int mMaxHP = monster._mmaxhp;
 					monster._mhitpoints += mMaxHP / 8;
 					if (monster._mhitpoints > monster._mmaxhp)
 						monster._mhitpoints = monster._mmaxhp;
@@ -3989,10 +3909,6 @@ void PrepDoEnding()
 	MyPlayerIsDead = false;
 	cineflag = true;
 
-	auto &myPlayer = Players[MyPlayerId];
-
-	myPlayer.pDiabloKillLevel = std::max(myPlayer.pDiabloKillLevel, static_cast<uint8_t>(sgGameInitInfo.nDifficulty + 1));
-
 	for (auto &player : Players) {
 		player._pmode = PM_QUIT;
 		player._pInvincible = true;
@@ -4501,24 +4417,11 @@ void PrintMonstHistory(int mt)
 		if (maxHP < 1)
 			maxHP = 1;
 
-		int hpBonusNightmare = 1;
-		int hpBonusHell = 3;
-		if (gbIsHellfire) {
-			hpBonusNightmare = 50;
-			hpBonusHell = 100;
-		}
-		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-			minHP = 3 * minHP + hpBonusNightmare;
-			maxHP = 3 * maxHP + hpBonusNightmare;
-		} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-			minHP = 4 * minHP + hpBonusHell;
-			maxHP = 4 * maxHP + hpBonusHell;
-		}
 		strcpy(tempstr, fmt::format("Hit Points: {:d}-{:d}", minHP, maxHP).c_str());
 		AddPanelString(tempstr);
 	}
 	if (MonsterKillCounts[mt] >= 15) {
-		int res = (sgGameInitInfo.nDifficulty != DIFF_HELL) ? MonstersData[mt].mMagicRes : MonstersData[mt].mMagicRes2;
+		int res = MonstersData[mt].mMagicRes;
 		if ((res & (RESIST_MAGIC | RESIST_FIRE | RESIST_LIGHTNING | IMMUNE_MAGIC | IMMUNE_FIRE | IMMUNE_LIGHTNING)) == 0) {
 			strcpy(tempstr, "No magic resistance");
 			AddPanelString(tempstr);

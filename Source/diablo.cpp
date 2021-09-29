@@ -1340,13 +1340,8 @@ void InitKeymapActions()
 	    'V',
 	    [] {
 		    char pszStr[120];
-		    const char *difficulties[3] = {
-			    "Normal",
-			    "Nightmare",
-			    "Hell",
-		    };
-		    strcpy(pszStr, fmt::format("{:s}, version = {:s}, mode = {:s}",
-		                       gszProductName, PROJECT_VERSION, difficulties[sgGameInitInfo.nDifficulty])
+		    strcpy(pszStr, fmt::format("{:s}, version = {:s}",
+		                       gszProductName, PROJECT_VERSION)
 		                       .c_str());
 		    NetSendCmdString(1 << MyPlayerId, pszStr);
 	    },

@@ -78,12 +78,6 @@ enum {
 	// clang-format on
 };
 
-enum _difficulty : uint8_t {
-	DIFF_NORMAL,
-	DIFF_NIGHTMARE,
-	DIFF_HELL,
-};
-
 struct ScrollStruct {
 	/** @brief Tile offset of camera. */
 	Point tile;
