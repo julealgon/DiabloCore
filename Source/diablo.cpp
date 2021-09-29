@@ -63,10 +63,6 @@
 #include "utils/console.h"
 #include "utils/paths.h"
 
-#ifdef GPERF_HEAP_FIRST_GAME_ITERATION
-#include <gperftools/heap-profiler.h>
-#endif
-
 namespace devilution {
 
 SDL_Window *ghMainWnd;
@@ -672,10 +668,6 @@ void RunGameLoop(interface_mode uMsg)
 	gbGameLoopStartup = true;
 	nthread_ignore_mutex(false);
 
-#ifdef GPERF_HEAP_FIRST_GAME_ITERATION
-	unsigned run_game_iteration = 0;
-#endif
-
 	while (gbRunGame) {
 
 #ifdef _DEBUG
@@ -718,10 +710,6 @@ void RunGameLoop(interface_mode uMsg)
 		gbGameLoopStartup = false;
 		if (drawGame)
 			DrawAndBlit();
-#ifdef GPERF_HEAP_FIRST_GAME_ITERATION
-		if (run_game_iteration++ == 0)
-			HeapProfilerDump("first_game_iteration");
-#endif
 	}
 
 	PaletteFadeOut(8);

@@ -18,8 +18,6 @@ DEBUG_OPTION(ASAN "Enable address sanitizer")
 DEBUG_OPTION(UBSAN "Enable undefined behaviour sanitizer")
 option(TSAN "Enable thread sanitizer (not compatible with ASAN=ON)" OFF)
 DEBUG_OPTION(DEBUG "Enable debug mode in engine")
-option(GPERF "Build with GPerfTools profiler" OFF)
-cmake_dependent_option(GPERF_HEAP_FIRST_GAME_ITERATION "Save heap profile of the first game iteration" OFF "GPERF" OFF)
 option(DISABLE_LTO "Disable link-time optimization (by default enabled in release mode)" OFF)
 option(PIE "Generate position-independent code" OFF)
 option(DIST "Dynamically link only glibc and SDL2" OFF)
@@ -105,21 +103,6 @@ if(NOT DISABLE_LTO)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${DevilutionX_SOURCE_DIR}/CMake")
-
-if(GPERF)
-  if(GPERF_HEAP_FIRST_GAME_ITERATION)
-    set(GPERF_HEAP_MAIN ON)
-  endif()
-
-  # Compile with information about file and line numbers for everything
-  # even in non-Debug build types.
-  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    add_compile_options("$<$<NOT:$<CONFIG:Debug>>:-g2>")
-  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    # Use the more size-efficient `-gmlt` option on clang.
-    add_compile_options("$<$<NOT:$<CONFIG:Debug>>:-gmlt>")
-  endif()
-endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD|NetBSD|OpenBSD|DragonFly")
   if(${CMAKE_SYSTEM_NAME} MATCHES "NetBSD")
@@ -412,10 +395,6 @@ file(GENERATE OUTPUT ${CONFIG_PATH} CONTENT
 #define PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH}
 ")
 
-if(GPERF)
-  find_package(Gperftools REQUIRED)
-endif()
-
 target_include_directories(libdevilutionx PUBLIC
   Source
   ${CMAKE_CURRENT_BINARY_DIR})
@@ -445,9 +424,6 @@ foreach(
   NOSOUND
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
-  GPERF
-  GPERF_HEAP_MAIN
-  GPERF_HEAP_FIRST_GAME_ITERATION
   STREAM_ALL_AUDIO
 )
 if(${def_name})
@@ -545,11 +521,7 @@ endif()
 
 target_compile_definitions(libdevilutionx PUBLIC ${def_list})
 
-if (GPERF)
-  target_link_libraries(libdevilutionx PUBLIC ${GPERFTOOLS_LIBRARIES})
-endif()
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND NOT GPERF)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   target_link_libraries(libdevilutionx PUBLIC "$<$<NOT:$<CONFIG:Debug>>:-static-libgcc;-static-libstdc++>")
 endif()
 
