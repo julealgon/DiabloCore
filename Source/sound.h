@@ -10,10 +10,7 @@
 #include <memory>
 
 #include "miniwin/miniwin.h"
-
-#ifndef NOSOUND
 #include "utils/soundsample.h"
-#endif
 
 namespace devilution {
 
@@ -41,20 +38,12 @@ enum _music_id : uint8_t {
 
 struct TSnd {
 	uint32_t start_tc;
-
-#ifndef NOSOUND
 	SoundSample DSB;
 
 	bool isPlaying()
 	{
 		return DSB.IsPlaying();
 	}
-#else
-	bool isPlaying()
-	{
-		return false;
-	}
-#endif
 
 	~TSnd();
 };

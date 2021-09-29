@@ -23,7 +23,6 @@ option(PIE "Generate position-independent code" OFF)
 option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
-option(NOSOUND "Disable sound support" OFF)
 
 option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
 mark_as_advanced(DISABLE_STREAMING_MUSIC)
@@ -49,11 +48,9 @@ if(NIGHTLY_BUILD OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
   set(CPACK ON)
 endif()
 
-if(NOT NOSOUND)
-  option(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
-  cmake_dependent_option(DEVILUTIONX_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
-                        "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
-endif()
+option(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
+cmake_dependent_option(DEVILUTIONX_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
+                      "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
 
 option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
 cmake_dependent_option(DEVILUTIONX_STATIC_LIBFMT "Link static libfmt" OFF
@@ -183,12 +180,10 @@ find_package(SDL2_ttf REQUIRED)
 
 add_subdirectory(3rdParty/SDL_image)
 
-if(NOT NOSOUND)
-  if(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB)
-    find_package(SDL_audiolib REQUIRED)
-  else()
-    add_subdirectory(3rdParty/SDL_audiolib)
-  endif()
+if(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB)
+  find_package(SDL_audiolib REQUIRED)
+else()
+  add_subdirectory(3rdParty/SDL_audiolib)
 endif()
 
 add_library(smacker STATIC
@@ -350,17 +345,11 @@ set(libdevilutionx_SRCS
   Source/storm/storm_svid.cpp
   Source/miniwin/misc_msg.cpp)
 
-if(NOSOUND)
-  list(APPEND libdevilutionx_SRCS
-    Source/effects_stubs.cpp
-    Source/sound_stubs.cpp)
-else()
-  list(APPEND libdevilutionx_SRCS
-    Source/effects.cpp
-    Source/sound.cpp
-    Source/utils/push_aulib_decoder.cpp
-    Source/utils/soundsample.cpp)
-endif()
+list(APPEND libdevilutionx_SRCS
+  Source/effects.cpp
+  Source/sound.cpp
+  Source/utils/push_aulib_decoder.cpp
+  Source/utils/soundsample.cpp)
 
 set(BIN_TARGET devilutionx)
 
@@ -421,7 +410,6 @@ target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 # Defines without value
 foreach(
   def_name
-  NOSOUND
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
   STREAM_ALL_AUDIO
@@ -515,9 +503,7 @@ target_link_libraries(libdevilutionx PUBLIC
 
 target_link_libraries(libdevilutionx PUBLIC SDL_image)
 
-if(NOT NOSOUND)
-  target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)
-endif()
+target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)
 
 target_compile_definitions(libdevilutionx PUBLIC ${def_list})
 
