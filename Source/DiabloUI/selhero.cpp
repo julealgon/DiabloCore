@@ -52,7 +52,6 @@ void SelheroNameEsc();
 void SelheroClassSelectorFocus(int value);
 void SelheroClassSelectorSelect(int value);
 void SelheroClassSelectorEsc();
-const char *SelheroGenerateName(HeroClass heroClass);
 
 void SelheroUiFocusNavigationYesNo()
 {
@@ -243,23 +242,12 @@ void SelheroClassSelectorFocus(int value)
 	SelheroSetStats();
 }
 
-bool ShouldPrefillHeroName()
-{
-#if defined(PREFILL_PLAYER_NAME)
-	return true;
-#else
-	return false;
-#endif
-}
-
 void SelheroClassSelectorSelect(int value)
 {
 	auto hClass = static_cast<HeroClass>(vecSelHeroDlgItems[value]->m_value);
 
 	title = "New Hero";
 	memset(selhero_heroInfo.name, '\0', sizeof(selhero_heroInfo.name));
-	if (ShouldPrefillHeroName())
-		strncpy(selhero_heroInfo.name, SelheroGenerateName(selhero_heroInfo.heroclass), sizeof(selhero_heroInfo.name) - 1);
 	vecSelDlgItems.clear();
 	SDL_Rect rect1 = { (Sint16)(PANEL_LEFT + 264), (Sint16)(UI_OFFSET_Y + 211), 320, 33 };
 	vecSelDlgItems.push_back(std::make_unique<UiArtText>("Enter Name", rect1, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
@@ -333,94 +321,6 @@ void SelheroLoadSelect(int value)
 	selgame_GameSelection_Select();
 
 	selhero_result = SELHERO_NEW_DUNGEON;
-}
-
-const char *SelheroGenerateName(HeroClass heroClass)
-{
-	static const char *const Names[6][10] = {
-		{
-		    // Warrior
-		    "Aidan",
-		    "Qarak",
-		    "Born",
-		    "Cathan",
-		    "Halbu",
-		    "Lenalas",
-		    "Maximus",
-		    "Vane",
-		    "Myrdgar",
-		    "Rothat",
-		},
-		{
-		    // Rogue
-		    "Moreina",
-		    "Akara",
-		    "Kashya",
-		    "Flavie",
-		    "Divo",
-		    "Oriana",
-		    "Iantha",
-		    "Shikha",
-		    "Basanti",
-		    "Elexa",
-		},
-		{
-		    // Sorcerer
-		    "Jazreth",
-		    "Drognan",
-		    "Armin",
-		    "Fauztin",
-		    "Jere",
-		    "Kazzulk",
-		    "Ranslor",
-		    "Sarnakyle",
-		    "Valthek",
-		    "Horazon",
-		},
-		{
-		    // Monk
-		    "Akyev",
-		    "Dvorak",
-		    "Kekegi",
-		    "Kharazim",
-		    "Mikulov",
-		    "Shenlong",
-		    "Vedenin",
-		    "Vhalit",
-		    "Vylnas",
-		    "Zhota",
-		},
-		{
-		    // Bard (uses Rogue names)
-		    "Moreina",
-		    "Akara",
-		    "Kashya",
-		    "Flavie",
-		    "Divo",
-		    "Oriana",
-		    "Iantha",
-		    "Shikha",
-		    "Basanti",
-		    "Elexa",
-		},
-		{
-		    // Barbarian
-		    "Alaric",
-		    "Barloc",
-		    "Egtheow",
-		    "Guthlaf",
-		    "Heorogar",
-		    "Hrothgar",
-		    "Oslaf",
-		    "Qual-Kehk",
-		    "Ragnar",
-		    "Ulf",
-		},
-	};
-
-	int iRand = rand() % 10;
-
-	return Names[static_cast<std::size_t>(heroClass) % 6][iRand];
 }
 
 } // namespace
