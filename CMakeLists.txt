@@ -443,7 +443,6 @@ target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 foreach(
   def_name
   NOSOUND
-  PREFILL_PLAYER_NAME
   DISABLE_STREAMING_MUSIC
   DISABLE_STREAMING_SOUNDS
   GPERF
