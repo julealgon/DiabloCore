@@ -69,9 +69,7 @@ bool SpawnWindow(const char *lpWindowName)
 	SDL_setenv("SDL_AUDIODRIVER", "winmm", /*overwrite=*/false);
 
 	int initFlags = SDL_INIT_VIDEO | SDL_INIT_JOYSTICK;
-#ifndef NOSOUND
 	initFlags |= SDL_INIT_AUDIO;
-#endif
 	initFlags |= SDL_INIT_GAMECONTROLLER;
 
 	SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");

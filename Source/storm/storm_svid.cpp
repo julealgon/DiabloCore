@@ -6,12 +6,8 @@
 
 #include <smacker.h>
 
-#ifndef NOSOUND
 #include <Aulib/ResamplerSpeex.h>
 #include <Aulib/Stream.h>
-
-#include "utils/push_aulib_decoder.h"
-#endif
 
 #include "dx.h"
 #include "options.h"
@@ -19,17 +15,16 @@
 #include "storm/storm.h"
 #include "utils/display.h"
 #include "utils/log.hpp"
+#include "utils/push_aulib_decoder.h"
 #include "utils/sdl_compat.h"
 #include "utils/sdl_wrap.h"
 
 namespace devilution {
 namespace {
 
-#ifndef NOSOUND
 std::optional<Aulib::Stream> SVidAudioStream;
 PushAulibDecoder *SVidAudioDecoder;
 std::uint8_t SVidAudioDepth;
-#endif
 
 unsigned long SVidWidth, SVidHeight;
 double SVidFrameEnd;
@@ -49,12 +44,10 @@ bool IsLandscapeFit(unsigned long srcW, unsigned long srcH, unsigned long dstW, 
 	return srcW * dstH > dstW * srcH;
 }
 
-#ifndef NOSOUND
 bool HasAudio()
 {
 	return SVidAudioStream && SVidAudioStream->isPlaying();
 }
-#endif
 
 bool SVidLoadNextFrame()
 {
@@ -105,7 +98,6 @@ bool SVidPlayBegin(const char *filename, int flags)
 		return false;
 	}
 
-#ifndef NOSOUND
 	const bool enableAudio = (flags & 0x1000000) == 0;
 
 	constexpr std::size_t MaxSmkChannels = 7;
@@ -137,7 +129,6 @@ bool SVidPlayBegin(const char *filename, int flags)
 			SVidAudioDecoder = nullptr;
 		}
 	}
-#endif
 
 	unsigned long nFrames;
 	smk_info_all(SVidSMK, nullptr, &nFrames, &SVidFrameLength);
@@ -202,7 +193,6 @@ bool SVidPlayContinue()
 		return SVidLoadNextFrame(); // Skip video and audio if the system is to slow
 	}
 
-#ifndef NOSOUND
 	if (HasAudio()) {
 		const auto len = smk_get_audio_size(SVidSMK, 0);
 		const unsigned char *buf = smk_get_audio(SVidSMK, 0);
@@ -212,7 +202,6 @@ bool SVidPlayContinue()
 			SVidAudioDecoder->PushSamples(reinterpret_cast<const std::uint8_t *>(buf), len);
 		}
 	}
-#endif
 
 	if (SDL_GetTicks() * 1000.0 >= SVidFrameEnd) {
 		return SVidLoadNextFrame(); // Skip video if the system is to slow
@@ -272,12 +261,10 @@ bool SVidPlayContinue()
 
 void SVidPlayEnd()
 {
-#ifndef NOSOUND
 	if (HasAudio()) {
 		SVidAudioStream = std::nullopt;
 		SVidAudioDecoder = nullptr;
 	}
-#endif
 
 	if (SVidSMK != nullptr)
 		smk_close(SVidSMK);
