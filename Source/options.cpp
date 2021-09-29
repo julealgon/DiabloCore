@@ -12,7 +12,6 @@
 #include <SimpleIni.h>
 
 #include "diablo.h"
-#include "engine/demomode.h"
 #include "options.h"
 #include "utils/file_util.h"
 #include "utils/paths.h"
@@ -244,9 +243,6 @@ void LoadOptions()
 		GetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i], MAX_SEND_STR_LEN, "");
 
 	keymapper.Load();
-
-	if (demo::IsRunning())
-		demo::OverrideOptions();
 
 	sbWasOptionsLoaded = true;
 }

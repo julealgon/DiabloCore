@@ -5,7 +5,6 @@
  */
 
 #include "DiabloUI/diabloui.h"
-#include "engine/demomode.h"
 #include "init.h"
 #include "movie.h"
 #include "options.h"
@@ -63,31 +62,22 @@ void PlayIntro()
 	RefreshMusic();
 }
 
-bool DummyGetHeroInfo(_uiheroinfo * /*pInfo*/)
-{
-	return true;
-}
-
 } // namespace
 
 bool mainmenu_select_hero_dialog(GameData *gameData)
 {
 	_selhero_selections dlgresult = SELHERO_NEW_DUNGEON;
-	if (demo::IsRunning()) {
-		pfile_ui_set_hero_infos(DummyGetHeroInfo);
-		gbLoadGame = true;
-	} else {
-		UiSelHeroSingDialog(
-		    pfile_ui_set_hero_infos,
-		    pfile_ui_save_create,
-		    pfile_delete_save,
-		    pfile_ui_set_class_stats,
-		    &dlgresult,
-		    &gSaveNumber,
-		    &gameData->nDifficulty);
+	UiSelHeroSingDialog(
+		pfile_ui_set_hero_infos,
+		pfile_ui_save_create,
+		pfile_delete_save,
+		pfile_ui_set_class_stats,
+		&dlgresult,
+		&gSaveNumber,
+		&gameData->nDifficulty);
 
-		gbLoadGame = (dlgresult == SELHERO_CONTINUE);
-	}
+	gbLoadGame = (dlgresult == SELHERO_CONTINUE);
+
 	if (dlgresult == SELHERO_PREVIOUS) {
 		SErrSetLastError(1223);
 		return false;
@@ -108,9 +98,7 @@ void mainmenu_loop()
 
 	do {
 		menu = MAINMENU_NONE;
-		if (demo::IsRunning())
-			menu = MAINMENU_SINGLE_PLAYER;
-		else if (!UiMainMenuDialog(gszProductName, &menu, effects_play_sound, 30))
+		if (!UiMainMenuDialog(gszProductName, &menu, effects_play_sound, 30))
 			app_fatal("%s", "Unable to display mainmenu");
 
 		switch (menu) {

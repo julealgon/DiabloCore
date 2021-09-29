@@ -6,7 +6,6 @@
 
 #include "diablo.h"
 #include "effects.h"
-#include "engine/demomode.h"
 #include "hwcursor.hpp"
 #include "sound.h"
 #include "storm/storm_svid.h"
@@ -21,9 +20,6 @@ bool loop_movie;
 
 void play_movie(const char *pszMovie, bool userCanClose)
 {
-	if (demo::IsRunning())
-		return;
-
 	movie_playing = true;
 
 	sound_disable_music(true);
