@@ -55,7 +55,6 @@ struct _uiheroinfo {
 	char name[16];
 	uint8_t level;
 	HeroClass heroclass;
-	uint8_t herorank;
 	uint16_t strength;
 	uint16_t magic;
 	uint16_t dexterity;
@@ -83,7 +82,7 @@ inline SDL_Surface *DiabloUiSurface()
 void UiDestroy();
 void UiTitleDialog();
 void UiInitialize();
-void UiSelHeroSingDialog(bool (*fninfo)(bool (*fninfofunc)(_uiheroinfo *)), bool (*fncreate)(_uiheroinfo *), bool (*fnremove)(_uiheroinfo *), void (*fnstats)(unsigned int, _uidefaultstats *), _selhero_selections *dlgresult, uint32_t *saveNumber, _difficulty *difficulty);
+void UiSelHeroSingDialog(bool (*fninfo)(bool (*fninfofunc)(_uiheroinfo *)), bool (*fncreate)(_uiheroinfo *), bool (*fnremove)(_uiheroinfo *), void (*fnstats)(unsigned int, _uidefaultstats *), _selhero_selections *dlgresult, uint32_t *saveNumber);
 bool UiCreditsDialog();
 bool UiSupportDialog();
 bool UiMainMenuDialog(const char *name, _mainmenu_selections *pdwResult, void (*fnSound)(const char *file), int attractTimeOut);

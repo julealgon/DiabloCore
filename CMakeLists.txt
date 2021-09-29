@@ -324,7 +324,7 @@ set(libdevilutionx_SRCS
   Source/DiabloUI/progress.cpp
   Source/DiabloUI/scrollbar.cpp
   
-  Source/DiabloUI/selgame.cpp
+  
   Source/DiabloUI/selhero.cpp
   Source/DiabloUI/selok.cpp
   Source/DiabloUI/selyesno.cpp

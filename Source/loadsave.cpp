@@ -525,8 +525,12 @@ void LoadPlayer(LoadHelper &file, Player &player)
 	player.wReflections = file.NextLE<uint16_t>();
 	file.Skip(14); // Available bytes
 
-	player.pDiabloKillLevel = file.NextLE<uint32_t>();
-	player.pDifficulty = static_cast<_difficulty>(file.NextLE<uint32_t>());
+	// Skip Diablo kill level
+	file.Skip<uint32_t>();
+
+	// Skip difficulty
+	file.Skip<uint32_t>();
+
 	player.pDamAcFlags = file.NextLE<uint32_t>();
 	file.Skip(20); // Available bytes
 	CalcPlrItemVals(player, false);
@@ -1195,8 +1199,12 @@ void SavePlayer(SaveHelper &file, const Player &player)
 	file.WriteLE<uint16_t>(player.wReflections);
 	file.Skip(14); // Available bytes
 
-	file.WriteLE<uint32_t>(player.pDiabloKillLevel);
-	file.WriteLE<uint32_t>(player.pDifficulty);
+	// Skip Diablo kill level
+	file.Skip<uint32_t>();
+
+	// Skip difficulty
+	file.Skip<uint32_t>();
+
 	file.WriteLE<uint32_t>(player.pDamAcFlags);
 	file.Skip(20); // Available bytes
 
@@ -1648,10 +1656,6 @@ void LoadGame(bool firstflag)
 
 	LoadPlayer(file, myPlayer);
 
-	sgGameInitInfo.nDifficulty = myPlayer.pDifficulty;
-	if (sgGameInitInfo.nDifficulty < DIFF_NORMAL || sgGameInitInfo.nDifficulty > DIFF_HELL)
-		sgGameInitInfo.nDifficulty = DIFF_NORMAL;
-
 	for (int i = 0; i < giNumberQuests; i++)
 		LoadQuest(&file, i);
 	for (int i = 0; i < MAXPORTAL; i++)
@@ -1861,7 +1865,6 @@ void SaveGameData()
 	}
 
 	auto &myPlayer = Players[MyPlayerId];
-	myPlayer.pDifficulty = sgGameInitInfo.nDifficulty;
 	SavePlayer(file, myPlayer);
 
 	for (int i = 0; i < giNumberQuests; i++)

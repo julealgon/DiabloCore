@@ -3218,19 +3218,8 @@ void GetItemAttrs(Item &item, int itemData, int lvl)
 	if (item._itype != ItemType::Gold)
 		return;
 
-	int rndv;
 	int itemlevel = ItemsGetCurrlevel();
-	switch (sgGameInitInfo.nDifficulty) {
-	case DIFF_NORMAL:
-		rndv = 5 * itemlevel + GenerateRnd(10 * itemlevel);
-		break;
-	case DIFF_NIGHTMARE:
-		rndv = 5 * (itemlevel + 16) + GenerateRnd(10 * (itemlevel + 16));
-		break;
-	case DIFF_HELL:
-		rndv = 5 * (itemlevel + 32) + GenerateRnd(10 * (itemlevel + 32));
-		break;
-	}
+	int rndv = 5 * itemlevel + GenerateRnd(10 * itemlevel);
 	if (leveltype == DTYPE_HELL)
 		rndv += rndv / 8;
 

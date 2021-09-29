@@ -9,7 +9,6 @@
 #include "DiabloUI/diabloui.h"
 #include "DiabloUI/dialogs.h"
 #include "DiabloUI/scrollbar.h"
-#include "DiabloUI/selgame.h"
 #include "DiabloUI/selok.h"
 #include "DiabloUI/selyesno.h"
 #include "control.h"
@@ -307,19 +306,8 @@ void SelheroLoadSelect(int value)
 		return;
 	}
 
-	// This is part of a dangerous hack to enable difficulty selection in single-player.
-	// FIXME: Dialogs should not refer to each other's variables.
-
-	// We disable `selhero_endMenu` and replace the background and art
-	// and the item list with the difficulty selection ones.
-	//
-	// This means selhero's render loop will render selgame's items,
-	// which happens to work because the render loops are similar.
-	selhero_endMenu = false;
 	SelheroFree();
-	LoadBackgroundArt("ui_art\\selgame.pcx");
-	selgame_GameSelection_Select();
-
+	selhero_endMenu = true;
 	selhero_result = SELHERO_NEW_DUNGEON;
 }
 
@@ -472,11 +460,9 @@ void UiSelHeroSingDialog(
     bool (*fnremove)(_uiheroinfo *),
     void (*fnstats)(unsigned int, _uidefaultstats *),
     _selhero_selections *dlgresult,
-    uint32_t *saveNumber,
-    _difficulty *difficulty)
+    uint32_t *saveNumber)
 {
 	UiSelHeroDialog(fninfo, fncreate, fnstats, fnremove, dlgresult, saveNumber);
-	*difficulty = nDifficulty;
 }
 
 } // namespace devilution

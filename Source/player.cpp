@@ -2363,8 +2363,6 @@ void CreatePlayer(int playerId, HeroClass c)
 	player.pDungMsgs = 0;
 	player.pDungMsgs2 = 0;
 	player.pLvlLoad = 0;
-	player.pDiabloKillLevel = 0;
-	player.pDifficulty = DIFF_NORMAL;
 
 	player._pLevel = 1;
 

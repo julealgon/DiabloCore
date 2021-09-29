@@ -72,8 +72,8 @@ struct PlayerPack {
 	int16_t wReserved2;  // For future use
 	int8_t pSplLvl2[10]; // Hellfire spells
 	int16_t wReserved8;  // For future use
-	uint32_t pDiabloKillLevel;
-	uint32_t pDifficulty;
+	uint32_t pDiabloKillLevelReserved;
+	uint32_t pDifficultyReserved;
 	int32_t pDamAcFlags;
 	int32_t dwReserved[5]; // For future use
 };
