@@ -6,7 +6,6 @@
 #include "control.h"
 #include "controls/remap_keyboard.h"
 #include "cursor.h"
-#include "engine/demomode.h"
 #include "engine/rectangle.hpp"
 #include "hwcursor.hpp"
 #include "inv.h"
@@ -36,8 +35,7 @@ void SetCursorPos(Point position)
 	mousePositionWarping = position;
 	mouseWarping = true;
 	LogicalToOutput(&position.x, &position.y);
-	if (!demo::IsRunning())
-		SDL_WarpMouseInWindow(ghMainWnd, position.x, position.y);
+	SDL_WarpMouseInWindow(ghMainWnd, position.x, position.y);
 }
 
 // Moves the mouse to the first attribute "+" button.
@@ -249,7 +247,7 @@ bool FalseAvail(const char *name, int value)
 
 } // namespace
 
-bool FetchMessage_Real(tagMSG *lpMsg)
+bool FetchMessage(tagMSG *lpMsg)
 {
 	if (!message_queue.empty()) {
 		*lpMsg = message_queue.front();
@@ -406,16 +404,6 @@ bool FetchMessage_Real(tagMSG *lpMsg)
 		return FalseAvail("unknown", e.type);
 	}
 	return true;
-}
-
-bool FetchMessage(tagMSG *lpMsg)
-{
-	bool available = demo::IsRunning() ? demo::FetchMessage(lpMsg) : FetchMessage_Real(lpMsg);
-
-	if (available && demo::IsRecording())
-		demo::RecordMessage(lpMsg);
-
-	return available;
 }
 
 bool TranslateMessage(const tagMSG *lpMsg)

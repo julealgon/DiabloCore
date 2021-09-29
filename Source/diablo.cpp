@@ -28,7 +28,6 @@
 #include "dx.h"
 #include "encrypt.h"
 #include "engine/cel_sprite.hpp"
-#include "engine/demomode.h"
 #include "engine/load_cel.hpp"
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
@@ -655,8 +654,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 
 void RunGameLoop(interface_mode uMsg)
 {
-	demo::NotifyGameLoopStart();
-
 	WNDPROC saveProc;
 	tagMSG msg;
 
@@ -704,9 +701,7 @@ void RunGameLoop(interface_mode uMsg)
 
 		bool drawGame = true;
 		bool processInput = true;
-		bool runGameLoop = demo::IsRunning() ? demo::GetRunGameLoop(drawGame, processInput) : nthread_has_500ms_passed();
-		if (demo::IsRecording())
-			demo::RecordGameLoopResult(runGameLoop);
+		bool runGameLoop = nthread_has_500ms_passed();
 		if (!runGameLoop) {
 			if (processInput)
 				ProcessInput();
@@ -728,8 +723,6 @@ void RunGameLoop(interface_mode uMsg)
 			HeapProfilerDump("first_game_iteration");
 #endif
 	}
-
-	demo::NotifyGameLoopEnd();
 
 	PaletteFadeOut(8);
 	NewCursor(CURSOR_NONE);
@@ -760,9 +753,6 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-f", "Display frames per second");
 	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
 	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
-	printInConsole("    %-20s %-30s\n", "--record <#>", "Record a demo file");
-	printInConsole("    %-20s %-30s\n", "--demo <#>", "Play a demo file");
-	printInConsole("    %-20s %-30s\n", "--timedemo", "Disable all frame limiting during demo playback");
 	printInConsole("%s", "\nHellfire options:\n");
 	printInConsole("    %-20s %-30s\n", "--diablo", "Force diablo mode even if hellfire.mpq is found");
 	printInConsole("    %-20s %-30s\n", "--nestart", "Use alternate nest palette");
@@ -781,9 +771,6 @@ void DiabloParseFlags(int argc, char **argv)
 	int argumentIndexOfLastCommandPart = -1;
 	std::string currentCommand;
 #endif
-	bool timedemo = false;
-	int demoNumber = -1;
-	int recordNumber = -1;
 	for (int i = 1; i < argc; i++) {
 		if (strcasecmp("-h", argv[i]) == 0 || strcasecmp("--help", argv[i]) == 0) {
 			PrintHelpAndExit();
@@ -794,13 +781,7 @@ void DiabloParseFlags(int argc, char **argv)
 			paths::SetBasePath(argv[++i]);
 		} else if (strcasecmp("--save-dir", argv[i]) == 0) {
 			paths::SetPrefPath(argv[++i]);
-		} else if (strcasecmp("--demo", argv[i]) == 0) {
-			demoNumber = SDL_atoi(argv[++i]);
 			gbShowIntro = false;
-		} else if (strcasecmp("--timedemo", argv[i]) == 0) {
-			timedemo = true;
-		} else if (strcasecmp("--record", argv[i]) == 0) {
-			recordNumber = SDL_atoi(argv[++i]);
 		} else if (strcasecmp("--config-dir", argv[i]) == 0) {
 			paths::SetConfigPath(argv[++i]);
 		} else if (strcasecmp("--lang-dir", argv[i]) == 0) {
@@ -846,11 +827,6 @@ void DiabloParseFlags(int argc, char **argv)
 	if (!currentCommand.empty())
 		DebugCmdsFromCommandLine.push_back(currentCommand);
 #endif
-
-	if (demoNumber != -1)
-		demo::InitPlayBack(demoNumber, timedemo);
-	if (recordNumber != -1)
-		demo::InitRecording(recordNumber);
 }
 
 void DiabloInitScreen()
@@ -935,7 +911,7 @@ void DiabloDeinit()
 {
 	FreeItemGFX();
 
-	if (sbWasOptionsLoaded && !demo::IsRunning())
+	if (sbWasOptionsLoaded)
 		SaveOptions();
 	if (was_snd_init)
 		effects_cleanup_sfx();
@@ -1995,7 +1971,7 @@ void game_loop(bool bStartup)
 		TimeoutCursor(false);
 		GameLogic();
 
-		if (!gbRunGame || demo::IsRunning() || demo::IsRecording() || !nthread_has_500ms_passed())
+		if (!gbRunGame || !nthread_has_500ms_passed())
 			break;
 	}
 }
