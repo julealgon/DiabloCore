@@ -24,8 +24,6 @@ option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 
-option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
-mark_as_advanced(DISABLE_STREAMING_MUSIC)
 option(STREAM_ALL_AUDIO "Stream all the audio. For extremely RAM-constrained platforms.")
 mark_as_advanced(STREAM_ALL_AUDIO)
 
@@ -408,7 +406,6 @@ target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 # Defines without value
 foreach(
   def_name
-  DISABLE_STREAMING_MUSIC
   STREAM_ALL_AUDIO
 )
 if(${def_name})
