@@ -24,13 +24,6 @@ option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 
-option(DISABLE_STREAMING_MUSIC "Disable streaming music (to work around broken platform implementations)" OFF)
-mark_as_advanced(DISABLE_STREAMING_MUSIC)
-option(DISABLE_STREAMING_SOUNDS "Disable streaming sounds (to work around broken platform implementations)" OFF)
-mark_as_advanced(DISABLE_STREAMING_SOUNDS)
-option(STREAM_ALL_AUDIO "Stream all the audio. For extremely RAM-constrained platforms.")
-mark_as_advanced(STREAM_ALL_AUDIO)
-
 RELEASE_OPTION(CPACK "Configure CPack")
 
 
@@ -406,18 +399,6 @@ target_link_libraries(libdevilutionx PUBLIC PNG::PNG)
 
 genex_for_option(DEBUG)
 target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
-
-# Defines without value
-foreach(
-  def_name
-  DISABLE_STREAMING_MUSIC
-  DISABLE_STREAMING_SOUNDS
-  STREAM_ALL_AUDIO
-)
-if(${def_name})
-  list(APPEND def_list ${def_name})
-endif()
-endforeach(def_name)
 
 # Defines with value
 foreach(

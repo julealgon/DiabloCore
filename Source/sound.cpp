@@ -39,22 +39,10 @@ namespace {
 
 std::optional<Aulib::Stream> music;
 
-#ifdef DISABLE_STREAMING_MUSIC
-std::unique_ptr<char[]> musicBuffer;
-#endif
-
 void LoadMusic(HANDLE handle)
 {
-#ifndef DISABLE_STREAMING_MUSIC
 	SDL_RWops *musicRw = SFileRw_FromStormHandle(handle);
-#else
-	size_t bytestoread = SFileGetFileSize(handle);
-	musicBuffer.reset(new char[bytestoread]);
-	SFileReadFileThreadSafe(handle, musicBuffer.get(), bytestoread);
-	SFileCloseFileThreadSafe(handle);
 
-	SDL_RWops *musicRw = SDL_RWFromConstMem(musicBuffer.get(), bytestoread);
-#endif
 	music.emplace(musicRw, std::make_unique<Aulib::DecoderDrwav>(),
 	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/true);
 }
@@ -63,9 +51,6 @@ void CleanupMusic()
 {
 	music = std::nullopt;
 	sgnMusicTrack = NUM_MUSIC;
-#ifdef DISABLE_STREAMING_MUSIC
-	musicBuffer = nullptr;
-#endif
 }
 
 std::list<std::unique_ptr<SoundSample>> duplicateSounds;
@@ -144,13 +129,10 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 	auto snd = std::make_unique<TSnd>();
 	snd->start_tc = SDL_GetTicks() - 80 - 1;
 
-#ifndef STREAM_ALL_AUDIO
 	if (stream) {
-#endif
 		if (snd->DSB.SetChunkStream(path) != 0) {
 			ErrSdl();
 		}
-#ifndef STREAM_ALL_AUDIO
 	} else {
 		HANDLE file;
 		if (!SFileOpenFile(path, &file)) {
@@ -165,7 +147,6 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 			ErrSdl();
 		}
 	}
-#endif
 
 	return snd;
 }

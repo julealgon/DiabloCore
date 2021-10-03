@@ -17,12 +17,6 @@ _sfx_id sfxdnum = SFX_NONE;
 
 namespace {
 
-#ifndef DISABLE_STREAMING_SOUNDS
-constexpr bool AllowStreaming = true;
-#else
-constexpr bool AllowStreaming = false;
-#endif
-
 /** Specifies the sound file and the playback state of the current sound effect. */
 TSFX *sgpStreamSFX = nullptr;
 
@@ -1081,7 +1075,7 @@ void StreamPlay(TSFX *pSFX, int lVolume, int lPan)
 		if (lVolume > VOLUME_MAX)
 			lVolume = VOLUME_MAX;
 		if (pSFX->pSnd == nullptr)
-			pSFX->pSnd = sound_file_load(pSFX->pszName, AllowStreaming);
+			pSFX->pSnd = sound_file_load(pSFX->pszName, true);
 		pSFX->pSnd->DSB.Play(lVolume, sound_get_or_set_sound_volume(1), lPan);
 		sgpStreamSFX = pSFX;
 	}
@@ -1350,7 +1344,7 @@ int GetSFXLength(int nSFX)
 {
 	if (sgSFX[nSFX].pSnd == nullptr)
 		sgSFX[nSFX].pSnd = sound_file_load(sgSFX[nSFX].pszName,
-		    /*stream=*/AllowStreaming && (sgSFX[nSFX].bFlags & sfx_STREAM) != 0);
+		    (sgSFX[nSFX].bFlags & sfx_STREAM) != 0);
 	return sgSFX[nSFX].pSnd->DSB.GetLength();
 }
 
