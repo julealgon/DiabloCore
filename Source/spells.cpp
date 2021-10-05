@@ -330,26 +330,11 @@ void DoHealOther(int pnum, uint16_t rid)
 
 int GetSpellBookLevel(spell_id s)
 {
-	if (!gbIsHellfire) {
-		switch (s) {
-		case SPL_NOVA:
-		case SPL_APOCA:
-			return -1;
-		default:
-			if (s > SPL_LASTDIABLO)
-				return -1;
-			break;
-		}
-	}
-
 	return spelldata[s].sBookLvl;
 }
 
 int GetSpellStaffLevel(spell_id s)
 {
-	if (!gbIsHellfire && s > SPL_LASTDIABLO)
-		return -1;
-
 	return spelldata[s].sStaffLvl;
 }
 

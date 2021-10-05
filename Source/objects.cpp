@@ -2752,7 +2752,7 @@ bool OperateShrineEnchanted(int pnum)
 
 	int cnt = 0;
 	uint64_t spell = 1;
-	int maxSpells = gbIsHellfire ? MAX_SPELLS : 37;
+	int maxSpells = MAX_SPELLS;
 	uint64_t spells = player._pMemSpells;
 	for (int j = 0; j < maxSpells; j++) {
 		if ((spell & spells) != 0)

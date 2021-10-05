@@ -684,7 +684,7 @@ void GetBookSpell(Item &item, int lvl)
 	if (lvl == 0)
 		lvl = 1;
 
-	int maxSpells = gbIsHellfire ? MAX_SPELLS : 37;
+	int maxSpells = MAX_SPELLS;
 
 	rv = GenerateRnd(maxSpells) + 1;
 
@@ -1269,7 +1269,7 @@ void GetStaffSpell(Item &item, int lvl, bool onlygood)
 		return;
 	}
 
-	int maxSpells = gbIsHellfire ? MAX_SPELLS : 37;
+	int maxSpells = MAX_SPELLS;
 	int l = lvl / 2;
 	if (l == 0)
 		l = 1;
