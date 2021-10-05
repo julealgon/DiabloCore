@@ -883,11 +883,7 @@ void DiabloSplash()
 
 	play_movie("gendata\\logo.smk", true);
 
-	if (gbIsHellfire && sgOptions.Hellfire.bIntro) {
-		play_movie("gendata\\Hellfire.smk", true);
-		sgOptions.Hellfire.bIntro = false;
-	}
-	if (!gbIsHellfire && sgOptions.Diablo.bIntro) {
+	if (sgOptions.Diablo.bIntro) {
 		play_movie("gendata\\diablo1.smk", true);
 		sgOptions.Diablo.bIntro = false;
 	}

@@ -12,8 +12,6 @@ struct DiabloOptions {
 };
 
 struct HellfireOptions {
-	/** @brief Play game intro video on startup. */
-	bool bIntro;
 	/** @brief Cornerstone of the world item. */
 	char szItem[sizeof(ItemPack) * 2 + 1];
 };

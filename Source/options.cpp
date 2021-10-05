@@ -184,7 +184,6 @@ bool sbWasOptionsLoaded = false;
 void LoadOptions()
 {
 	sgOptions.Diablo.bIntro = GetIniBool("Diablo", "Intro", true);
-	sgOptions.Hellfire.bIntro = GetIniBool("Hellfire", "Intro", true);
 	GetIniValue("Hellfire", "SItem", sgOptions.Hellfire.szItem, sizeof(sgOptions.Hellfire.szItem), "");
 
 	sgOptions.Audio.nSoundVolume = GetIniInt("Audio", "Sound Volume", VOLUME_MAX);
@@ -250,7 +249,6 @@ void LoadOptions()
 void SaveOptions()
 {
 	SetIniValue("Diablo", "Intro", sgOptions.Diablo.bIntro);
-	SetIniValue("Hellfire", "Intro", sgOptions.Hellfire.bIntro);
 	SetIniValue("Hellfire", "SItem", sgOptions.Hellfire.szItem);
 
 	SetIniValue("Audio", "Sound Volume", sgOptions.Audio.nSoundVolume);
