@@ -1119,9 +1119,6 @@ void StartDeathFromMonster(int i, int mid)
 	M_FallenFear(monster.position.tile);
 	if (monster.MType->mtype >= MT_NACID && monster.MType->mtype <= MT_XACID)
 		AddMissile(monster.position.tile, { 0, 0 }, Direction::South, MIS_ACIDPUD, TARGET_PLAYERS, mid, monster._mint + 1, 0);
-
-	if (gbIsHellfire)
-		M_StartStand(killer, killer._mdir);
 }
 
 void StartFadein(Monster &monster, Direction md, bool backwards)
@@ -1371,8 +1368,6 @@ void MonsterAttackPlayer(int i, int pnum, int hit, Damage damage)
 	}
 	
 	if (player._pHitPoints >> 6 <= 0) {
-		if (gbIsHellfire)
-			M_StartStand(monster, monster._mdir);
 		return;
 	}
 	StartPlrHit(pnum, dam, false);
