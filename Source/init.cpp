@@ -177,11 +177,6 @@ void init_archives()
 	hfopt1_mpq = LoadMPQ(paths, "hfopt1.mpq");
 	hfopt2_mpq = LoadMPQ(paths, "hfopt2.mpq");
 
-	if (gbIsHellfire && (hfmonk_mpq == nullptr || hfmusic_mpq == nullptr || hfvoice_mpq == nullptr)) {
-		UiErrorOkDialog("Some Hellfire MPQs are missing", "Not all Hellfire MPQs were found.\nPlease copy all the hf*.mpq files.");
-		app_fatal(nullptr);
-	}
-
 	devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
 }
 
