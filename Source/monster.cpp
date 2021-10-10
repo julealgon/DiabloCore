@@ -162,11 +162,6 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 
 	monster.mLevel = monster.MData->mLevel;
 	monster._mmaxhp = (monster.MType->mMinHP + GenerateRnd(monster.MType->mMaxHP - monster.MType->mMinHP + 1)) << 6;
-	if (monster.MType->mtype == MT_DIABLO && !gbIsHellfire) {
-		monster._mmaxhp /= 2;
-		monster.mLevel -= 15;
-	}
-
 	monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
 
 	monster._mhitpoints = monster._mmaxhp;
@@ -3524,10 +3519,6 @@ void InitMonsterGFX(int monst)
 
 	LevelMonsterTypes[monst].mMinHP = MonstersData[mtype].mMinHP;
 	LevelMonsterTypes[monst].mMaxHP = MonstersData[mtype].mMaxHP;
-	if (!gbIsHellfire && mtype == MT_DIABLO) {
-		LevelMonsterTypes[monst].mMinHP -= 2000;
-		LevelMonsterTypes[monst].mMaxHP -= 2000;
-	}
 	LevelMonsterTypes[monst].mAFNum = MonstersData[mtype].mAFNum;
 	LevelMonsterTypes[monst].MData = &MonstersData[mtype];
 
@@ -4406,10 +4397,6 @@ void PrintMonstHistory(int mt)
 	if (MonsterKillCounts[mt] >= 30) {
 		int minHP = MonstersData[mt].mMinHP;
 		int maxHP = MonstersData[mt].mMaxHP;
-		if (!gbIsHellfire && mt == MT_DIABLO) {
-			minHP -= 2000;
-			maxHP -= 2000;
-		}
 		minHP /= 2;
 		maxHP /= 2;
 		if (minHP < 1)
