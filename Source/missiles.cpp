@@ -3796,7 +3796,7 @@ void MI_Apoca(Missile &missile)
 				continue;
 			if (nSolidTable[dPiece[k][j]])
 				continue;
-			if (gbIsHellfire && !LineClearMissile(missile.position.tile, { k, j }))
+			if (!LineClearMissile(missile.position.tile, { k, j }))
 				continue;
 			AddMissile({ k, j }, { k, j }, Players[id]._pdir, MIS_BOOM, TARGET_MONSTERS, id, missile._midam, 0);
 			exit = true;
