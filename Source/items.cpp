@@ -2265,15 +2265,8 @@ bool HealerItemOk(int i)
 
 	auto &myPlayer = Players[MyPlayerId];
 
-	if (AllItemsList[i].iMiscId == IMISC_ELIXSTR)
-		return !gbIsHellfire || myPlayer._pBaseStr < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Strength);
-	if (AllItemsList[i].iMiscId == IMISC_ELIXMAG)
-		return !gbIsHellfire || myPlayer._pBaseMag < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Magic);
-	if (AllItemsList[i].iMiscId == IMISC_ELIXDEX)
-		return !gbIsHellfire || myPlayer._pBaseDex < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Dexterity);
-	if (AllItemsList[i].iMiscId == IMISC_ELIXVIT)
-		return !gbIsHellfire || myPlayer._pBaseVit < myPlayer.GetMaximumAttributeValue(CharacterAttribute::Vitality);
-
+	if (AllItemsList[i].iMiscId == AnyOf(IMISC_ELIXSTR, IMISC_ELIXMAG, IMISC_ELIXDEX, IMISC_ELIXVIT))
+		return true;
 	if (AllItemsList[i].iMiscId == IMISC_REJUV)
 		return true;
 	if (AllItemsList[i].iMiscId == IMISC_FULLREJUV)
