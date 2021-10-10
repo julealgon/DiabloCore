@@ -1160,7 +1160,6 @@ enum sfx_flag : uint8_t {
 	sfx_ROGUE    = 1 << 4,
 	sfx_WARRIOR  = 1 << 5,
 	sfx_SORCERER = 1 << 6,
-	sfx_HELLFIRE = 1 << 7,
 	// clang-format on
 };
 
