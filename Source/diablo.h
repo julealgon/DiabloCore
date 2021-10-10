@@ -18,8 +18,6 @@
 
 namespace devilution {
 
-#define GAME_ID (gbIsHellfire ? LoadBE32("HRTL") : LoadBE32("DRTL"))
-
 #define NUMLEVELS 25
 
 enum clicktype : int8_t {
