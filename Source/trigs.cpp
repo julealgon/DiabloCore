@@ -72,19 +72,10 @@ bool IsWarpOpen(dungeon_type type)
 		return true;
 	if (type == DTYPE_HELL && (myPlayer.pTownWarps & 4) != 0)
 		return true;
-
-	if (gbIsHellfire) {
-		if (type == DTYPE_CATACOMBS && myPlayer._pLevel >= 10)
-			return true;
-		if (type == DTYPE_CAVES && myPlayer._pLevel >= 15)
-			return true;
-		if (type == DTYPE_HELL && myPlayer._pLevel >= 20)
-			return true;
-		if (type == DTYPE_NEST && Quests[Q_FARMER]._qactive == AnyOf(QUEST_DONE, QUEST_HIVE_DONE))
-			return true;
-		if (type == DTYPE_CRYPT && Quests[Q_GRAVE]._qactive == QUEST_DONE)
-			return true;
-	}
+	if (type == DTYPE_NEST && Quests[Q_FARMER]._qactive == AnyOf(QUEST_DONE, QUEST_HIVE_DONE))
+		return true;
+	if (type == DTYPE_CRYPT && Quests[Q_GRAVE]._qactive == QUEST_DONE)
+		return true;
 
 	return false;
 }
