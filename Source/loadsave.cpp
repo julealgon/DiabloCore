@@ -293,10 +293,7 @@ void LoadItemData(LoadHelper &file, Item &item)
 		item.IDidx = RemapItemIdxFromDiablo(item.IDidx);
 	}
 	item.dwBuff = file.NextLE<uint32_t>();
-	if (gbIsHellfireSaveGame)
-		item._iDamAcFlags = file.NextLE<uint32_t>();
-	else
-		item._iDamAcFlags = 0;
+	item._iDamAcFlags = file.NextLE<uint32_t>();
 
 	RemoveInvalidItem(item);
 }
@@ -980,8 +977,7 @@ void SaveItem(SaveHelper &file, const Item &item)
 	file.WriteLE<uint32_t>(item._iStatFlag ? 1 : 0);
 	file.WriteLE<int32_t>(idx);
 	file.WriteLE<uint32_t>(item.dwBuff);
-	if (gbIsHellfire)
-		file.WriteLE<uint32_t>(item._iDamAcFlags);
+	file.WriteLE<uint32_t>(item._iDamAcFlags);
 }
 
 void SavePlayer(SaveHelper &file, const Player &player)

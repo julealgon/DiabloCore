@@ -892,7 +892,7 @@ bool PlrHitMonst(int pnum, int m)
 		hit = 0;
 	}
 
-	hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
+	hper += player.GetMeleeToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
 	hper = std::clamp(hper, 5, 95);
 
 	bool ret = false;

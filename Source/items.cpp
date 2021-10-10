@@ -971,10 +971,7 @@ int SaveItemPower(Item &item, const ItemPower &power)
 		drawhpflag = true;
 		break;
 	case IPL_TARGAC:
-		if (gbIsHellfire)
-			item._iPLEnAc = power.param1;
-		else
-			item._iPLEnAc += r;
+		item._iPLEnAc = power.param1;
 		break;
 	case IPL_FASTATTACK:
 		if (power.param1 == 1)
@@ -1112,13 +1109,6 @@ int PLVal(int pv, int p1, int p2, int minv, int maxv)
 void SaveItemAffix(Item &item, const PLStruct &affix)
 {
 	auto power = affix.power;
-
-	if (!gbIsHellfire) {
-		if (power.type == IPL_TARGAC) {
-			power.param1 = 1 << power.param1;
-			power.param2 = 3 << power.param2;
-		}
-	}
 
 	int value = SaveItemPower(item, power);
 
