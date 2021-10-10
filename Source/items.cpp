@@ -2839,7 +2839,7 @@ void SetPlrHandItem(Item &item, int itemData)
 	item._iSpell = pAllItem.iSpell;
 
 	if (pAllItem.iMiscId == IMISC_STAFF) {
-		item._iCharges = gbIsHellfire ? 18 : 40;
+		item._iCharges = 40;
 	}
 
 	item._iMaxCharges = item._iCharges;
@@ -2953,13 +2953,13 @@ void CreatePlrItems(int playerId)
 		GetPlrHandSeed(&player.SpdList[1]);
 		break;
 	case HeroClass::Sorcerer:
-		SetPlrHandItem(player.InvBody[INVLOC_HAND_LEFT], gbIsHellfire ? IDI_SORCERER : 166);
+		SetPlrHandItem(player.InvBody[INVLOC_HAND_LEFT], IDI_SORCERER);
 		GetPlrHandSeed(&player.InvBody[INVLOC_HAND_LEFT]);
 
-		SetPlrHandItem(player.SpdList[0], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+		SetPlrHandItem(player.SpdList[0], IDI_MANA);
 		GetPlrHandSeed(&player.SpdList[0]);
 
-		SetPlrHandItem(player.SpdList[1], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+		SetPlrHandItem(player.SpdList[1], IDI_MANA);
 		GetPlrHandSeed(&player.SpdList[1]);
 		break;
 
