@@ -228,9 +228,6 @@ bool MonsterMHit(int pnum, int m, Damage damage, int dist, missile_id t, bool sh
 	    || ((mor & RESIST_LIGHTNING) != 0 && mir == MISR_LIGHTNING))
 		resist = true;
 
-	if (gbIsHellfire && t == MIS_HBOLT && (monster.MType->mtype == MT_DIABLO || monster.MType->mtype == MT_BONEDEMN))
-		resist = true;
-
 	int hit = GenerateRnd(100);
 	int hper = 0;
 	if (pnum != -1) {
