@@ -647,7 +647,7 @@ void AddChestTraps()
 					if (leveltype == DTYPE_CATACOMBS) {
 						Objects[oi]._oVar4 = GenerateRnd(2);
 					} else {
-						Objects[oi]._oVar4 = GenerateRnd(gbIsHellfire ? 6 : 3);
+						Objects[oi]._oVar4 = GenerateRnd(6);
 					}
 				}
 			}
