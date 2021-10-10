@@ -1418,8 +1418,6 @@ bool GoldAutoPlace(Player &player)
 			player.HoldItem._ivalue = player.InvList[i]._ivalue - MaxGold;
 			SetPlrHandGoldCurs(player.HoldItem);
 			player.InvList[i]._ivalue = MaxGold;
-			if (gbIsHellfire)
-				GetPlrHandSeed(&player.HoldItem);
 		} else {
 			player.HoldItem._ivalue = 0;
 			done = true;

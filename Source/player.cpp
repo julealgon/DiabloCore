@@ -503,17 +503,10 @@ void StartRangeAttack(int pnum, Direction d, int cx, int cy)
 		return;
 	}
 
-	int skippedAnimationFrames = 0;
-	if (!gbIsHellfire) {
-		if ((player._pIFlags & ISPL_FASTATTACK) != 0) {
-			skippedAnimationFrames += 1;
-		}
-	}
-
 	auto animationFlags = AnimationDistributionFlags::ProcessAnimationPending;
 	if (player._pmode == PM_RATTACK)
 		animationFlags = static_cast<AnimationDistributionFlags>(animationFlags | AnimationDistributionFlags::RepeatedAction);
-	NewPlrAnim(player, player_graphic::Attack, d, player._pAFrames, 1, animationFlags, skippedAnimationFrames, player._pAFNum);
+	NewPlrAnim(player, player_graphic::Attack, d, player._pAFrames, 1, animationFlags, 0, player._pAFNum);
 
 	player._pmode = PM_RATTACK;
 	FixPlayerLocation(pnum, d);
