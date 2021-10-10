@@ -131,20 +131,11 @@ void PackPlayer(PlayerPack *pPack, const Player &player, bool manashield)
 		pPack->pManaShield = 0;
 }
 
-void UnPackItem(const ItemPack *is, Item *id, bool isHellfire)
+void UnPackItem(const ItemPack *is, Item *id)
 {
 	auto &item = Items[MAXITEMS];
 	auto idx = static_cast<_item_indexes>(SDL_SwapLE16(is->idx));
 	if (idx == IDI_NONE) {
-		id->_itype = ItemType::None;
-		return;
-	}
-
-	if (!isHellfire) {
-		idx = RemapItemIdxFromDiablo(idx);
-	}
-
-	if (!IsItemAvailable(idx)) {
 		id->_itype = ItemType::None;
 		return;
 	}
@@ -163,20 +154,13 @@ void UnPackItem(const ItemPack *is, Item *id, bool isHellfire)
 		    SDL_SwapLE32(is->dwBuff));
 	} else {
 		memset(&item, 0, sizeof(item));
-		RecreateItem(item, idx, SDL_SwapLE16(is->iCreateInfo), SDL_SwapLE32(is->iSeed), SDL_SwapLE16(is->wValue), isHellfire);
+		RecreateItem(item, idx, SDL_SwapLE16(is->iCreateInfo), SDL_SwapLE32(is->iSeed), SDL_SwapLE16(is->wValue));
 		item._iMagical = static_cast<item_quality>(is->bId >> 1);
 		item._iIdentified = (is->bId & 1) != 0;
 		item._iDurability = is->bDur;
 		item._iMaxDur = is->bMDur;
 		item._iCharges = is->bCh;
 		item._iMaxCharges = is->bMCh;
-
-		RemoveInvalidItem(item);
-
-		if (isHellfire)
-			item.dwBuff |= CF_HELLFIRE;
-		else
-			item.dwBuff &= ~CF_HELLFIRE;
 	}
 	*id = item;
 }
@@ -221,15 +205,13 @@ void UnPackPlayer(const PlayerPack *pPack, Player &player, bool netSync)
 
 	for (int i = 0; i < NUM_INVLOC; i++) {
 		auto packedItem = pPack->InvBody[i];
-		bool isHellfire = netSync ? ((packedItem.dwBuff & CF_HELLFIRE) != 0) : (pPack->bIsHellfire != 0);
-		UnPackItem(&packedItem, &player.InvBody[i], isHellfire);
+		UnPackItem(&packedItem, &player.InvBody[i]);
 	}
 
 	player._pNumInv = pPack->_pNumInv;
 	for (int i = 0; i < player._pNumInv; i++) {
 		auto packedItem = pPack->InvList[i];
-		bool isHellfire = netSync ? ((packedItem.dwBuff & CF_HELLFIRE) != 0) : (pPack->bIsHellfire != 0);
-		UnPackItem(&packedItem, &player.InvList[i], isHellfire);
+		UnPackItem(&packedItem, &player.InvList[i]);
 	}
 
 	for (int i = 0; i < NUM_INV_GRID_ELEM; i++)
@@ -239,8 +221,7 @@ void UnPackPlayer(const PlayerPack *pPack, Player &player, bool netSync)
 
 	for (int i = 0; i < MAXBELTITEMS; i++) {
 		auto packedItem = pPack->SpdList[i];
-		bool isHellfire = netSync ? ((packedItem.dwBuff & CF_HELLFIRE) != 0) : (pPack->bIsHellfire != 0);
-		UnPackItem(&packedItem, &player.SpdList[i], isHellfire);
+		UnPackItem(&packedItem, &player.SpdList[i]);
 	}
 
 	if (&player == &Players[MyPlayerId]) {

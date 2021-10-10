@@ -294,8 +294,6 @@ void LoadItemData(LoadHelper &file, Item &item)
 	}
 	item.dwBuff = file.NextLE<uint32_t>();
 	item._iDamAcFlags = file.NextLE<uint32_t>();
-
-	RemoveInvalidItem(item);
 }
 
 void LoadPlayer(LoadHelper &file, Player &player)
@@ -893,8 +891,6 @@ void RemoveEmptyLevelItems()
 void SaveItem(SaveHelper &file, const Item &item)
 {
 	auto idx = item.IDidx;
-	if (!gbIsHellfire)
-		idx = RemapItemIdxToDiablo(idx);
 	ItemType iType = item._itype;
 	if (idx == -1) {
 		idx = _item_indexes::IDI_GOLD;
@@ -1457,23 +1453,6 @@ const int DiabloItemSaveSize = 368;
 const int HellfireItemSaveSize = 372;
 
 } // namespace
-
-void RemoveInvalidItem(Item &item)
-{
-	bool isInvalid = !IsItemAvailable(item.IDidx) || !IsUniqueAvailable(item._iUid);
-
-	if (!gbIsHellfire) {
-		isInvalid = isInvalid || (item._itype == ItemType::Staff && GetSpellStaffLevel(item._iSpell) == -1);
-		isInvalid = isInvalid || (item._iMiscId == IMISC_BOOK && GetSpellBookLevel(item._iSpell) == -1);
-		isInvalid = isInvalid || item._iDamAcFlags != 0;
-		isInvalid = isInvalid || item._iPrePower > IDI_LASTDIABLO;
-		isInvalid = isInvalid || item._iSufPower > IDI_LASTDIABLO;
-	}
-
-	if (isInvalid) {
-		item._itype = ItemType::None;
-	}
-}
 
 _item_indexes RemapItemIdxFromDiablo(_item_indexes i)
 {

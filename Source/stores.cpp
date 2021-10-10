@@ -380,7 +380,7 @@ bool SmithSellOk(int i)
 		return false;
 	if (pI->_itype == ItemType::Gold)
 		return false;
-	if (pI->_itype == ItemType::Staff && (!gbIsHellfire || pI->_iSpell != SPL_NULL))
+	if (pI->_itype == ItemType::Staff && pI->_iSpell != SPL_NULL)
 		return false;
 	if (pI->_iClass == ICLASS_QUEST)
 		return false;
@@ -676,7 +676,7 @@ bool WitchSellOk(int i)
 		rv = false;
 	if (pI->_iClass == ICLASS_QUEST)
 		rv = false;
-	if (pI->_itype == ItemType::Staff && (!gbIsHellfire || pI->_iSpell != SPL_NULL))
+	if (pI->_itype == ItemType::Staff && pI->_iSpell != SPL_NULL)
 		rv = true;
 	if (pI->IDidx >= IDI_FIRSTQUEST && pI->IDidx <= IDI_LASTQUEST)
 		rv = false;
