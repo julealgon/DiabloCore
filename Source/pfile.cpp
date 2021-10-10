@@ -32,8 +32,6 @@ std::string GetSavePath(uint32_t saveNum)
 {
 	std::string path = paths::PrefPath();
 	const char *ext = ".sv";
-	if (gbIsHellfire)
-		ext = ".hsv";
 
 	path.append("single_");
 
