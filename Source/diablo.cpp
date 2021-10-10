@@ -979,7 +979,7 @@ void LoadAllGFX()
 	IncProgress();
 	InitObjectGFX();
 	IncProgress();
-	InitMissileGFX(gbIsHellfire);
+	InitMissileGFX();
 	IncProgress();
 }
 
@@ -1751,7 +1751,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		} else {
 			IncProgress();
 			IncProgress();
-			InitMissileGFX(gbIsHellfire);
+			InitMissileGFX();
 			IncProgress();
 			IncProgress();
 		}
@@ -1842,7 +1842,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		IncProgress();
 		InitMonsters();
 		IncProgress();
-		InitMissileGFX(gbIsHellfire);
+		InitMissileGFX();
 		IncProgress();
 		InitCorpses();
 		IncProgress();

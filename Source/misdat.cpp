@@ -248,11 +248,9 @@ void MissileFileData::LoadGFX()
 	}
 }
 
-void InitMissileGFX(bool loadHellfireGraphics)
+void InitMissileGFX()
 {
 	for (size_t mi = 0; MissileSpriteData[mi].animFAmt != 0; mi++) {
-		if (!loadHellfireGraphics && mi > MFILE_SCBSEXPD)
-			break;
 		if (MissileSpriteData[mi].flags == MissileDataFlags::MonsterOwned)
 			continue;
 		MissileSpriteData[mi].LoadGFX();
