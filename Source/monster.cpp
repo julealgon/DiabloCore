@@ -2278,20 +2278,14 @@ void ScavengerAi(int i)
 		if (dCorpse[monster.position.tile.x][monster.position.tile.y] != 0) {
 			StartEating(monster);
 			if ((monster._mFlags & MFLAG_NOHEAL) == 0) {
-				if (gbIsHellfire) {
-					int mMaxHP = monster._mmaxhp;
-					monster._mhitpoints += mMaxHP / 8;
-					if (monster._mhitpoints > monster._mmaxhp)
-						monster._mhitpoints = monster._mmaxhp;
-					if (monster._mgoalvar3 <= 0 || monster._mhitpoints == monster._mmaxhp)
-						dCorpse[monster.position.tile.x][monster.position.tile.y] = 0;
-				} else {
-					monster._mhitpoints += 64;
-				}
+				int mMaxHP = monster._mmaxhp;
+				monster._mhitpoints += mMaxHP / 8;
+				if (monster._mhitpoints > monster._mmaxhp)
+					monster._mhitpoints = monster._mmaxhp;
+				if (monster._mgoalvar3 <= 0 || monster._mhitpoints == monster._mmaxhp)
+					dCorpse[monster.position.tile.x][monster.position.tile.y] = 0;
 			}
 			int targetHealth = monster._mmaxhp;
-			if (!gbIsHellfire)
-				targetHealth = (monster._mmaxhp / 2) + (monster._mmaxhp / 4);
 			if (monster._mhitpoints >= targetHealth) {
 				monster._mgoal = MGOAL_NORMAL;
 				monster._mgoalvar1 = 0;
