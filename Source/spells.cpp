@@ -139,7 +139,7 @@ int GetManaAmount(Player &player, spell_id sn)
 	ma = std::max(ma, 0);
 	ma <<= 6;
 
-	if (gbIsHellfire && player._pClass == HeroClass::Sorcerer) {
+	if (player._pClass == HeroClass::Sorcerer) {
 		ma /= 2;
 	} else if (player._pClass == HeroClass::Rogue || player._pClass == HeroClass::Monk || player._pClass == HeroClass::Bard) {
 		ma -= ma / 4;
