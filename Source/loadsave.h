@@ -11,8 +11,6 @@ namespace devilution {
 
 extern uint8_t giNumberOfLevels;
 
-_item_indexes RemapItemIdxFromDiablo(_item_indexes i);
-_item_indexes RemapItemIdxToDiablo(_item_indexes i);
 bool IsHeaderValid(uint32_t magicNumber);
 void LoadHotkeys();
 void LoadHeroItems(Player &player);

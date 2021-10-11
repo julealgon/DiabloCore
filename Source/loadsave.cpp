@@ -1424,50 +1424,6 @@ const int ItemSaveSize = 372;
 
 } // namespace
 
-_item_indexes RemapItemIdxFromDiablo(_item_indexes i)
-{
-	constexpr auto GetItemIdValue = [](int i) -> int {
-		if (i == IDI_SORCERER) {
-			return 166;
-		}
-		if (i >= 156) {
-			i += 5; // Hellfire exclusive items
-		}
-		if (i >= 88) {
-			i += 1; // Scroll of Search
-		}
-		if (i >= 83) {
-			i += 4; // Oils
-		}
-
-		return i;
-	};
-
-	return static_cast<_item_indexes>(GetItemIdValue(i));
-}
-
-_item_indexes RemapItemIdxToDiablo(_item_indexes i)
-{
-	constexpr auto GetItemIdValue = [](int i) -> int {
-		if (i == 166) {
-			return IDI_SORCERER;
-		}
-		if ((i >= 83 && i <= 86) || i == 92 || i >= 161) {
-			return -1; // Hellfire exclusive items
-		}
-		if (i >= 93) {
-			i -= 1; // Scroll of Search
-		}
-		if (i >= 87) {
-			i -= 4; // Oils
-		}
-
-		return i;
-	};
-
-	return static_cast<_item_indexes>(GetItemIdValue(i));
-}
-
 bool IsHeaderValid(uint32_t magicNumber)
 {
 	if (magicNumber == LoadLE32("SHAR")) {
