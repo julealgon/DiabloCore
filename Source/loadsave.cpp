@@ -528,8 +528,6 @@ void LoadPlayer(LoadHelper &file, Player &player)
 	// Omit pointer pReserved
 }
 
-bool gbSkipSync = false;
-
 void LoadMonster(LoadHelper *file, Monster &monster)
 {
 	monster._mMTidx = file->NextLE<int32_t>();
@@ -632,9 +630,6 @@ void LoadMonster(LoadHelper *file, Monster &monster)
 	// Omit pointer mName;
 	// Omit pointer MType;
 	// Omit pointer MData;
-
-	if (gbSkipSync)
-		return;
 
 	SyncMonsterAnim(monster);
 }
@@ -1906,10 +1901,8 @@ void LoadLevel()
 			objectId = file.NextLE<int8_t>();
 		for (int i = 0; i < ActiveObjectCount; i++)
 			LoadObject(file, Objects[ActiveObjects[i]]);
-		if (!gbSkipSync) {
-			for (int i = 0; i < ActiveObjectCount; i++)
-				SyncObjectAnim(Objects[ActiveObjects[i]]);
-		}
+		for (int i = 0; i < ActiveObjectCount; i++)
+			SyncObjectAnim(Objects[ActiveObjects[i]]);
 	}
 
 	for (int &itemId : ActiveItems)
@@ -1951,13 +1944,11 @@ void LoadLevel()
 		}
 	}
 
-	if (!gbSkipSync) {
-		AutomapZoomReset();
-		ResyncQuests();
-		RedoMissileFlags();
-		SyncPortals();
-		UpdateLighting = true;
-	}
+	AutomapZoomReset();
+	ResyncQuests();
+	RedoMissileFlags();
+	SyncPortals();
+	UpdateLighting = true;
 
 	for (auto &player : Players) {
 		if (player.plractive && currlevel == player.plrlevel)
