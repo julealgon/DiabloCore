@@ -65,8 +65,7 @@ struct PlayerPack {
 	uint8_t pBattleNet;
 	uint8_t pManaShield;
 	uint8_t pDungMsgs2;
-	/** The format the charater is in, 0: Diablo, 1: Hellfire */
-	int8_t bIsHellfire;
+	int8_t bIsHellfireReserved;
 	int8_t bReserved; // For future use
 	uint16_t wReflections;
 	int16_t wReserved2;  // For future use

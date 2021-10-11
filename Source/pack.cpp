@@ -42,9 +42,6 @@ void PackItem(ItemPack *id, const Item *is)
 		id->idx = 0xFFFF;
 	} else {
 		auto idx = is->IDidx;
-		if (!gbIsHellfire) {
-			idx = RemapItemIdxToDiablo(idx);
-		}
 		id->idx = SDL_SwapLE16(idx);
 		if (is->IDidx == IDI_EAR) {
 			id->iCreateInfo = is->_iName[8] | (is->_iName[7] << 8);
@@ -123,7 +120,6 @@ void PackPlayer(PlayerPack *pPack, const Player &player, bool manashield)
 
 	pPack->wReflections = SDL_SwapLE16(player.wReflections);
 	pPack->pDamAcFlags = SDL_SwapLE32(player.pDamAcFlags);
-	pPack->bIsHellfire = gbIsHellfire ? 1 : 0;
 
 	if (manashield)
 		pPack->pManaShield = SDL_SwapLE32(player.pManaShield);

@@ -849,8 +849,6 @@ void DiabloInit()
 	if (forceDiablo)
 		gbIsHellfire = false;
 
-	gbIsHellfireSaveGame = gbIsHellfire;
-
 	SetApplicationVersions();
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++) {

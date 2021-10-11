@@ -30,7 +30,6 @@
 
 namespace devilution {
 
-bool gbIsHellfireSaveGame;
 uint8_t giNumberOfLevels;
 
 namespace {
@@ -289,9 +288,6 @@ void LoadItemData(LoadHelper &file, Item &item)
 	file.Skip(1); // Alignment
 	item._iStatFlag = file.NextBool32();
 	item.IDidx = static_cast<_item_indexes>(file.NextLE<int32_t>());
-	if (!gbIsHellfireSaveGame) {
-		item.IDidx = RemapItemIdxFromDiablo(item.IDidx);
-	}
 	item.dwBuff = file.NextLE<uint32_t>();
 	item._iDamAcFlags = file.NextLE<uint32_t>();
 }
@@ -502,19 +498,10 @@ void LoadPlayer(LoadHelper &file, Player &player)
 	player.pDungMsgs = file.NextLE<uint8_t>();
 	player.pLvlLoad = file.NextLE<uint8_t>();
 
-	if (gbIsHellfireSaveGame) {
-		player.pDungMsgs2 = file.NextLE<uint8_t>();
-		player.pBattleNet = false;
-	} else {
-		player.pDungMsgs2 = 0;
-		player.pBattleNet = file.NextBool8();
-	}
+	player.pDungMsgs2 = file.NextLE<uint8_t>();
+	player.pBattleNet = false;
 	player.pManaShield = file.NextBool8();
-	if (gbIsHellfireSaveGame) {
-		file.NextBool8();
-	} else {
-		file.Skip(1);
-	}
+	file.NextBool8();
 	file.Skip(2); // Available bytes
 	player.wReflections = file.NextLE<uint16_t>();
 	file.Skip(14); // Available bytes
@@ -762,17 +749,11 @@ void LoadQuest(LoadHelper *file, int i)
 	quest.position.y = file->NextLE<int32_t>();
 	quest._qslvl = static_cast<_setlevels>(file->NextLE<uint8_t>());
 	quest._qidx = static_cast<quest_id>(file->NextLE<uint8_t>());
-	if (gbIsHellfireSaveGame) {
-		file->Skip(2); // Alignment
-		quest._qmsg = static_cast<_speech_id>(file->NextLE<int32_t>());
-	} else {
-		quest._qmsg = static_cast<_speech_id>(file->NextLE<uint8_t>());
-	}
+	file->Skip(2); // Alignment
+	quest._qmsg = static_cast<_speech_id>(file->NextLE<int32_t>());
 	quest._qvar1 = file->NextLE<uint8_t>();
 	quest._qvar2 = file->NextLE<uint8_t>();
 	file->Skip(2); // Alignment
-	if (!gbIsHellfireSaveGame)
-		file->Skip(1); // Alignment
 	quest._qlog = file->NextBool32();
 
 	ReturnLvlPosition.x = file->NextBE<int32_t>();
@@ -1180,10 +1161,7 @@ void SavePlayer(SaveHelper &file, const Player &player)
 	file.WriteLE<uint8_t>(player.pTownWarps);
 	file.WriteLE<uint8_t>(player.pDungMsgs);
 	file.WriteLE<uint8_t>(player.pLvlLoad);
-	if (gbIsHellfire)
-		file.WriteLE<uint8_t>(player.pDungMsgs2);
-	else
-		file.WriteLE<uint8_t>(player.pBattleNet ? 1 : 0);
+	file.WriteLE<uint8_t>(player.pDungMsgs2);
 	file.WriteLE<uint8_t>(player.pManaShield ? 1 : 0);
 	file.Skip<uint8_t>();
 	file.Skip(2); // Available bytes
@@ -1399,17 +1377,11 @@ void SaveQuest(SaveHelper *file, int i)
 	file->WriteLE<int32_t>(quest.position.y);
 	file->WriteLE<uint8_t>(quest._qslvl);
 	file->WriteLE<uint8_t>(quest._qidx);
-	if (gbIsHellfire) {
-		file->Skip(2); // Alignment
-		file->WriteLE<int32_t>(quest._qmsg);
-	} else {
-		file->WriteLE<uint8_t>(quest._qmsg);
-	}
+	file->Skip(2); // Alignment
+	file->WriteLE<int32_t>(quest._qmsg);
 	file->WriteLE<uint8_t>(quest._qvar1);
 	file->WriteLE<uint8_t>(quest._qvar2);
 	file->Skip(2); // Alignment
-	if (!gbIsHellfire)
-		file->Skip(1); // Alignment
 	file->WriteLE<uint32_t>(quest._qlog ? 1 : 0);
 
 	file->WriteBE<int32_t>(ReturnLvlPosition.x);
@@ -1448,8 +1420,7 @@ void SavePortal(SaveHelper *file, int i)
 	file->WriteLE<uint32_t>(pPortal->setlvl ? 1 : 0);
 }
 
-const int DiabloItemSaveSize = 368;
-const int HellfireItemSaveSize = 372;
+const int ItemSaveSize = 372;
 
 } // namespace
 
@@ -1499,19 +1470,16 @@ _item_indexes RemapItemIdxToDiablo(_item_indexes i)
 
 bool IsHeaderValid(uint32_t magicNumber)
 {
-	gbIsHellfireSaveGame = false;
 	if (magicNumber == LoadLE32("SHAR")) {
 		return true;
 	}
 	if (magicNumber == LoadLE32("SHLF")) {
-		gbIsHellfireSaveGame = true;
 		return true;
 	}
 	if (magicNumber == LoadLE32("RETL")) {
 		return true;
 	}
 	if (magicNumber == LoadLE32("HELF")) {
-		gbIsHellfireSaveGame = true;
 		return true;
 	}
 
@@ -1561,13 +1529,11 @@ void LoadHeroItems(Player &player)
 	if (!file.IsValid())
 		return;
 
-	gbIsHellfireSaveGame = file.NextBool8();
+	file.NextBool8();
 
 	LoadMatchingItems(file, NUM_INVLOC, player.InvBody);
 	LoadMatchingItems(file, NUM_INV_GRID_ELEM, player.InvList);
 	LoadMatchingItems(file, MAXBELTITEMS, player.SpdList);
-
-	gbIsHellfireSaveGame = gbIsHellfire;
 }
 
 void RemoveEmptyInventory(Player &player)
@@ -1594,12 +1560,7 @@ void LoadGame(bool firstflag)
 
 	giNumberOfLevels = 25;
 	giNumberQuests = 24;
-	if (gbIsHellfireSaveGame) {
-		giNumberOfSmithPremiumItems = 15;
-	} else {
-		// Todo initialize additional levels and quests if we are running Hellfire
-		giNumberOfSmithPremiumItems = 6;
-	}
+	giNumberOfSmithPremiumItems = 6;
 
 	setlevel = file.NextBool8();
 	setlvlnum = static_cast<_setlevels>(file.NextBE<uint32_t>());
@@ -1629,11 +1590,6 @@ void LoadGame(bool firstflag)
 		LoadQuest(&file, i);
 	for (int i = 0; i < MAXPORTAL; i++)
 		LoadPortal(&file, i);
-
-	if (gbIsHellfireSaveGame != gbIsHellfire) {
-		ConvertLevels();
-		RemoveEmptyInventory(myPlayer);
-	}
 
 	LoadGameLevel(firstflag, ENTRY_LOAD);
 	SyncInitPlr(MyPlayerId);
@@ -1741,8 +1697,6 @@ void LoadGame(bool firstflag)
 
 	for (int i = 0; i < giNumberOfSmithPremiumItems; i++)
 		LoadPremium(file, i);
-	if (gbIsHellfire && !gbIsHellfireSaveGame)
-		SpawnPremium(MyPlayerId);
 
 	AutomapActive = file.NextBool8();
 	AutoMapScale = file.NextBE<int32_t>();
@@ -1766,21 +1720,14 @@ void LoadGame(bool firstflag)
 	RedoMissileFlags();
 	NewCursor(CURSOR_HAND);
 	gbProcessPlayers = true;
-
-	if (gbIsHellfireSaveGame != gbIsHellfire) {
-		RemoveEmptyLevelItems();
-		SaveGame();
-	}
-
-	gbIsHellfireSaveGame = gbIsHellfire;
 }
 
 void SaveHeroItems(Player &player)
 {
 	size_t itemCount = NUM_INVLOC + NUM_INV_GRID_ELEM + MAXBELTITEMS;
-	SaveHelper file("heroitems", itemCount * (gbIsHellfire ? HellfireItemSaveSize : DiabloItemSaveSize) + sizeof(uint8_t));
+	SaveHelper file("heroitems", itemCount * ItemSaveSize + sizeof(uint8_t));
 
-	file.WriteLE<uint8_t>(gbIsHellfire ? 1 : 0);
+	file.Skip<uint8_t>();
 
 	for (const Item &item : player.InvBody)
 		SaveItem(file, item);
@@ -1798,20 +1745,11 @@ void SaveGameData()
 {
 	SaveHelper file("game", FILEBUFF);
 
-	if (gbIsHellfire)
-		file.WriteLE<uint32_t>(LoadLE32("HELF"));
-	else if (!gbIsHellfire)
-		file.WriteLE<uint32_t>(LoadLE32("RETL"));
-	else
-		app_fatal("%s", "Invalid game state");
+	file.WriteLE<uint32_t>(LoadLE32("HELF"));
 
 	giNumberOfLevels = 25;
 	giNumberQuests = 24;
-	if (gbIsHellfire) {
-		giNumberOfSmithPremiumItems = 15;
-	} else {
-		giNumberOfSmithPremiumItems = 6;
-	}
+	giNumberOfSmithPremiumItems = 6;
 
 	file.WriteLE<uint8_t>(setlevel ? 1 : 0);
 	file.WriteBE<uint32_t>(setlvlnum);
@@ -2105,10 +2043,6 @@ void LoadLevel()
 			for (int i = 0; i < DMAXX; i++) // NOLINT(modernize-loop-convert)
 				AutomapView[i][j] = file.NextBool8();
 		}
-	}
-
-	if (gbIsHellfireSaveGame != gbIsHellfire) {
-		RemoveEmptyLevelItems();
 	}
 
 	if (!gbSkipSync) {

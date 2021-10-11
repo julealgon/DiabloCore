@@ -264,8 +264,6 @@ bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *))
 				uihero.saveNumber = i;
 				strcpy(hero_names[i], pkplr.pName);
 				bool hasSaveGame = ArchiveContainsGame(archive);
-				if (hasSaveGame)
-					pkplr.bIsHellfire = gbIsHellfireSaveGame ? 1 : 0;
 
 				auto &player = Players[0];
 				UnPackPlayer(&pkplr, player, false);
@@ -355,8 +353,6 @@ void pfile_read_player_from_save(uint32_t saveNum, Player &player)
 		app_fatal("%s", "Unable to load character");
 
 	gbValidSaveFile = ArchiveContainsGame(archive);
-	if (gbValidSaveFile)
-		pkplr.bIsHellfire = gbIsHellfireSaveGame ? 1 : 0;
 
 	CloseArchive(&archive);
 
