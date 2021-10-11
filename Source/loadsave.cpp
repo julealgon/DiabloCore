@@ -792,56 +792,6 @@ void LoadPortal(LoadHelper *file, int i)
 	pPortal->setlvl = file->NextBool32();
 }
 
-void ConvertLevels()
-{
-	// Backup current level state
-	bool tmpSetlevel = setlevel;
-	_setlevels tmpSetlvlnum = setlvlnum;
-	int tmpCurrlevel = currlevel;
-	dungeon_type tmpLeveltype = leveltype;
-
-	gbSkipSync = true;
-
-	setlevel = false; // Convert regular levels
-	for (int i = 0; i < giNumberOfLevels; i++) {
-		currlevel = i;
-		if (!LevelFileExists())
-			continue;
-
-		leveltype = gnLevelTypeTbl[i];
-
-		LoadLevel();
-		SaveLevel();
-	}
-
-	setlevel = true; // Convert quest levels
-	for (auto &quest : Quests) {
-		if (quest._qactive == QUEST_NOTAVAIL) {
-			continue;
-		}
-
-		leveltype = quest._qlvltype;
-		if (leveltype == DTYPE_NONE) {
-			continue;
-		}
-
-		setlvlnum = quest._qslvl;
-		if (!LevelFileExists())
-			continue;
-
-		LoadLevel();
-		SaveLevel();
-	}
-
-	gbSkipSync = false;
-
-	// Restor current level state
-	setlevel = tmpSetlevel;
-	setlvlnum = tmpSetlvlnum;
-	currlevel = tmpCurrlevel;
-	leveltype = tmpLeveltype;
-}
-
 void LoadMatchingItems(LoadHelper &file, const int n, Item *pItem)
 {
 	Item tempItem;
