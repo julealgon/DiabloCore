@@ -315,26 +315,6 @@ int premiumlvladd[] = {
 	 2,
 	// clang-format on
 };
-/** Maps from Griswold premium item number to a quality level delta as added to the base quality level. */
-int premiumLvlAddHellfire[] = {
-	// clang-format off
-	-1,
-	-1,
-	-1,
-	 0,
-	 0,
-	 0,
-	 0,
-	 1,
-	 1,
-	 1,
-	 1,
-	 2,
-	 2,
-	 3,
-	 3,
-	// clang-format on
-};
 
 bool IsPrefixValidForItemType(int i, int flgs)
 {
@@ -4248,11 +4228,11 @@ void SpawnSmith(int lvl)
 void SpawnPremium(int pnum)
 {
 	int8_t lvl = Players[pnum]._pLevel;
-	int maxItems = gbIsHellfire ? SMITH_PREMIUM_ITEMS : 6;
+	int maxItems = SMITH_PREMIUM_ITEMS;
 	if (numpremium < maxItems) {
 		for (int i = 0; i < maxItems; i++) {
 			if (premiumitems[i].isEmpty()) {
-				int plvl = premiumlevel + (gbIsHellfire ? premiumLvlAddHellfire[i] : premiumlvladd[i]);
+				int plvl = premiumlevel + premiumlvladd[i];
 				SpawnOnePremium(i, plvl, pnum);
 			}
 		}
@@ -4260,21 +4240,12 @@ void SpawnPremium(int pnum)
 	}
 	while (premiumlevel < lvl) {
 		premiumlevel++;
-		if (gbIsHellfire) {
-			// Discard first 3 items and shift next 10
-			std::move(&premiumitems[3], &premiumitems[12] + 1, &premiumitems[0]);
-			SpawnOnePremium(10, premiumlevel + premiumLvlAddHellfire[10], pnum);
-			premiumitems[11] = premiumitems[13];
-			SpawnOnePremium(12, premiumlevel + premiumLvlAddHellfire[12], pnum);
-			premiumitems[13] = premiumitems[14];
-			SpawnOnePremium(14, premiumlevel + premiumLvlAddHellfire[14], pnum);
-		} else {
-			// Discard first 2 items and shift next 3
-			std::move(&premiumitems[2], &premiumitems[4] + 1, &premiumitems[0]);
-			SpawnOnePremium(3, premiumlevel + premiumlvladd[3], pnum);
-			premiumitems[4] = premiumitems[5];
-			SpawnOnePremium(5, premiumlevel + premiumlvladd[5], pnum);
-		}
+		
+		// Discard first 2 items and shift next 3
+		std::move(&premiumitems[2], &premiumitems[4] + 1, &premiumitems[0]);
+		SpawnOnePremium(3, premiumlevel + premiumlvladd[3], pnum);
+		premiumitems[4] = premiumitems[5];
+		SpawnOnePremium(5, premiumlevel + premiumlvladd[5], pnum);
 	}
 }
 
