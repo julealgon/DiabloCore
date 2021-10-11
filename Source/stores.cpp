@@ -953,10 +953,7 @@ void SStartBoyBuy()
 	else
 		AddSText(20, 10, boyitem._iName, itemColor, true);
 
-	if (gbIsHellfire)
-		AddSTextVal(10, boyitem._iIvalue - (boyitem._iIvalue / 4));
-	else
-		AddSTextVal(10, boyitem._iIvalue + (boyitem._iIvalue / 2));
+	AddSTextVal(10, boyitem._iIvalue + (boyitem._iIvalue / 2));
 	PrintStoreItem(&boyitem, 11, itemColor);
 	AddSText(0, 22, "Leave", UiFlags::ColorWhite | UiFlags::AlignCenter, true);
 	OffsetSTextY(22, 6);
@@ -1807,10 +1804,7 @@ void BoyBuyEnter()
 	stextvhold = stextsval;
 	stextlhold = 10;
 	int price = boyitem._iIvalue;
-	if (gbIsHellfire)
-		price -= boyitem._iIvalue / 4;
-	else
-		price += boyitem._iIvalue / 2;
+	price += boyitem._iIvalue / 2;
 
 	auto &myPlayer = Players[MyPlayerId];
 
