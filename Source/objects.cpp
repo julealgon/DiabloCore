@@ -1218,7 +1218,7 @@ void AddShrine(int i)
 
 	Objects[i]._oPreFlag = true;
 
-	int shrines = gbIsHellfire ? NumberOfShrineTypes : 26;
+	int shrines = NumberOfShrineTypes;
 
 	for (int j = 0; j < shrines; j++) {
 		slist[j] = currlevel >= shrinemin[j] && currlevel <= shrinemax[j];
@@ -3673,7 +3673,7 @@ int FindValidShrine()
 	bool done = false;
 	int rv;
 	do {
-		rv = GenerateRnd(gbIsHellfire ? NumberOfShrineTypes : 26);
+		rv = GenerateRnd(NumberOfShrineTypes);
 		if (currlevel >= shrinemin[rv] && currlevel <= shrinemax[rv] && rv != ShrineThaumaturgic) {
 			done = true;
 		}

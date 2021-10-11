@@ -290,7 +290,6 @@ struct Player {
 	bool pBattleNet;
 	bool pManaShield;
 	uint8_t pDungMsgs2;
-	bool pOriginalCathedral;
 	uint16_t wReflections;
 	uint32_t pDamAcFlags;
 

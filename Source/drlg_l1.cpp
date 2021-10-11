@@ -2226,17 +2226,10 @@ void GenerateLevel(lvl_entry entry)
 			}
 		} else if (entry == ENTRY_MAIN) {
 			if (currlevel < 21) {
-				if (!Players[MyPlayerId].pOriginalCathedral) {
-					if (PlaceMiniSet(STAIRSUP, 1, 1, 0, 0, true, -1) < 0)
-						doneflag = false;
-					if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, false, -1) < 0)
-						doneflag = false;
-				} else {
-					if (PlaceMiniSet(L5STAIRSUP, 1, 1, 0, 0, true, -1) < 0)
-						doneflag = false;
-					else if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, false, -1) < 0)
-						doneflag = false;
-				}
+				if (PlaceMiniSet(STAIRSUP, 1, 1, 0, 0, true, -1) < 0)
+					doneflag = false;
+				if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, false, -1) < 0)
+					doneflag = false;
 			} else if (currlevel == 21) {
 				if (PlaceMiniSet(L5STAIRSTOWN, 1, 1, 0, 0, false, -1) < 0)
 					doneflag = false;
@@ -2252,7 +2245,7 @@ void GenerateLevel(lvl_entry entry)
 				}
 				ViewPosition.y++;
 			}
-		} else if (!Players[MyPlayerId].pOriginalCathedral && entry == ENTRY_PREV) {
+		} else if (entry == ENTRY_PREV) {
 			if (currlevel < 21) {
 				if (PlaceMiniSet(STAIRSUP, 1, 1, 0, 0, false, -1) < 0)
 					doneflag = false;
@@ -2276,18 +2269,10 @@ void GenerateLevel(lvl_entry entry)
 			}
 		} else {
 			if (currlevel < 21) {
-				if (!Players[MyPlayerId].pOriginalCathedral) {
-					if (PlaceMiniSet(STAIRSUP, 1, 1, 0, 0, false, -1) < 0)
-						doneflag = false;
-					if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, false, -1) < 0)
-						doneflag = false;
-				} else {
-					if (PlaceMiniSet(L5STAIRSUP, 1, 1, 0, 0, false, -1) < 0)
-						doneflag = false;
-					else if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, true, -1) < 0)
-						doneflag = false;
-					ViewPosition.y--;
-				}
+				if (PlaceMiniSet(STAIRSUP, 1, 1, 0, 0, false, -1) < 0)
+					doneflag = false;
+				if (PlaceMiniSet(STAIRSDOWN, 1, 1, 0, 0, false, -1) < 0)
+					doneflag = false;
 			} else if (currlevel == 21) {
 				if (PlaceMiniSet(L5STAIRSTOWN, 1, 1, 0, 0, true, -1) < 0)
 					doneflag = false;

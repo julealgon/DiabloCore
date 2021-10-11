@@ -65,9 +65,7 @@ std::unique_ptr<uint8_t[]> LoadLevelSOLData(size_t &tileCount)
 {
 	switch (leveltype) {
 	case DTYPE_TOWN:
-		if (gbIsHellfire)
-			return LoadFileInMem<uint8_t>("NLevels\\TownData\\Town.SOL", &tileCount);
-		return LoadFileInMem<uint8_t>("Levels\\TownData\\Town.SOL", &tileCount);
+		return LoadFileInMem<uint8_t>("NLevels\\TownData\\Town.SOL", &tileCount);
 	case DTYPE_CATHEDRAL:
 		if (currlevel < 17)
 			return LoadFileInMem<uint8_t>("Levels\\L1Data\\L1.SOL", &tileCount);

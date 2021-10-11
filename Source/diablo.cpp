@@ -920,15 +920,9 @@ void LoadLvlGFX()
 
 	switch (leveltype) {
 	case DTYPE_TOWN:
-		if (gbIsHellfire) {
-			pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("NLevels\\TownData\\Town.TIL");
-			pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
-		} else {
-			pDungeonCels = LoadFileInMem("Levels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("Levels\\TownData\\Town.TIL");
-			pLevelPieces = LoadFileInMem<uint16_t>("Levels\\TownData\\Town.MIN");
-		}
+		pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
+		pMegaTiles = LoadFileInMem<MegaTile>("NLevels\\TownData\\Town.TIL");
+		pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
 		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);
 		break;
 	case DTYPE_CATHEDRAL:

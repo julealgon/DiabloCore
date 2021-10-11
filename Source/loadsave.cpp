@@ -511,10 +511,9 @@ void LoadPlayer(LoadHelper &file, Player &player)
 	}
 	player.pManaShield = file.NextBool8();
 	if (gbIsHellfireSaveGame) {
-		player.pOriginalCathedral = file.NextBool8();
+		file.NextBool8();
 	} else {
 		file.Skip(1);
-		player.pOriginalCathedral = true;
 	}
 	file.Skip(2); // Available bytes
 	player.wReflections = file.NextLE<uint16_t>();
@@ -1186,7 +1185,7 @@ void SavePlayer(SaveHelper &file, const Player &player)
 	else
 		file.WriteLE<uint8_t>(player.pBattleNet ? 1 : 0);
 	file.WriteLE<uint8_t>(player.pManaShield ? 1 : 0);
-	file.WriteLE<uint8_t>(player.pOriginalCathedral ? 1 : 0);
+	file.Skip<uint8_t>();
 	file.Skip(2); // Available bytes
 	file.WriteLE<uint16_t>(player.wReflections);
 	file.Skip(14); // Available bytes
@@ -1593,14 +1592,12 @@ void LoadGame(bool firstflag)
 	if (!IsHeaderValid(file.NextLE<uint32_t>()))
 		app_fatal("%s", "Invalid save file");
 
+	giNumberOfLevels = 25;
+	giNumberQuests = 24;
 	if (gbIsHellfireSaveGame) {
-		giNumberOfLevels = 25;
-		giNumberQuests = 24;
 		giNumberOfSmithPremiumItems = 15;
 	} else {
 		// Todo initialize additional levels and quests if we are running Hellfire
-		giNumberOfLevels = 17;
-		giNumberQuests = 16;
 		giNumberOfSmithPremiumItems = 6;
 	}
 
@@ -1618,9 +1615,6 @@ void LoadGame(bool firstflag)
 	int tmpNumitems = file.NextBE<int32_t>();
 	int tmpNummissiles = file.NextBE<int32_t>();
 	int tmpNobjects = file.NextBE<int32_t>();
-
-	if (!gbIsHellfire && currlevel > 17)
-		app_fatal("%s", "Player is on a Hellfire only level");
 
 	for (uint8_t i = 0; i < giNumberOfLevels; i++) {
 		glSeedTbl[i] = file.NextBE<uint32_t>();
@@ -1811,13 +1805,11 @@ void SaveGameData()
 	else
 		app_fatal("%s", "Invalid game state");
 
+	giNumberOfLevels = 25;
+	giNumberQuests = 24;
 	if (gbIsHellfire) {
-		giNumberOfLevels = 25;
-		giNumberQuests = 24;
 		giNumberOfSmithPremiumItems = 15;
 	} else {
-		giNumberOfLevels = 17;
-		giNumberQuests = 16;
 		giNumberOfSmithPremiumItems = 6;
 	}
 
