@@ -784,8 +784,6 @@ void DiabloParseFlags(int argc, char **argv)
 			gbForceWindowed = true;
 		} else if (strcasecmp("--nestart", argv[i]) == 0) {
 			gbNestArt = true;
-		} else if (strcasecmp("--vanilla", argv[i]) == 0) {
-			gbVanilla = true;
 		} else if (strcasecmp("--verbose", argv[i]) == 0) {
 			SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
 #ifdef _DEBUG

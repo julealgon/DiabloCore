@@ -77,10 +77,6 @@ void PackPlayer(PlayerPack *pPack, const Player &player, bool manashield)
 	pPack->plrlevel = player.plrlevel;
 	pPack->px = player.position.tile.x;
 	pPack->py = player.position.tile.y;
-	if (gbVanilla) {
-		pPack->targx = player.position.tile.x;
-		pPack->targy = player.position.tile.y;
-	}
 	strcpy(pPack->pName, player._pName);
 	pPack->pClass = static_cast<int8_t>(player._pClass);
 	pPack->pBaseStr = player._pBaseStr;

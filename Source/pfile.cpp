@@ -245,10 +245,8 @@ void pfile_write_hero(bool writeGameData, bool clearTables)
 
 	PackPlayer(&pkplr, myPlayer, true);
 	EncodeHero(&pkplr);
-	if (!gbVanilla) {
-		SaveHotkeys();
-		SaveHeroItems(myPlayer);
-	}
+	SaveHotkeys();
+	SaveHeroItems(myPlayer);
 }
 
 bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *))
@@ -322,10 +320,8 @@ bool pfile_ui_save_create(_uiheroinfo *heroinfo)
 	PackPlayer(&pkplr, player, true);
 	EncodeHero(&pkplr);
 	Game2UiPlayer(player, heroinfo, false);
-	if (!gbVanilla) {
-		SaveHotkeys();
-		SaveHeroItems(player);
-	}
+	SaveHotkeys();
+	SaveHeroItems(player);
 
 	mpqapi_flush_and_close(true);
 	return true;

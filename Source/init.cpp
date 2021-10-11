@@ -29,8 +29,6 @@ WNDPROC CurrentProc;
 HANDLE diabdat_mpq;
 /** A handle to the patch_rt.mpq archive. */
 HANDLE patch_rt_mpq;
-/** Indicate if we want vanilla savefiles */
-bool gbVanilla;
 HANDLE hfmonk_mpq;
 HANDLE hfbard_mpq;
 HANDLE hfbarb_mpq;
