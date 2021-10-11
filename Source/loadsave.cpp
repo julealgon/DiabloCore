@@ -1359,20 +1359,7 @@ const int ItemSaveSize = 372;
 
 bool IsHeaderValid(uint32_t magicNumber)
 {
-	if (magicNumber == LoadLE32("SHAR")) {
-		return true;
-	}
-	if (magicNumber == LoadLE32("SHLF")) {
-		return true;
-	}
-	if (magicNumber == LoadLE32("RETL")) {
-		return true;
-	}
-	if (magicNumber == LoadLE32("HELF")) {
-		return true;
-	}
-
-	return false;
+	return magicNumber == LoadLE32("HELF");
 }
 
 void LoadHotkeys()
