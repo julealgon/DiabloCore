@@ -1206,7 +1206,7 @@ bool PlayerMHit(int pnum, Monster *monster, int dist, Damage damage, missile_id 
 		dam = std::max(dam, 64);
 	}
 
-	if ((resper <= 0 || gbIsHellfire) && blk < blkper) {
+	if (blk < blkper) {
 		Direction dir = player._pdir;
 		if (monster != nullptr) {
 			dir = GetDirection(player.position.tile, monster->position.tile);
