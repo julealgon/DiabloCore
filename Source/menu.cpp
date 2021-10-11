@@ -26,7 +26,7 @@ void RefreshMusic()
 
 	do {
 		menu_music_track_id++;
-		if (menu_music_track_id == NUM_MUSIC || (!gbIsHellfire && menu_music_track_id > TMUSIC_L4))
+		if (menu_music_track_id == NUM_MUSIC)
 			menu_music_track_id = TMUSIC_L2;
 	} while (menu_music_track_id == TMUSIC_TOWN || menu_music_track_id == TMUSIC_L1);
 }
