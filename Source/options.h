@@ -9,9 +9,6 @@ namespace devilution {
 struct DiabloOptions {
 	/** @brief Play game intro video on startup. */
 	bool bIntro;
-};
-
-struct HellfireOptions {
 	/** @brief Cornerstone of the world item. */
 	char szItem[sizeof(ItemPack) * 2 + 1];
 };
@@ -130,7 +127,6 @@ struct ChatOptions {
 
 struct Options {
 	DiabloOptions Diablo;
-	HellfireOptions Hellfire;
 	AudioOptions Audio;
 	GameplayOptions Gameplay;
 	GraphicsOptions Graphics;
