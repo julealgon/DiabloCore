@@ -801,18 +801,6 @@ void LoadMatchingItems(LoadHelper &file, const int n, Item *pItem)
 	}
 }
 
-void RemoveEmptyLevelItems()
-{
-	for (int i = ActiveItemCount; i > 0; i--) {
-		int ii = ActiveItems[i];
-		auto &item = Items[ii];
-		if (item.isEmpty()) {
-			dItem[item.position.x][item.position.y] = 0;
-			DeleteItem(ii, i);
-		}
-	}
-}
-
 void SaveItem(SaveHelper &file, const Item &item)
 {
 	auto idx = item.IDidx;
