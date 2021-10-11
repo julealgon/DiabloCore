@@ -13,7 +13,6 @@ extern bool gbActive;
 extern HANDLE hellfire_mpq;
 extern WNDPROC CurrentProc;
 extern HANDLE diabdat_mpq;
-extern bool gbIsHellfire;
 extern bool gbVanilla;
 extern HANDLE patch_rt_mpq;
 extern HANDLE hfmonk_mpq;

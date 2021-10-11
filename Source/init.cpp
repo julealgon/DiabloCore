@@ -29,8 +29,6 @@ WNDPROC CurrentProc;
 HANDLE diabdat_mpq;
 /** A handle to the patch_rt.mpq archive. */
 HANDLE patch_rt_mpq;
-/** Indicate if we have loaded the Hellfire expansion data */
-bool gbIsHellfire;
 /** Indicate if we want vanilla savefiles */
 bool gbVanilla;
 HANDLE hfmonk_mpq;
@@ -163,8 +161,6 @@ void init_archives()
 		patch_rt_mpq = LoadMPQ(paths, "patch_sh.mpq");
 
 	hellfire_mpq = LoadMPQ(paths, "hellfire.mpq");
-	if (hellfire_mpq != nullptr)
-		gbIsHellfire = true;
 	hfmonk_mpq = LoadMPQ(paths, "hfmonk.mpq");
 	hfbard_mpq = LoadMPQ(paths, "hfbard.mpq");
 	if (hfbard_mpq != nullptr)

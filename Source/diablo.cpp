@@ -111,7 +111,6 @@ namespace {
 char gszVersionNumber[64] = "internal version unknown";
 
 bool gbGameLoopStartup;
-bool forceDiablo;
 int sgnTimeoutCurs;
 bool gbShowIntro = true;
 /** To know if these things have been done when we get to the diablo_deinit() function */
@@ -742,7 +741,6 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
 	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
 	printInConsole("%s", "\nHellfire options:\n");
-	printInConsole("    %-20s %-30s\n", "--diablo", "Force diablo mode even if hellfire.mpq is found");
 	printInConsole("    %-20s %-30s\n", "--nestart", "Use alternate nest palette");
 #ifdef _DEBUG
 	printInConsole("\nDebug options:\n");
@@ -784,8 +782,6 @@ void DiabloParseFlags(int argc, char **argv)
 			EnableFrameCount();
 		} else if (strcasecmp("-x", argv[i]) == 0) {
 			gbForceWindowed = true;
-		} else if (strcasecmp("--diablo", argv[i]) == 0) {
-			forceDiablo = true;
 		} else if (strcasecmp("--nestart", argv[i]) == 0) {
 			gbNestArt = true;
 		} else if (strcasecmp("--vanilla", argv[i]) == 0) {
@@ -845,9 +841,6 @@ void DiabloInit()
 	SFileEnableDirectAccess(true);
 	init_archives();
 	was_archives_init = true;
-
-	if (forceDiablo)
-		gbIsHellfire = false;
 
 	SetApplicationVersions();
 
