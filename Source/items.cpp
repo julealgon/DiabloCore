@@ -4068,22 +4068,12 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		break;
 	case IMISC_ELIXMAG:
 		ModifyPlrMag(p, 1);
-		if (gbIsHellfire) {
-			player._pMana = player._pMaxMana;
-			player._pManaBase = player._pMaxManaBase;
-			drawmanaflag = true;
-		}
 		break;
 	case IMISC_ELIXDEX:
 		ModifyPlrDex(p, 1);
 		break;
 	case IMISC_ELIXVIT:
 		ModifyPlrVit(p, 1);
-		if (gbIsHellfire) {
-			player._pHitPoints = player._pMaxHP;
-			player._pHPBase = player._pMaxHPBase;
-			drawhpflag = true;
-		}
 		break;
 	case IMISC_REJUV: {
 		int j = player._pMaxHP >> 8;
