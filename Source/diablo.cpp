@@ -79,7 +79,6 @@ bool cineflag;
 int force_redraw;
 int PauseMode;
 bool gbNestArt;
-bool gbBard;
 bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;

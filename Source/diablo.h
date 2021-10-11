@@ -69,7 +69,6 @@ extern bool was_fonts_init;
 extern void FontsCleanup();
 extern int PauseMode;
 extern bool gbNestArt;
-extern bool gbBard;
 /**
  * @brief Don't show Messageboxes or other user-interaction. Needed for UnitTests.
  */

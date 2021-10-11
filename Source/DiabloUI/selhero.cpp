@@ -164,7 +164,7 @@ void SelheroListSelect(int value)
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Rogue", static_cast<int>(HeroClass::Rogue)));
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Sorcerer", static_cast<int>(HeroClass::Sorcerer)));
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Monk", static_cast<int>(HeroClass::Monk)));
-		if (gbBard || sgOptions.Gameplay.bTestBard) {
+		if (sgOptions.Gameplay.bTestBard) {
 			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Bard", static_cast<int>(HeroClass::Bard)));
 		}
 		if (sgOptions.Gameplay.bTestBarbarian) {

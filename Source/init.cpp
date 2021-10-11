@@ -161,8 +161,6 @@ void init_archives()
 	hellfire_mpq = LoadMPQ(paths, "hellfire.mpq");
 	hfmonk_mpq = LoadMPQ(paths, "hfmonk.mpq");
 	hfbard_mpq = LoadMPQ(paths, "hfbard.mpq");
-	if (hfbard_mpq != nullptr)
-		gbBard = true;
 	hfbarb_mpq = LoadMPQ(paths, "hfbarb.mpq");
 	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
 	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
