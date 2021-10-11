@@ -1768,19 +1768,8 @@ void AddLArrow(Missile &missile, Point dst, Direction midir)
 		else if (player._pClass == AnyOf(HeroClass::Warrior, HeroClass::Bard))
 			av += (player._pLevel) / 8;
 
-		if (gbIsHellfire) {
-			if ((player._pIFlags & ISPL_QUICKATTACK) != 0)
-				av++;
-			if ((player._pIFlags & ISPL_FASTATTACK) != 0)
-				av += 2;
-			if ((player._pIFlags & ISPL_FASTERATTACK) != 0)
-				av += 4;
-			if ((player._pIFlags & ISPL_FASTESTATTACK) != 0)
-				av += 8;
-		} else {
-			if (player._pClass == AnyOf(HeroClass::Rogue, HeroClass::Warrior, HeroClass::Bard))
-				av -= 1;
-		}
+		if (player._pClass == AnyOf(HeroClass::Rogue, HeroClass::Warrior, HeroClass::Bard))
+			av -= 1;
 	}
 	UpdateMissileVelocity(missile, dst, av);
 
@@ -1807,17 +1796,6 @@ void AddArrow(Missile &missile, Point dst, Direction midir)
 			av += (player._pLevel - 1) / 4;
 		else if (player._pClass == HeroClass::Warrior || player._pClass == HeroClass::Bard)
 			av += (player._pLevel - 1) / 8;
-
-		if (gbIsHellfire) {
-			if ((player._pIFlags & ISPL_QUICKATTACK) != 0)
-				av++;
-			if ((player._pIFlags & ISPL_FASTATTACK) != 0)
-				av += 2;
-			if ((player._pIFlags & ISPL_FASTERATTACK) != 0)
-				av += 4;
-			if ((player._pIFlags & ISPL_FASTESTATTACK) != 0)
-				av += 8;
-		}
 	}
 	UpdateMissileVelocity(missile, dst, av);
 	missile._miAnimFrame = static_cast<int>(GetDirection16(missile.position.start, dst)) + 1;
