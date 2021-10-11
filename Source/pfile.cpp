@@ -359,21 +359,6 @@ void pfile_read_player_from_save(uint32_t saveNum, Player &player)
 	CalcPlrInv(player, false);
 }
 
-bool LevelFileExists()
-{
-	char szName[MAX_PATH];
-
-	GetPermLevelNames(szName);
-
-	uint32_t saveNum = gSaveNumber;
-	if (!OpenArchive(saveNum))
-		app_fatal("%s", "Unable to read to save file archive");
-
-	bool hasFile = mpqapi_has_file(szName);
-	mpqapi_flush_and_close(true);
-	return hasFile;
-}
-
 void GetTempLevelNames(char *szTemp)
 {
 	if (setlevel)
