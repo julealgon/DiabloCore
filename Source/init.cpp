@@ -164,8 +164,6 @@ void init_archives()
 	if (hfbard_mpq != nullptr)
 		gbBard = true;
 	hfbarb_mpq = LoadMPQ(paths, "hfbarb.mpq");
-	if (hfbarb_mpq != nullptr)
-		gbBarbarian = true;
 	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
 	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
 	hfopt1_mpq = LoadMPQ(paths, "hfopt1.mpq");

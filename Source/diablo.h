@@ -70,7 +70,6 @@ extern void FontsCleanup();
 extern int PauseMode;
 extern bool gbNestArt;
 extern bool gbBard;
-extern bool gbBarbarian;
 /**
  * @brief Don't show Messageboxes or other user-interaction. Needed for UnitTests.
  */
