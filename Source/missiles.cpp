@@ -467,7 +467,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        missile._mitype,
 			        shift,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
@@ -501,7 +501,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        shift,
 			        0,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
@@ -548,7 +548,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        shift,
 			        (missile._miAnimType == MFILE_FIREWAL || missile._miAnimType == MFILE_LGHNING) ? 1 : 0,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
