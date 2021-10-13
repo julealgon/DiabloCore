@@ -951,8 +951,8 @@ void InitControlPan()
 	spselflag = false;
 	pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
 
-	static const int SBkBtnHellfireWidths[] = { 0, 61, 61, 61, 61, 61, 76 };
-	pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", SBkBtnHellfireWidths);
+	static const int SBkBtnWidths[] = { 0, 61, 61, 61, 61, 61, 76 };
+	pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", SBkBtnWidths);
 	pSBkIconCels = LoadCel("Data\\SpellI2.CEL", 37);
 	sbooktab = 0;
 	sbookflag = false;
