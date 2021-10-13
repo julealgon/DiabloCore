@@ -30,12 +30,8 @@ HANDLE diabdat_mpq;
 /** A handle to the patch_rt.mpq archive. */
 HANDLE patch_rt_mpq;
 HANDLE hfmonk_mpq;
-HANDLE hfbard_mpq;
-HANDLE hfbarb_mpq;
 HANDLE hfmusic_mpq;
 HANDLE hfvoice_mpq;
-HANDLE hfopt1_mpq;
-HANDLE hfopt2_mpq;
 HANDLE devilutionx_mpq;
 
 namespace {
@@ -82,14 +78,6 @@ void init_cleanup()
 		SFileCloseArchive(hfmonk_mpq);
 		hfmonk_mpq = nullptr;
 	}
-	if (hfbard_mpq != nullptr) {
-		SFileCloseArchive(hfbard_mpq);
-		hfbard_mpq = nullptr;
-	}
-	if (hfbarb_mpq != nullptr) {
-		SFileCloseArchive(hfbarb_mpq);
-		hfbarb_mpq = nullptr;
-	}
 	if (hfmusic_mpq != nullptr) {
 		SFileCloseArchive(hfmusic_mpq);
 		hfmusic_mpq = nullptr;
@@ -97,14 +85,6 @@ void init_cleanup()
 	if (hfvoice_mpq != nullptr) {
 		SFileCloseArchive(hfvoice_mpq);
 		hfvoice_mpq = nullptr;
-	}
-	if (hfopt1_mpq != nullptr) {
-		SFileCloseArchive(hfopt1_mpq);
-		hfopt1_mpq = nullptr;
-	}
-	if (hfopt2_mpq != nullptr) {
-		SFileCloseArchive(hfopt2_mpq);
-		hfopt2_mpq = nullptr;
 	}
 	if (devilutionx_mpq != nullptr) {
 		SFileCloseArchive(devilutionx_mpq);
@@ -160,12 +140,8 @@ void init_archives()
 
 	hellfire_mpq = LoadMPQ(paths, "hellfire.mpq");
 	hfmonk_mpq = LoadMPQ(paths, "hfmonk.mpq");
-	hfbard_mpq = LoadMPQ(paths, "hfbard.mpq");
-	hfbarb_mpq = LoadMPQ(paths, "hfbarb.mpq");
 	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
 	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
-	hfopt1_mpq = LoadMPQ(paths, "hfopt1.mpq");
-	hfopt2_mpq = LoadMPQ(paths, "hfopt2.mpq");
 
 	devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
 }

@@ -84,23 +84,11 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 	if (!result && devilutionx_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)devilutionx_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
-	if (!result && hfopt2_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)hfopt2_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
-	}
-	if (!result && hfopt1_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)hfopt1_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
-	}
 	if (!result && hfvoice_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)hfvoice_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
 	if (!result && hfmusic_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)hfmusic_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
-	}
-	if (!result && hfbarb_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)hfbarb_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
-	}
-	if (!result && hfbard_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)hfbard_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
 	if (!result && hfmonk_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)hfmonk_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
