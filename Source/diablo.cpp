@@ -738,7 +738,6 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-f", "Display frames per second");
 	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
 	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
-	printInConsole("%s", "\nHellfire options:\n");
 	printInConsole("    %-20s %-30s\n", "--nestart", "Use alternate nest palette");
 #ifdef _DEBUG
 	printInConsole("\nDebug options:\n");
