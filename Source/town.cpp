@@ -179,17 +179,15 @@ void DrlgTPass3()
 			FillTile(x, 78, GenerateRnd(4) + 1);
 		}
 	}
-	if (gbIsHellfire) {
-		if (IsWarpOpen(DTYPE_NEST)) {
-			TownOpenHive();
-		} else {
-			TownCloseHive();
-		}
-		if (IsWarpOpen(DTYPE_CRYPT))
-			TownOpenGrave();
-		else
-			TownCloseGrave();
+	if (IsWarpOpen(DTYPE_NEST)) {
+		TownOpenHive();
+	} else {
+		TownCloseHive();
 	}
+	if (IsWarpOpen(DTYPE_CRYPT))
+		TownOpenGrave();
+	else
+		TownCloseGrave();
 
 	if (Quests[Q_PWATER]._qactive != QUEST_DONE && Quests[Q_PWATER]._qactive != QUEST_NOTAVAIL) {
 		FillTile(60, 70, 342);

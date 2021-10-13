@@ -36,10 +36,8 @@ void MainmenuLoad(const char *name, void (*fnSound)(const char *file))
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Replay Intro", MAINMENU_REPLAY_INTRO));
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Support", MAINMENU_SHOW_SUPPORT));
 	vecMenuItems.push_back(std::make_unique<UiListItem>("Show Credits", MAINMENU_SHOW_CREDITS));
-	vecMenuItems.push_back(std::make_unique<UiListItem>(gbIsHellfire ? "Exit Hellfire" : "Exit Diablo", MAINMENU_EXIT_DIABLO));
+	vecMenuItems.push_back(std::make_unique<UiListItem>("Exit Diablo", MAINMENU_EXIT_DIABLO));
 
-	if (gbIsHellfire)
-		LoadArt("ui_art\\mainmenuw.pcx", &ArtBackgroundWidescreen);
 	LoadBackgroundArt("ui_art\\mainmenu.pcx");
 
 	UiAddBackground(&vecMainMenuDialog);

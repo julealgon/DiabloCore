@@ -190,7 +190,7 @@ std::string DebugCmdWarpToLevel(const std::string_view parameter)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	auto level = atoi(parameter.data());
-	if (level < 0 || level > (gbIsHellfire ? 24 : 16))
+	if (level < 0 || level > 24)
 		return fmt::format("Level {} is not known. Do you want to write a mod?", level);
 	if (!setlevel && myPlayer.plrlevel == level)
 		return fmt::format("I did nothing but fulfilled your wish. You are already at level {}.", level);
@@ -296,7 +296,7 @@ std::string DebugCmdResetLevel(const std::string_view parameter)
 	if (!std::getline(paramsStream, singleParameter, ' '))
 		return "What level do you want to visit?";
 	auto level = atoi(singleParameter.c_str());
-	if (level < 0 || level > (gbIsHellfire ? 24 : 16))
+	if (level < 0 || level > 24)
 		return fmt::format("Level {} is not known. Do you want to write an extension mod?", level);
 	myPlayer._pLvlVisited[level] = false;
 

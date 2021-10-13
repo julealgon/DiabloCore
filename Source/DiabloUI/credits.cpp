@@ -237,13 +237,8 @@ bool UiSupportDialog()
 	Text = SupportLines;
 	textLines = SupportLinesSize;
 
-	if (gbIsHellfire) {
-		LoadArt("ui_art\\supportw.pcx", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\support.pcx");
-	} else {
-		LoadArt("ui_art\\creditsw.pcx", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\credits.pcx");
-	}
+	LoadArt("ui_art\\supportw.pcx", &ArtBackgroundWidescreen);
+	LoadBackgroundArt("ui_art\\support.pcx");
 
 	return TextDialog();
 }

@@ -216,7 +216,7 @@ spell_id SpellPages[6][7] = {
 
 #define SPLICONLENGTH 56
 #define SPLROWICONLS 10
-#define SPLICONLAST (gbIsHellfire ? 52 : 43)
+#define SPLICONLAST 52
 
 void CalculatePanelAreas()
 {
@@ -908,10 +908,7 @@ void InitControlPan()
 
 	LoadCharPanel();
 
-	if (!gbIsHellfire)
-		pSpellCels = LoadCel("CtrlPan\\SpelIcon.CEL", SPLICONLENGTH);
-	else
-		pSpellCels = LoadCel("Data\\SpelIcon.CEL", SPLICONLENGTH);
+	pSpellCels = LoadCel("Data\\SpelIcon.CEL", SPLICONLENGTH);
 	SetSpellTrans(RSPLTYPE_SKILL);
 	CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
 	{
@@ -954,12 +951,8 @@ void InitControlPan()
 	spselflag = false;
 	pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
 
-	if (gbIsHellfire) {
-		static const int SBkBtnHellfireWidths[] = { 0, 61, 61, 61, 61, 61, 76 };
-		pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", SBkBtnHellfireWidths);
-	} else {
-		pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", 76);
-	}
+	static const int SBkBtnWidths[] = { 0, 61, 61, 61, 61, 61, 76 };
+	pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", SBkBtnWidths);
 	pSBkIconCels = LoadCel("Data\\SpellI2.CEL", 37);
 	sbooktab = 0;
 	sbookflag = false;
@@ -1499,7 +1492,7 @@ void RedBack(const Surface &out)
 void DrawSpellBook(const Surface &out)
 {
 	CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 0, 351 }), *pSpellBkCel, 1);
-	if (gbIsHellfire && sbooktab < 5) {
+	if (sbooktab < 5) {
 		CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 61 * sbooktab + 7, 348 }), *pSBkBtnCel, sbooktab + 1);
 	} else {
 		// BUGFIX: rendering of page 3 and page 4 buttons are both off-by-one pixel (fixed).
@@ -1583,7 +1576,7 @@ void CheckSBook()
 		}
 	}
 	if (tabArea.Contains(MousePosition)) {
-		sbooktab = (MousePosition.x - (RightPanel.position.x + 7)) / (gbIsHellfire ? 61 : 76);
+		sbooktab = (MousePosition.x - (RightPanel.position.x + 7)) / 61;
 	}
 }
 

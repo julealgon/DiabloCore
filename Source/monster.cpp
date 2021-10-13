@@ -162,11 +162,6 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 
 	monster.mLevel = monster.MData->mLevel;
 	monster._mmaxhp = (monster.MType->mMinHP + GenerateRnd(monster.MType->mMaxHP - monster.MType->mMinHP + 1)) << 6;
-	if (monster.MType->mtype == MT_DIABLO && !gbIsHellfire) {
-		monster._mmaxhp /= 2;
-		monster.mLevel -= 15;
-	}
-
 	monster._mmaxhp = std::max(monster._mmaxhp / 2, 64);
 
 	monster._mhitpoints = monster._mmaxhp;
@@ -659,8 +654,7 @@ void StartMonsterGotHit(int monsterId)
 	auto &monster = Monsters[monsterId];
 	if (monster.MType->mtype != MT_GOLEM) {
 		auto animationFlags = gGameLogicStep < GameLogicStep::ProcessMonsters ? AnimationDistributionFlags::ProcessAnimationPending : AnimationDistributionFlags::None;
-		int numSkippedFrames = (gbIsHellfire && monster.MType->mtype == MT_DIABLO) ? 4 : 0;
-		NewMonsterAnim(monster, MonsterGraphic::GotHit, monster._mdir, animationFlags, numSkippedFrames);
+		NewMonsterAnim(monster, MonsterGraphic::GotHit, monster._mdir, animationFlags, 0);
 		monster._mmode = MonsterMode::HitRecovery;
 	}
 	monster.position.offset = { 0, 0 };
@@ -1125,9 +1119,6 @@ void StartDeathFromMonster(int i, int mid)
 	M_FallenFear(monster.position.tile);
 	if (monster.MType->mtype >= MT_NACID && monster.MType->mtype <= MT_XACID)
 		AddMissile(monster.position.tile, { 0, 0 }, Direction::South, MIS_ACIDPUD, TARGET_PLAYERS, mid, monster._mint + 1, 0);
-
-	if (gbIsHellfire)
-		M_StartStand(killer, killer._mdir);
 }
 
 void StartFadein(Monster &monster, Direction md, bool backwards)
@@ -1377,8 +1368,6 @@ void MonsterAttackPlayer(int i, int pnum, int hit, Damage damage)
 	}
 	
 	if (player._pHitPoints >> 6 <= 0) {
-		if (gbIsHellfire)
-			M_StartStand(monster, monster._mdir);
 		return;
 	}
 	StartPlrHit(pnum, dam, false);
@@ -2284,20 +2273,14 @@ void ScavengerAi(int i)
 		if (dCorpse[monster.position.tile.x][monster.position.tile.y] != 0) {
 			StartEating(monster);
 			if ((monster._mFlags & MFLAG_NOHEAL) == 0) {
-				if (gbIsHellfire) {
-					int mMaxHP = monster._mmaxhp;
-					monster._mhitpoints += mMaxHP / 8;
-					if (monster._mhitpoints > monster._mmaxhp)
-						monster._mhitpoints = monster._mmaxhp;
-					if (monster._mgoalvar3 <= 0 || monster._mhitpoints == monster._mmaxhp)
-						dCorpse[monster.position.tile.x][monster.position.tile.y] = 0;
-				} else {
-					monster._mhitpoints += 64;
-				}
+				int mMaxHP = monster._mmaxhp;
+				monster._mhitpoints += mMaxHP / 8;
+				if (monster._mhitpoints > monster._mmaxhp)
+					monster._mhitpoints = monster._mmaxhp;
+				if (monster._mgoalvar3 <= 0 || monster._mhitpoints == monster._mmaxhp)
+					dCorpse[monster.position.tile.x][monster.position.tile.y] = 0;
 			}
 			int targetHealth = monster._mmaxhp;
-			if (!gbIsHellfire)
-				targetHealth = (monster._mmaxhp / 2) + (monster._mmaxhp / 4);
 			if (monster._mhitpoints >= targetHealth) {
 				monster._mgoal = MGOAL_NORMAL;
 				monster._mgoalvar1 = 0;
@@ -3524,10 +3507,6 @@ void InitMonsterGFX(int monst)
 
 	LevelMonsterTypes[monst].mMinHP = MonstersData[mtype].mMinHP;
 	LevelMonsterTypes[monst].mMaxHP = MonstersData[mtype].mMaxHP;
-	if (!gbIsHellfire && mtype == MT_DIABLO) {
-		LevelMonsterTypes[monst].mMinHP -= 2000;
-		LevelMonsterTypes[monst].mMaxHP -= 2000;
-	}
 	LevelMonsterTypes[monst].mAFNum = MonstersData[mtype].mAFNum;
 	LevelMonsterTypes[monst].MData = &MonstersData[mtype];
 
@@ -4406,10 +4385,6 @@ void PrintMonstHistory(int mt)
 	if (MonsterKillCounts[mt] >= 30) {
 		int minHP = MonstersData[mt].mMinHP;
 		int maxHP = MonstersData[mt].mMaxHP;
-		if (!gbIsHellfire && mt == MT_DIABLO) {
-			minHP -= 2000;
-			maxHP -= 2000;
-		}
 		minHP /= 2;
 		maxHP /= 2;
 		if (minHP < 1)

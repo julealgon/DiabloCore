@@ -123,11 +123,7 @@ void DrawHelp(const Surface &out)
 	DrawSTextHelp();
 	DrawQTextBack(out);
 
-	const char *title;
-	if (gbIsHellfire)
-		title = "Hellfire Help";
-	else
-		title = "Diablo Help";
+	const char *title = "Diablo Help";
 	PrintSString(out, 0, 2, title, UiFlags::ColorWhitegold | UiFlags::AlignCenter);
 
 	DrawSLine(out, 5);

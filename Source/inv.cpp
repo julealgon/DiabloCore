@@ -1418,8 +1418,6 @@ bool GoldAutoPlace(Player &player)
 			player.HoldItem._ivalue = player.InvList[i]._ivalue - MaxGold;
 			SetPlrHandGoldCurs(player.HoldItem);
 			player.InvList[i]._ivalue = MaxGold;
-			if (gbIsHellfire)
-				GetPlrHandSeed(&player.HoldItem);
 		} else {
 			player.HoldItem._ivalue = 0;
 			done = true;
@@ -1469,11 +1467,11 @@ bool GoldAutoPlaceInInventorySlot(Player &player, int slotIndex)
 	return true;
 }
 
-void CheckInvSwap(Player &player, BYTE bLoc, int idx, uint16_t wCI, int seed, bool bId, uint32_t dwBuff)
+void CheckInvSwap(Player &player, BYTE bLoc, int idx, uint16_t wCI, int seed, bool bId)
 {
 	auto &item = Items[MAXITEMS];
 	memset(&item, 0, sizeof(item));
-	RecreateItem(item, idx, wCI, seed, 0, (dwBuff & CF_HELLFIRE) != 0);
+	RecreateItem(item, idx, wCI, seed, 0);
 
 	player.HoldItem = item;
 
@@ -1777,7 +1775,7 @@ int SyncPutItem(Player &player, Point position, int idx, uint16_t icreateinfo, i
 	if (idx == IDI_EAR) {
 		RecreateEar(item, icreateinfo, iseed, id, dur, mdur, ch, mch, ivalue, ibuff);
 	} else {
-		RecreateItem(item, idx, icreateinfo, iseed, ivalue, (ibuff & CF_HELLFIRE) != 0);
+		RecreateItem(item, idx, icreateinfo, iseed, ivalue);
 		if (id != 0)
 			item._iIdentified = true;
 		item._iDurability = dur;

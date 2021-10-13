@@ -1358,7 +1358,7 @@ DWORD OnChangePlayerItems(TCmd *pCmd, int pnum)
 	if (gbBufferMsgs == 1)
 		SendPacket(pnum, p, sizeof(*p));
 	else if (pnum != MyPlayerId)
-		CheckInvSwap(player, p->bLoc, p->wIndx, p->wCI, p->dwSeed, p->bId != 0, p->dwBuff);
+		CheckInvSwap(player, p->bLoc, p->wIndx, p->wCI, p->dwSeed, p->bId != 0);
 
 	player.ReadySpellFromEquipment(bodyLocation);
 

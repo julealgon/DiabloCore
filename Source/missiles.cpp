@@ -228,15 +228,12 @@ bool MonsterMHit(int pnum, int m, Damage damage, int dist, missile_id t, bool sh
 	    || ((mor & RESIST_LIGHTNING) != 0 && mir == MISR_LIGHTNING))
 		resist = true;
 
-	if (gbIsHellfire && t == MIS_HBOLT && (monster.MType->mtype == MT_DIABLO || monster.MType->mtype == MT_BONEDEMN))
-		resist = true;
-
 	int hit = GenerateRnd(100);
 	int hper = 0;
 	if (pnum != -1) {
 		const auto &player = Players[pnum];
 		if (MissilesData[t].mType == 0) {
-			hper = player.GetRangedPiercingToHit();
+			hper = player.GetRangedToHit();
 			hper -= player.CalculateArmorPierce(monster.mArmorClass, false);
 			hper -= (dist * dist) / 2;
 		} else {
@@ -287,7 +284,7 @@ bool MonsterMHit(int pnum, int m, Damage damage, int dist, missile_id t, bool sh
 	if (pnum == MyPlayerId)
 		monster._mhitpoints -= dam;
 
-	if ((gbIsHellfire && (player._pIFlags & ISPL_NOHEALMON) != 0) || (!gbIsHellfire && (player._pIFlags & ISPL_FIRE_ARROWS) != 0))
+	if ((player._pIFlags & ISPL_NOHEALMON) != 0)
 		monster._mFlags |= MFLAG_NOHEAL;
 
 	if (monster._mhitpoints >> 6 <= 0) {
@@ -470,7 +467,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        missile._mitype,
 			        shift,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
@@ -504,7 +501,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        shift,
 			        0,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
@@ -551,7 +548,7 @@ void CheckMissileCol(Missile &missile, Damage damage, bool shift, Point position
 			        shift,
 			        (missile._miAnimType == MFILE_FIREWAL || missile._miAnimType == MFILE_LGHNING) ? 1 : 0,
 			        &blocked)) {
-				if (gbIsHellfire && blocked) {
+				if (blocked) {
 					int dir = missile._mimfnum + (GenerateRnd(2) != 0 ? 1 : -1);
 					int mAnimFAmt = MissileSpriteData[missile._miAnimType].animFAmt;
 					if (dir < 0)
@@ -1209,7 +1206,7 @@ bool PlayerMHit(int pnum, Monster *monster, int dist, Damage damage, missile_id 
 		dam = std::max(dam, 64);
 	}
 
-	if ((resper <= 0 || gbIsHellfire) && blk < blkper) {
+	if (blk < blkper) {
 		Direction dir = player._pdir;
 		if (monster != nullptr) {
 			dir = GetDirection(player.position.tile, monster->position.tile);
@@ -1771,19 +1768,8 @@ void AddLArrow(Missile &missile, Point dst, Direction midir)
 		else if (player._pClass == AnyOf(HeroClass::Warrior, HeroClass::Bard))
 			av += (player._pLevel) / 8;
 
-		if (gbIsHellfire) {
-			if ((player._pIFlags & ISPL_QUICKATTACK) != 0)
-				av++;
-			if ((player._pIFlags & ISPL_FASTATTACK) != 0)
-				av += 2;
-			if ((player._pIFlags & ISPL_FASTERATTACK) != 0)
-				av += 4;
-			if ((player._pIFlags & ISPL_FASTESTATTACK) != 0)
-				av += 8;
-		} else {
-			if (player._pClass == AnyOf(HeroClass::Rogue, HeroClass::Warrior, HeroClass::Bard))
-				av -= 1;
-		}
+		if (player._pClass == AnyOf(HeroClass::Rogue, HeroClass::Warrior, HeroClass::Bard))
+			av -= 1;
 	}
 	UpdateMissileVelocity(missile, dst, av);
 
@@ -1810,17 +1796,6 @@ void AddArrow(Missile &missile, Point dst, Direction midir)
 			av += (player._pLevel - 1) / 4;
 		else if (player._pClass == HeroClass::Warrior || player._pClass == HeroClass::Bard)
 			av += (player._pLevel - 1) / 8;
-
-		if (gbIsHellfire) {
-			if ((player._pIFlags & ISPL_QUICKATTACK) != 0)
-				av++;
-			if ((player._pIFlags & ISPL_FASTATTACK) != 0)
-				av += 2;
-			if ((player._pIFlags & ISPL_FASTERATTACK) != 0)
-				av += 4;
-			if ((player._pIFlags & ISPL_FASTESTATTACK) != 0)
-				av += 8;
-		}
 	}
 	UpdateMissileVelocity(missile, dst, av);
 	missile._miAnimFrame = static_cast<int>(GetDirection16(missile.position.start, dst)) + 1;
@@ -1914,10 +1889,7 @@ void AddMagmaball(Missile &missile, Point dst, Direction /*midir*/)
 	missile.position.traveled.deltaX += 3 * missile.position.velocity.deltaX;
 	missile.position.traveled.deltaY += 3 * missile.position.velocity.deltaY;
 	UpdateMissilePos(missile);
-	if (!gbIsHellfire || (missile.position.velocity.deltaX & 0xFFFF0000) != 0 || (missile.position.velocity.deltaY & 0xFFFF0000) != 0)
-		missile._mirange = 256;
-	else
-		missile._mirange = 1;
+	missile._mirange = 256;
 	missile.var1 = missile.position.start.x;
 	missile.var2 = missile.position.start.y;
 	missile._mlid = AddLight(missile.position.start, 8);
@@ -2306,10 +2278,7 @@ void AddAcid(Missile &missile, Point dst, Direction /*midir*/)
 {
 	UpdateMissileVelocity(missile, dst, 16);
 	SetMissDir(missile, GetDirection16(missile.position.start, dst));
-	if ((!gbIsHellfire && (missile.position.velocity.deltaX & 0xFFFF0000) != 0) || (missile.position.velocity.deltaY & 0xFFFF0000) != 0)
-		missile._mirange = 5 * (Monsters[missile._misource]._mint + 4);
-	else
-		missile._mirange = 1;
+	missile._mirange = 5 * (Monsters[missile._misource]._mint + 4);
 	missile._mlid = NO_LIGHT;
 	missile.var1 = missile.position.start.x;
 	missile.var2 = missile.position.start.y;
@@ -3799,7 +3768,7 @@ void MI_Apoca(Missile &missile)
 				continue;
 			if (nSolidTable[dPiece[k][j]])
 				continue;
-			if (gbIsHellfire && !LineClearMissile(missile.position.tile, { k, j }))
+			if (!LineClearMissile(missile.position.tile, { k, j }))
 				continue;
 			AddMissile({ k, j }, { k, j }, Players[id]._pdir, MIS_BOOM, TARGET_MONSTERS, id, missile._midam, 0);
 			exit = true;

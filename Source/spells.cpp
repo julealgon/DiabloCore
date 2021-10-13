@@ -139,7 +139,7 @@ int GetManaAmount(Player &player, spell_id sn)
 	ma = std::max(ma, 0);
 	ma <<= 6;
 
-	if (gbIsHellfire && player._pClass == HeroClass::Sorcerer) {
+	if (player._pClass == HeroClass::Sorcerer) {
 		ma /= 2;
 	} else if (player._pClass == HeroClass::Rogue || player._pClass == HeroClass::Monk || player._pClass == HeroClass::Bard) {
 		ma -= ma / 4;
@@ -330,26 +330,11 @@ void DoHealOther(int pnum, uint16_t rid)
 
 int GetSpellBookLevel(spell_id s)
 {
-	if (!gbIsHellfire) {
-		switch (s) {
-		case SPL_NOVA:
-		case SPL_APOCA:
-			return -1;
-		default:
-			if (s > SPL_LASTDIABLO)
-				return -1;
-			break;
-		}
-	}
-
 	return spelldata[s].sBookLvl;
 }
 
 int GetSpellStaffLevel(spell_id s)
 {
-	if (!gbIsHellfire && s > SPL_LASTDIABLO)
-		return -1;
-
 	return spelldata[s].sStaffLvl;
 }
 

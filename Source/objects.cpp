@@ -647,7 +647,7 @@ void AddChestTraps()
 					if (leveltype == DTYPE_CATACOMBS) {
 						Objects[oi]._oVar4 = GenerateRnd(2);
 					} else {
-						Objects[oi]._oVar4 = GenerateRnd(gbIsHellfire ? 6 : 3);
+						Objects[oi]._oVar4 = GenerateRnd(6);
 					}
 				}
 			}
@@ -1218,7 +1218,7 @@ void AddShrine(int i)
 
 	Objects[i]._oPreFlag = true;
 
-	int shrines = gbIsHellfire ? NumberOfShrineTypes : 26;
+	int shrines = NumberOfShrineTypes;
 
 	for (int j = 0; j < shrines; j++) {
 		slist[j] = currlevel >= shrinemin[j] && currlevel <= shrinemax[j];
@@ -2752,7 +2752,7 @@ bool OperateShrineEnchanted(int pnum)
 
 	int cnt = 0;
 	uint64_t spell = 1;
-	int maxSpells = gbIsHellfire ? MAX_SPELLS : 37;
+	int maxSpells = MAX_SPELLS;
 	uint64_t spells = player._pMemSpells;
 	for (int j = 0; j < maxSpells; j++) {
 		if ((spell & spells) != 0)
@@ -3673,7 +3673,7 @@ int FindValidShrine()
 	bool done = false;
 	int rv;
 	do {
-		rv = GenerateRnd(gbIsHellfire ? NumberOfShrineTypes : 26);
+		rv = GenerateRnd(NumberOfShrineTypes);
 		if (currlevel >= shrinemin[rv] && currlevel <= shrinemax[rv] && rv != ShrineThaumaturgic) {
 			done = true;
 		}

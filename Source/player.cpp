@@ -503,17 +503,10 @@ void StartRangeAttack(int pnum, Direction d, int cx, int cy)
 		return;
 	}
 
-	int skippedAnimationFrames = 0;
-	if (!gbIsHellfire) {
-		if ((player._pIFlags & ISPL_FASTATTACK) != 0) {
-			skippedAnimationFrames += 1;
-		}
-	}
-
 	auto animationFlags = AnimationDistributionFlags::ProcessAnimationPending;
 	if (player._pmode == PM_RATTACK)
 		animationFlags = static_cast<AnimationDistributionFlags>(animationFlags | AnimationDistributionFlags::RepeatedAction);
-	NewPlrAnim(player, player_graphic::Attack, d, player._pAFrames, 1, animationFlags, skippedAnimationFrames, player._pAFNum);
+	NewPlrAnim(player, player_graphic::Attack, d, player._pAFrames, 1, animationFlags, 0, player._pAFNum);
 
 	player._pmode = PM_RATTACK;
 	FixPlayerLocation(pnum, d);
@@ -899,7 +892,7 @@ bool PlrHitMonst(int pnum, int m)
 		hit = 0;
 	}
 
-	hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
+	hper += player.GetMeleeToHit() - player.CalculateArmorPierce(monster.mArmorClass, true);
 	hper = std::clamp(hper, 5, 95);
 
 	bool ret = false;
@@ -1827,10 +1820,7 @@ void ValidatePlayer()
 	int gt = 0;
 	for (int i = 0; i < myPlayer._pNumInv; i++) {
 		if (myPlayer.InvList[i]._itype == ItemType::Gold) {
-			int maxGold = GOLD_MAX_LIMIT;
-			if (gbIsHellfire) {
-				maxGold *= 2;
-			}
+			int maxGold = GOLD_MAX_LIMIT * 2;
 			if (myPlayer.InvList[i]._ivalue > maxGold) {
 				myPlayer.InvList[i]._ivalue = maxGold;
 			}
@@ -2090,9 +2080,9 @@ void LoadPlrGFX(Player &player, player_graphic graphic)
 	const char *szCel;
 
 	HeroClass c = player._pClass;
-	if (c == HeroClass::Bard && hfbard_mpq == nullptr) {
+	if (c == HeroClass::Bard) {
 		c = HeroClass::Rogue;
-	} else if (c == HeroClass::Barbarian && hfbarb_mpq == nullptr) {
+	} else if (c == HeroClass::Barbarian) {
 		c = HeroClass::Warrior;
 	}
 

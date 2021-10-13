@@ -32,8 +32,6 @@ std::string GetSavePath(uint32_t saveNum)
 {
 	std::string path = paths::PrefPath();
 	const char *ext = ".sv";
-	if (gbIsHellfire)
-		ext = ".hsv";
 
 	path.append("single_");
 
@@ -247,10 +245,8 @@ void pfile_write_hero(bool writeGameData, bool clearTables)
 
 	PackPlayer(&pkplr, myPlayer, true);
 	EncodeHero(&pkplr);
-	if (!gbVanilla) {
-		SaveHotkeys();
-		SaveHeroItems(myPlayer);
-	}
+	SaveHotkeys();
+	SaveHeroItems(myPlayer);
 }
 
 bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *))
@@ -266,8 +262,6 @@ bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *))
 				uihero.saveNumber = i;
 				strcpy(hero_names[i], pkplr.pName);
 				bool hasSaveGame = ArchiveContainsGame(archive);
-				if (hasSaveGame)
-					pkplr.bIsHellfire = gbIsHellfireSaveGame ? 1 : 0;
 
 				auto &player = Players[0];
 				UnPackPlayer(&pkplr, player, false);
@@ -326,10 +320,8 @@ bool pfile_ui_save_create(_uiheroinfo *heroinfo)
 	PackPlayer(&pkplr, player, true);
 	EncodeHero(&pkplr);
 	Game2UiPlayer(player, heroinfo, false);
-	if (!gbVanilla) {
-		SaveHotkeys();
-		SaveHeroItems(player);
-	}
+	SaveHotkeys();
+	SaveHeroItems(player);
 
 	mpqapi_flush_and_close(true);
 	return true;
@@ -357,8 +349,6 @@ void pfile_read_player_from_save(uint32_t saveNum, Player &player)
 		app_fatal("%s", "Unable to load character");
 
 	gbValidSaveFile = ArchiveContainsGame(archive);
-	if (gbValidSaveFile)
-		pkplr.bIsHellfire = gbIsHellfireSaveGame ? 1 : 0;
 
 	CloseArchive(&archive);
 
@@ -367,21 +357,6 @@ void pfile_read_player_from_save(uint32_t saveNum, Player &player)
 	LoadHeroItems(player);
 	RemoveEmptyInventory(player);
 	CalcPlrInv(player, false);
-}
-
-bool LevelFileExists()
-{
-	char szName[MAX_PATH];
-
-	GetPermLevelNames(szName);
-
-	uint32_t saveNum = gSaveNumber;
-	if (!OpenArchive(saveNum))
-		app_fatal("%s", "Unable to read to save file archive");
-
-	bool hasFile = mpqapi_has_file(szName);
-	mpqapi_flush_and_close(true);
-	return hasFile;
 }
 
 void GetTempLevelNames(char *szTemp)

@@ -162,12 +162,6 @@ enum icreateinfo_flag {
 	// clang-format on
 };
 
-enum icreateinfo_flag2 {
-	// clang-format off
-	CF_HELLFIRE = 1,
-	// clang-format on
-};
-
 // All item animation frames have this width.
 constexpr int ItemAnimWidth = 96;
 
@@ -404,8 +398,6 @@ extern CornerStoneStruct CornerStone;
 extern bool UniqueItemFlags[128];
 
 BYTE GetOutlineColor(const Item &item, bool checkReq);
-bool IsItemAvailable(int i);
-bool IsUniqueAvailable(int i);
 void InitItemGFX();
 void InitItems();
 void CalcPlrItemVals(Player &player, bool Loadgfx);
@@ -436,7 +428,7 @@ void SpawnItem(Monster &monster, Point position, bool sendmsg);
 void CreateRndItem(Point position, bool onlygood, bool sendmsg, bool delta);
 void CreateRndUseful(Point position, bool sendmsg);
 void CreateTypeItem(Point position, bool onlygood, ItemType itemType, int imisc, bool sendmsg, bool delta);
-void RecreateItem(Item &item, int idx, uint16_t icreateinfo, int iseed, int ivalue, bool isHellfire);
+void RecreateItem(Item &item, int idx, uint16_t icreateinfo, int iseed, int ivalue);
 void RecreateEar(Item &item, uint16_t ic, int iseed, int Id, int dur, int mdur, int ch, int mch, int ivalue, int ibuff);
 void CornerstoneSave();
 void CornerstoneLoad(Point position);

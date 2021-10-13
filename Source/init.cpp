@@ -29,17 +29,9 @@ WNDPROC CurrentProc;
 HANDLE diabdat_mpq;
 /** A handle to the patch_rt.mpq archive. */
 HANDLE patch_rt_mpq;
-/** Indicate if we have loaded the Hellfire expansion data */
-bool gbIsHellfire;
-/** Indicate if we want vanilla savefiles */
-bool gbVanilla;
 HANDLE hfmonk_mpq;
-HANDLE hfbard_mpq;
-HANDLE hfbarb_mpq;
 HANDLE hfmusic_mpq;
 HANDLE hfvoice_mpq;
-HANDLE hfopt1_mpq;
-HANDLE hfopt2_mpq;
 HANDLE devilutionx_mpq;
 
 namespace {
@@ -86,14 +78,6 @@ void init_cleanup()
 		SFileCloseArchive(hfmonk_mpq);
 		hfmonk_mpq = nullptr;
 	}
-	if (hfbard_mpq != nullptr) {
-		SFileCloseArchive(hfbard_mpq);
-		hfbard_mpq = nullptr;
-	}
-	if (hfbarb_mpq != nullptr) {
-		SFileCloseArchive(hfbarb_mpq);
-		hfbarb_mpq = nullptr;
-	}
 	if (hfmusic_mpq != nullptr) {
 		SFileCloseArchive(hfmusic_mpq);
 		hfmusic_mpq = nullptr;
@@ -101,14 +85,6 @@ void init_cleanup()
 	if (hfvoice_mpq != nullptr) {
 		SFileCloseArchive(hfvoice_mpq);
 		hfvoice_mpq = nullptr;
-	}
-	if (hfopt1_mpq != nullptr) {
-		SFileCloseArchive(hfopt1_mpq);
-		hfopt1_mpq = nullptr;
-	}
-	if (hfopt2_mpq != nullptr) {
-		SFileCloseArchive(hfopt2_mpq);
-		hfopt2_mpq = nullptr;
 	}
 	if (devilutionx_mpq != nullptr) {
 		SFileCloseArchive(devilutionx_mpq);
@@ -163,24 +139,9 @@ void init_archives()
 		patch_rt_mpq = LoadMPQ(paths, "patch_sh.mpq");
 
 	hellfire_mpq = LoadMPQ(paths, "hellfire.mpq");
-	if (hellfire_mpq != nullptr)
-		gbIsHellfire = true;
 	hfmonk_mpq = LoadMPQ(paths, "hfmonk.mpq");
-	hfbard_mpq = LoadMPQ(paths, "hfbard.mpq");
-	if (hfbard_mpq != nullptr)
-		gbBard = true;
-	hfbarb_mpq = LoadMPQ(paths, "hfbarb.mpq");
-	if (hfbarb_mpq != nullptr)
-		gbBarbarian = true;
 	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
 	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
-	hfopt1_mpq = LoadMPQ(paths, "hfopt1.mpq");
-	hfopt2_mpq = LoadMPQ(paths, "hfopt2.mpq");
-
-	if (gbIsHellfire && (hfmonk_mpq == nullptr || hfmusic_mpq == nullptr || hfvoice_mpq == nullptr)) {
-		UiErrorOkDialog("Some Hellfire MPQs are missing", "Not all Hellfire MPQs were found.\nPlease copy all the hf*.mpq files.");
-		app_fatal(nullptr);
-	}
 
 	devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
 }

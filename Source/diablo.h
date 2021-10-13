@@ -18,8 +18,6 @@
 
 namespace devilution {
 
-#define GAME_ID (gbIsHellfire ? LoadBE32("HRTL") : LoadBE32("DRTL"))
-
 #define NUMLEVELS 25
 
 enum clicktype : int8_t {
@@ -71,8 +69,6 @@ extern bool was_fonts_init;
 extern void FontsCleanup();
 extern int PauseMode;
 extern bool gbNestArt;
-extern bool gbBard;
-extern bool gbBarbarian;
 /**
  * @brief Don't show Messageboxes or other user-interaction. Needed for UnitTests.
  */

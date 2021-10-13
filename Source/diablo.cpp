@@ -79,8 +79,6 @@ bool cineflag;
 int force_redraw;
 int PauseMode;
 bool gbNestArt;
-bool gbBard;
-bool gbBarbarian;
 bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
@@ -111,7 +109,6 @@ namespace {
 char gszVersionNumber[64] = "internal version unknown";
 
 bool gbGameLoopStartup;
-bool forceDiablo;
 int sgnTimeoutCurs;
 bool gbShowIntro = true;
 /** To know if these things have been done when we get to the diablo_deinit() function */
@@ -741,8 +738,6 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-f", "Display frames per second");
 	printInConsole("    %-20s %-30s\n", "-x", "Run in windowed mode");
 	printInConsole("    %-20s %-30s\n", "--verbose", "Enable verbose logging");
-	printInConsole("%s", "\nHellfire options:\n");
-	printInConsole("    %-20s %-30s\n", "--diablo", "Force diablo mode even if hellfire.mpq is found");
 	printInConsole("    %-20s %-30s\n", "--nestart", "Use alternate nest palette");
 #ifdef _DEBUG
 	printInConsole("\nDebug options:\n");
@@ -784,12 +779,8 @@ void DiabloParseFlags(int argc, char **argv)
 			EnableFrameCount();
 		} else if (strcasecmp("-x", argv[i]) == 0) {
 			gbForceWindowed = true;
-		} else if (strcasecmp("--diablo", argv[i]) == 0) {
-			forceDiablo = true;
 		} else if (strcasecmp("--nestart", argv[i]) == 0) {
 			gbNestArt = true;
-		} else if (strcasecmp("--vanilla", argv[i]) == 0) {
-			gbVanilla = true;
 		} else if (strcasecmp("--verbose", argv[i]) == 0) {
 			SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
 #ifdef _DEBUG
@@ -846,11 +837,6 @@ void DiabloInit()
 	init_archives();
 	was_archives_init = true;
 
-	if (forceDiablo)
-		gbIsHellfire = false;
-
-	gbIsHellfireSaveGame = gbIsHellfire;
-
 	SetApplicationVersions();
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++) {
@@ -883,11 +869,7 @@ void DiabloSplash()
 
 	play_movie("gendata\\logo.smk", true);
 
-	if (gbIsHellfire && sgOptions.Hellfire.bIntro) {
-		play_movie("gendata\\Hellfire.smk", true);
-		sgOptions.Hellfire.bIntro = false;
-	}
-	if (!gbIsHellfire && sgOptions.Diablo.bIntro) {
+	if (sgOptions.Diablo.bIntro) {
 		play_movie("gendata\\diablo1.smk", true);
 		sgOptions.Diablo.bIntro = false;
 	}
@@ -924,15 +906,9 @@ void LoadLvlGFX()
 
 	switch (leveltype) {
 	case DTYPE_TOWN:
-		if (gbIsHellfire) {
-			pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("NLevels\\TownData\\Town.TIL");
-			pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
-		} else {
-			pDungeonCels = LoadFileInMem("Levels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("Levels\\TownData\\Town.TIL");
-			pLevelPieces = LoadFileInMem<uint16_t>("Levels\\TownData\\Town.MIN");
-		}
+		pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
+		pMegaTiles = LoadFileInMem<MegaTile>("NLevels\\TownData\\Town.TIL");
+		pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
 		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);
 		break;
 	case DTYPE_CATHEDRAL:
@@ -983,7 +959,7 @@ void LoadAllGFX()
 	IncProgress();
 	InitObjectGFX();
 	IncProgress();
-	InitMissileGFX(gbIsHellfire);
+	InitMissileGFX();
 	IncProgress();
 }
 
@@ -1755,7 +1731,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		} else {
 			IncProgress();
 			IncProgress();
-			InitMissileGFX(gbIsHellfire);
+			InitMissileGFX();
 			IncProgress();
 			IncProgress();
 		}
@@ -1846,7 +1822,7 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 		IncProgress();
 		InitMonsters();
 		IncProgress();
-		InitMissileGFX(gbIsHellfire);
+		InitMissileGFX();
 		IncProgress();
 		InitCorpses();
 		IncProgress();

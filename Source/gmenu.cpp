@@ -169,10 +169,7 @@ void gmenu_init_menu()
 	gmenu_current_option = nullptr;
 	sgCurrentMenuIdx = 0;
 	mouseNavigation = false;
-	if (gbIsHellfire)
-		sgpLogo = LoadCel("Data\\hf_logo3.CEL", 430);
-	else
-		sgpLogo = LoadCel("Data\\Diabsmal.CEL", 296);
+	sgpLogo = LoadCel("Data\\Diabsmal.CEL", 296);
 	PentSpin_cel = LoadCel("Data\\PentSpin.CEL", 48);
 	option_cel = LoadCel("Data\\option.CEL", 27);
 	optbar_cel = LoadCel("Data\\optbar.CEL", 287);
@@ -208,15 +205,7 @@ void gmenu_draw(const Surface &out)
 	if (sgpCurrentMenu != nullptr) {
 		if (gmenu_current_option != nullptr)
 			gmenu_current_option();
-		if (gbIsHellfire) {
-			const uint32_t ticks = SDL_GetTicks();
-			if ((int)(ticks - LogoAnim_tick) > 25) {
-				LogoAnim_frame++;
-				if (LogoAnim_frame > 16)
-					LogoAnim_frame = 1;
-				LogoAnim_tick = ticks;
-			}
-		}
+		
 		CelDrawTo(out, { (gnScreenWidth - sgpLogo->Width()) / 2, 102 + UI_OFFSET_Y }, *sgpLogo, LogoAnim_frame);
 		int y = 110 + UI_OFFSET_Y;
 		TMenuItem *i = sgpCurrentMenu;

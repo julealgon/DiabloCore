@@ -290,7 +290,6 @@ struct Player {
 	bool pBattleNet;
 	bool pManaShield;
 	uint8_t pDungMsgs2;
-	bool pOriginalCathedral;
 	uint16_t wReflections;
 	uint32_t pDamAcFlags;
 
@@ -421,18 +420,6 @@ struct Player {
 	}
 
 	/**
-	 * @brief Return player's melee to hit value, including armor piercing
-	 */
-	int GetMeleePiercingToHit() const
-	{
-		int hper = GetMeleeToHit();
-		//in hellfire armor piercing ignores % of enemy armor instead, no way to include it here
-		if (!gbIsHellfire)
-			hper += _pIEnAc;
-		return hper;
-	}
-
-	/**
 	 * @brief Return player's ranged to hit value
 	 */
 	int GetRangedToHit() const
@@ -442,15 +429,6 @@ struct Player {
 			hper += 20;
 		else if (_pClass == HeroClass::Warrior || _pClass == HeroClass::Bard)
 			hper += 10;
-		return hper;
-	}
-
-	int GetRangedPiercingToHit() const
-	{
-		int hper = GetRangedToHit();
-		//in hellfire armor piercing ignores % of enemy armor instead, no way to include it here
-		if (!gbIsHellfire)
-			hper += _pIEnAc;
 		return hper;
 	}
 
@@ -480,14 +458,14 @@ struct Player {
 	}
 
 	/**
-	 * @brief Return monster armor value after including player's armor piercing % (hellfire only)
+	 * @brief Return monster armor value after including player's armor piercing %
 	 * @param monsterArmor - monster armor before applying % armor pierce
 	 * @param isMelee - indicates if it's melee or ranged combat
 	 */
 	int CalculateArmorPierce(int monsterArmor, bool isMelee) const
 	{
 		int tmac = monsterArmor;
-		if (gbIsHellfire && _pIEnAc > 0) {
+		if (_pIEnAc > 0) {
 			int pIEnAc = _pIEnAc - 1;
 			if (pIEnAc > 0)
 				tmac >>= pIEnAc;

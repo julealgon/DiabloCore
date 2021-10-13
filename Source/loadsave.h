@@ -9,12 +9,8 @@
 
 namespace devilution {
 
-extern bool gbIsHellfireSaveGame;
 extern uint8_t giNumberOfLevels;
 
-void RemoveInvalidItem(Item &pItem);
-_item_indexes RemapItemIdxFromDiablo(_item_indexes i);
-_item_indexes RemapItemIdxToDiablo(_item_indexes i);
 bool IsHeaderValid(uint32_t magicNumber);
 void LoadHotkeys();
 void LoadHeroItems(Player &player);

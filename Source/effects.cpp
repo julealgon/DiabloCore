@@ -46,16 +46,16 @@ TSFX sgSFX[] = {
 	{ sfx_MISC,                  "Sfx\\Misc\\Swing.wav",        nullptr },// PS_SWING
 	{ sfx_MISC,                  "Sfx\\Misc\\Swing2.wav",       nullptr },// PS_SWING2
 	{ sfx_MISC,                  "Sfx\\Misc\\Dead.wav",         nullptr },// PS_DEAD
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Misc\\Sting1.wav",       nullptr },// IS_STING1
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Misc\\FBallBow.wav",     nullptr },// IS_FBALLBOW
+	{ sfx_MISC,                  "Sfx\\Misc\\Sting1.wav",       nullptr },// IS_STING1
+	{ sfx_MISC,                  "Sfx\\Misc\\FBallBow.wav",     nullptr },// IS_FBALLBOW
 	{ sfx_STREAM,                "Sfx\\Misc\\Questdon.wav",     nullptr },// IS_QUESTDN
 	{ sfx_MISC,                  "Sfx\\Items\\Armrfkd.wav",     nullptr },// IS_ARMRFKD
 	{ sfx_MISC,                  "Sfx\\Items\\Barlfire.wav",    nullptr },// IS_BARLFIRE
 	{ sfx_MISC,                  "Sfx\\Items\\Barrel.wav",      nullptr },// IS_BARREL
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\PodPop8.wav",     nullptr },// IS_POPPOP8
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\PodPop5.wav",     nullptr },// IS_POPPOP5
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\UrnPop3.wav",     nullptr },// IS_POPPOP3
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\UrnPop2.wav",     nullptr },// IS_POPPOP2
+	{ sfx_MISC,                  "Sfx\\Items\\PodPop8.wav",     nullptr },// IS_POPPOP8
+	{ sfx_MISC,                  "Sfx\\Items\\PodPop5.wav",     nullptr },// IS_POPPOP5
+	{ sfx_MISC,                  "Sfx\\Items\\UrnPop3.wav",     nullptr },// IS_POPPOP3
+	{ sfx_MISC,                  "Sfx\\Items\\UrnPop2.wav",     nullptr },// IS_POPPOP2
 	{ sfx_MISC,                  "Sfx\\Items\\Bhit.wav",        nullptr },// IS_BHIT
 	{ sfx_MISC,                  "Sfx\\Items\\Bhit1.wav",       nullptr },// IS_BHIT1
 	{ sfx_MISC,                  "Sfx\\Items\\Chest.wav",       nullptr },// IS_CHEST
@@ -163,7 +163,7 @@ TSFX sgSFX[] = {
 	{ sfx_MISC,                  "Sfx\\Misc\\Lning1.wav",       nullptr },// LS_LNING1
 	{ sfx_MISC,                  "Sfx\\Misc\\Ltning.wav",       nullptr },// LS_LTNING
 	{ sfx_MISC,                  "Sfx\\Misc\\Mshield.wav",      nullptr },// LS_MSHIELD
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Misc\\NestXpld.wav",     nullptr },// LS_NESTXPLD
+	{ sfx_MISC,                  "Sfx\\Misc\\NestXpld.wav",     nullptr },// LS_NESTXPLD
 	{ sfx_MISC,                  "Sfx\\Misc\\Nova.wav",         nullptr },// LS_NOVA
 	{ sfx_MISC,                  "Sfx\\Misc\\Portal.wav",       nullptr },// LS_PORTAL
 	{ sfx_MISC,                  "Sfx\\Misc\\Puddle.wav",       nullptr },// LS_PUDDLE
@@ -181,7 +181,7 @@ TSFX sgSFX[] = {
 	{ sfx_MISC,                  "Sfx\\Misc\\Vtheft.wav",       nullptr },// LS_VTHEFT
 	{ sfx_MISC,                  "Sfx\\Misc\\Wallloop.wav",     nullptr },// LS_WALLLOOP
 	{ sfx_MISC,                  "Sfx\\Misc\\Wallstrt.wav",     nullptr },// LS_WALLSTRT
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Misc\\LMag.wav",         nullptr },// LS_LMAG
+	{ sfx_MISC,                  "Sfx\\Misc\\LMag.wav",         nullptr },// LS_LMAG
 	{ sfx_STREAM,                "Sfx\\Towners\\Bmaid01.wav",   nullptr },// TSFX_BMAID1
 	{ sfx_STREAM,                "Sfx\\Towners\\Bmaid02.wav",   nullptr },// TSFX_BMAID2
 	{ sfx_STREAM,                "Sfx\\Towners\\Bmaid03.wav",   nullptr },// TSFX_BMAID3
@@ -286,8 +286,8 @@ TSFX sgSFX[] = {
 	{ sfx_MISC,                  "Sfx\\Towners\\Cow5.wav",      nullptr },// TSFX_COW5
 	{ sfx_MISC,                  "Sfx\\Towners\\Cow6.wav",      nullptr },// TSFX_COW6
 */
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Towners\\Cow7.wav",      nullptr },// TSFX_COW7
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Towners\\Cow8.wav",      nullptr },// TSFX_COW8
+	{ sfx_MISC,                  "Sfx\\Towners\\Cow7.wav",      nullptr },// TSFX_COW7
+	{ sfx_MISC,                  "Sfx\\Towners\\Cow8.wav",      nullptr },// TSFX_COW8
 	{ sfx_STREAM,                "Sfx\\Towners\\Deadguy2.wav",  nullptr },// TSFX_DEADGUY
 	{ sfx_STREAM,                "Sfx\\Towners\\Drunk01.wav",   nullptr },// TSFX_DRUNK1
 	{ sfx_STREAM,                "Sfx\\Towners\\Drunk02.wav",   nullptr },// TSFX_DRUNK2
@@ -1060,8 +1060,8 @@ TSFX sgSFX[] = {
 	{ sfx_STREAM,                "Sfx\\Hellfire\\Naratr9.wav",  nullptr },// PS_NARATR9
 	{ sfx_STREAM,                "Sfx\\Hellfire\\Naratr4.wav",  nullptr },// PS_NARATR4
 	{ sfx_STREAM,                "Sfx\\Hellfire\\TRADER1.wav",  nullptr },// TSFX_TRADER1
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\Cropen.wav",      nullptr },// IS_CROPEN
-	{ sfx_MISC | sfx_HELLFIRE,   "Sfx\\Items\\Crclos.wav",      nullptr },// IS_CRCLOS
+	{ sfx_MISC,                  "Sfx\\Items\\Cropen.wav",      nullptr },// IS_CROPEN
+	{ sfx_MISC,                  "Sfx\\Items\\Crclos.wav",      nullptr },// IS_CRCLOS
 	// clang-format on
 };
 
@@ -1164,10 +1164,6 @@ void PrivSoundInit(BYTE bLoadMask)
 		}
 
 		if ((sfx.bFlags & bLoadMask) == 0) {
-			continue;
-		}
-
-		if (!gbIsHellfire && (sfx.bFlags & sfx_HELLFIRE) != 0) {
 			continue;
 		}
 
