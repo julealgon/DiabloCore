@@ -234,10 +234,6 @@ void LoadOptions()
 	sgOptions.Gameplay.bShowMonsterType = GetIniBool("Game", "Show Monster Type", false);
 	sgOptions.Gameplay.bDisableCripplingShrines = GetIniBool("Game", "Disable Crippling Shrines", false);
 
-	GetIniValue("Network", "Bind Address", sgOptions.Network.szBindAddress, sizeof(sgOptions.Network.szBindAddress), "0.0.0.0");
-	sgOptions.Network.nPort = GetIniInt("Network", "Port", 6112);
-	GetIniValue("Network", "Previous Host", sgOptions.Network.szPreviousHost, sizeof(sgOptions.Network.szPreviousHost), "");
-
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		GetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i], MAX_SEND_STR_LEN, "");
 
@@ -297,10 +293,6 @@ void SaveOptions()
 	SetIniValue("Game", "Randomize Quests", sgOptions.Gameplay.bRandomizeQuests);
 	SetIniValue("Game", "Show Monster Type", sgOptions.Gameplay.bShowMonsterType);
 	SetIniValue("Game", "Disable Crippling Shrines", sgOptions.Gameplay.bDisableCripplingShrines);
-
-	SetIniValue("Network", "Bind Address", sgOptions.Network.szBindAddress);
-	SetIniValue("Network", "Port", sgOptions.Network.nPort);
-	SetIniValue("Network", "Previous Host", sgOptions.Network.szPreviousHost);
 
 	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
 		SetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i]);

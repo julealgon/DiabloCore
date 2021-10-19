@@ -111,15 +111,6 @@ struct GameplayOptions {
 	bool bDisableCripplingShrines;
 };
 
-struct NetworkOptions {
-	/** @brief Optionally bind to a specific network interface. */
-	char szBindAddress[129];
-	/** @brief Most recently entered Hostname in join dialog. */
-	char szPreviousHost[129];
-	/** @brief What network port to use. */
-	uint16_t nPort;
-};
-
 struct ChatOptions {
 	/** @brief Quick chat messages. */
 	char szHotKeyMsgs[QUICK_MESSAGE_OPTIONS][MAX_SEND_STR_LEN];
@@ -130,7 +121,6 @@ struct Options {
 	AudioOptions Audio;
 	GameplayOptions Gameplay;
 	GraphicsOptions Graphics;
-	NetworkOptions Network;
 	ChatOptions Chat;
 };
 
