@@ -77,8 +77,6 @@ struct GameplayOptions {
 	bool bGrabInput;
 	/** @brief Enable the Theo quest. */
 	bool bTheoQuest;
-	/** @brief Enable the cow quest. */
-	bool bCowQuest;
 	/** @brief Show enemy health at the top of the screen. */
 	bool bEnemyHealthBar;
 	/** @brief Automatically pick up gold when walking over it. */

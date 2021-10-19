@@ -776,9 +776,9 @@ bool IsTownerPresent(_talker_id npc)
 	case TOWN_DEADGUY:
 		return Quests[Q_BUTCHER]._qactive != QUEST_NOTAVAIL && Quests[Q_BUTCHER]._qactive != QUEST_DONE;
 	case TOWN_FARMER:
-		return sgGameInitInfo.bCowQuest == 0 && Quests[Q_FARMER]._qactive != QUEST_HIVE_DONE;
+		return Quests[Q_FARMER]._qactive != QUEST_HIVE_DONE;
 	case TOWN_COWFARM:
-		return sgGameInitInfo.bCowQuest != 0;
+		return false;
 	case TOWN_GIRL:
 		return sgGameInitInfo.bTheoQuest != 0 && Players->_pLvlVisited[17] && Quests[Q_GIRL]._qactive != QUEST_DONE;
 	default:

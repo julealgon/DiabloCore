@@ -953,8 +953,6 @@ void SpawnLoot(Monster &monster, bool sendmsg)
 	} else if (monster.MType->mtype == MT_HORKSPWN) {
 	} else if (monster.MType->mtype == MT_NAKRUL) {
 		int nSFX = IsUberRoomOpened ? USFX_NAKRUL4 : USFX_NAKRUL5;
-		if (sgGameInitInfo.bCowQuest != 0)
-			nSFX = USFX_NAKRUL6;
 		if (effect_is_playing(nSFX))
 			stream_stop();
 		Quests[Q_NAKRUL]._qlog = false;
@@ -4037,14 +4035,10 @@ void ProcessMonsters()
 				PlaySFX(USFX_CLEAVER);
 			}
 			if (monster.MType->mtype == MT_NAKRUL) {
-				if (sgGameInitInfo.bCowQuest != 0) {
-					PlaySFX(USFX_NAKRUL6);
-				} else {
-					if (IsUberRoomOpened)
-						PlaySFX(USFX_NAKRUL4);
-					else
-						PlaySFX(USFX_NAKRUL5);
-				}
+				if (IsUberRoomOpened)
+					PlaySFX(USFX_NAKRUL4);
+				else
+					PlaySFX(USFX_NAKRUL5);
 			}
 			if (monster.MType->mtype == MT_DEFILER)
 				PlaySFX(USFX_DEFILER8);
