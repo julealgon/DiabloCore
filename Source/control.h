@@ -52,7 +52,7 @@ extern Rectangle MainPanel;
 extern Rectangle LeftPanel;
 extern Rectangle RightPanel;
 extern std::optional<OwnedSurface> pBtmBuff;
-extern SDL_Rect PanBtnPos[8];
+extern SDL_Rect PanBtnPos[7];
 
 bool IsChatAvailable();
 /**

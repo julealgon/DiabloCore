@@ -218,7 +218,6 @@ void LoadOptions()
 	sgOptions.Gameplay.bGrabInput = GetIniBool("Game", "Grab Input", false);
 	sgOptions.Gameplay.bTheoQuest = GetIniBool("Game", "Theo Quest", false);
 	sgOptions.Gameplay.bCowQuest = GetIniBool("Game", "Cow Quest", false);
-	sgOptions.Gameplay.bFriendlyFire = GetIniBool("Game", "Friendly Fire", true);
 	sgOptions.Gameplay.bTestBard = GetIniBool("Game", "Test Bard", false);
 	sgOptions.Gameplay.bTestBarbarian = GetIniBool("Game", "Test Barbarian", false);
 	sgOptions.Gameplay.bEnemyHealthBar = GetIniBool("Game", "Enemy Health Bar", false);
@@ -271,7 +270,6 @@ void SaveOptions()
 	SetIniValue("Game", "Grab Input", sgOptions.Gameplay.bGrabInput);
 	SetIniValue("Game", "Theo Quest", sgOptions.Gameplay.bTheoQuest);
 	SetIniValue("Game", "Cow Quest", sgOptions.Gameplay.bCowQuest);
-	SetIniValue("Game", "Friendly Fire", sgOptions.Gameplay.bFriendlyFire);
 	SetIniValue("Game", "Test Bard", sgOptions.Gameplay.bTestBard);
 	SetIniValue("Game", "Test Barbarian", sgOptions.Gameplay.bTestBarbarian);
 	SetIniValue("Game", "Enemy Health Bar", sgOptions.Gameplay.bEnemyHealthBar);

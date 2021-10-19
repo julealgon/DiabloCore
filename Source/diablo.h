@@ -105,7 +105,6 @@ extern bool gbForceWindowed;
 extern bool DebugDisableNetworkTimeout;
 #endif
 
-extern bool gbFriendlyMode;
 /**
  * @brief Specifices what game logic step is currently executed
  */
