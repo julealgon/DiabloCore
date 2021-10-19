@@ -304,10 +304,8 @@ void InitQuests()
 		quest._qactive = QUEST_INIT;
 	}
 
-	if (sgOptions.Gameplay.bRandomizeQuests) {
-		// Quests are set from the seed used to generate level 16.
-		InitialiseQuestPools(glSeedTbl[15], Quests);
-	}
+	// Quests are set from the seed used to generate level 16.
+	InitialiseQuestPools(glSeedTbl[15], Quests);
 
 	if (Quests[Q_SKELKING]._qactive == QUEST_NOTAVAIL)
 		Quests[Q_SKELKING]._qvar2 = 2;

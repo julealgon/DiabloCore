@@ -103,8 +103,6 @@ struct GameplayOptions {
 	bool bAutoEquipShields;
 	/** @brief Automatically attempt to equip jewelry-type items when picking them up. */
 	bool bAutoEquipJewelry;
-	/** @brief Only enable 2/3 quests in each game session */
-	bool bRandomizeQuests;
 	/** @brief Indicates whether or not monster type (Animal, Demon, Undead) is shown along with other monster information. */
 	bool bShowMonsterType;
 };
