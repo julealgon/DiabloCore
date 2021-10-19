@@ -3440,11 +3440,6 @@ void SpawnRuneBomb(Point position)
 	SpawnRewardItem(IDI_RUNEBOMB, position);
 }
 
-void SpawnTheodore(Point position)
-{
-	SpawnRewardItem(IDI_THEODORE, position);
-}
-
 void RespawnItem(Item *item, bool flipFlag)
 {
 	int it = ItemCAnimTbl[item->_iCurs];

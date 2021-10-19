@@ -945,11 +945,7 @@ void SpawnLoot(Monster &monster, bool sendmsg)
 		Quests[Q_DEFILER]._qlog = false;
 		SpawnMapOfDoom(monster.position.tile);
 	} else if (monster._uniqtype - 1 == UMT_HORKDMN) {
-		if (sgGameInitInfo.bTheoQuest != 0) {
-			SpawnTheodore(monster.position.tile);
-		} else {
-			CreateAmulet(monster.position.tile, 13, false, true);
-		}
+		CreateAmulet(monster.position.tile, 13, false, true);
 	} else if (monster.MType->mtype == MT_HORKSPWN) {
 	} else if (monster.MType->mtype == MT_NAKRUL) {
 		int nSFX = IsUberRoomOpened ? USFX_NAKRUL4 : USFX_NAKRUL5;

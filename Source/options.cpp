@@ -216,7 +216,6 @@ void LoadOptions()
 	sgOptions.Gameplay.nTickRate = GetIniInt("Game", "Speed", 20);
 	sgOptions.Gameplay.bRunInTown = GetIniBool("Game", "Run in Town", false);
 	sgOptions.Gameplay.bGrabInput = GetIniBool("Game", "Grab Input", false);
-	sgOptions.Gameplay.bTheoQuest = GetIniBool("Game", "Theo Quest", false);
 	sgOptions.Gameplay.bEnemyHealthBar = GetIniBool("Game", "Enemy Health Bar", false);
 	sgOptions.Gameplay.bAutoGoldPickup = GetIniBool("Game", "Auto Gold Pickup", false);
 	sgOptions.Gameplay.bAutoEquipWeapons = GetIniBool("Game", "Auto Equip Weapons", true);
@@ -265,7 +264,6 @@ void SaveOptions()
 	SetIniValue("Game", "Speed", sgOptions.Gameplay.nTickRate);
 	SetIniValue("Game", "Run in Town", sgOptions.Gameplay.bRunInTown);
 	SetIniValue("Game", "Grab Input", sgOptions.Gameplay.bGrabInput);
-	SetIniValue("Game", "Theo Quest", sgOptions.Gameplay.bTheoQuest);
 	SetIniValue("Game", "Enemy Health Bar", sgOptions.Gameplay.bEnemyHealthBar);
 	SetIniValue("Game", "Auto Gold Pickup", sgOptions.Gameplay.bAutoGoldPickup);
 	SetIniValue("Game", "Auto Equip Weapons", sgOptions.Gameplay.bAutoEquipWeapons);

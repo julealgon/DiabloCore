@@ -75,8 +75,6 @@ struct GameplayOptions {
 	bool bRunInTown;
 	/** @brief Do not let the mouse leave the application window. */
 	bool bGrabInput;
-	/** @brief Enable the Theo quest. */
-	bool bTheoQuest;
 	/** @brief Show enemy health at the top of the screen. */
 	bool bEnemyHealthBar;
 	/** @brief Automatically pick up gold when walking over it. */

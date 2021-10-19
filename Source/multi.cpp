@@ -534,7 +534,6 @@ bool NetInit()
 		sgGameInitInfo.dwSeed = time(nullptr);
 		sgGameInitInfo.nTickRate = sgOptions.Gameplay.nTickRate;
 		sgGameInitInfo.bRunInTown = sgOptions.Gameplay.bRunInTown ? 1 : 0;
-		sgGameInitInfo.bTheoQuest = sgOptions.Gameplay.bTheoQuest ? 1 : 0;
 		memset(sgbPlayerTurnBitTbl, 0, sizeof(sgbPlayerTurnBitTbl));
 		gbGameDestroyed = false;
 		memset(sgbPlayerLeftGameTbl, 0, sizeof(sgbPlayerLeftGameTbl));
