@@ -111,17 +111,11 @@ struct GameplayOptions {
 	bool bDisableCripplingShrines;
 };
 
-struct ChatOptions {
-	/** @brief Quick chat messages. */
-	char szHotKeyMsgs[QUICK_MESSAGE_OPTIONS][MAX_SEND_STR_LEN];
-};
-
 struct Options {
 	DiabloOptions Diablo;
 	AudioOptions Audio;
 	GameplayOptions Gameplay;
 	GraphicsOptions Graphics;
-	ChatOptions Chat;
 };
 
 bool GetIniValue(const char *sectionName, const char *keyName, char *string, int stringSize, const char *defaultString = "");

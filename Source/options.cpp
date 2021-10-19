@@ -234,9 +234,6 @@ void LoadOptions()
 	sgOptions.Gameplay.bShowMonsterType = GetIniBool("Game", "Show Monster Type", false);
 	sgOptions.Gameplay.bDisableCripplingShrines = GetIniBool("Game", "Disable Crippling Shrines", false);
 
-	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
-		GetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i], MAX_SEND_STR_LEN, "");
-
 	keymapper.Load();
 
 	sbWasOptionsLoaded = true;
@@ -293,9 +290,6 @@ void SaveOptions()
 	SetIniValue("Game", "Randomize Quests", sgOptions.Gameplay.bRandomizeQuests);
 	SetIniValue("Game", "Show Monster Type", sgOptions.Gameplay.bShowMonsterType);
 	SetIniValue("Game", "Disable Crippling Shrines", sgOptions.Gameplay.bDisableCripplingShrines);
-
-	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++)
-		SetIniValue("NetMsg", QuickMessages[i].key, sgOptions.Chat.szHotKeyMsgs[i]);
 
 	keymapper.Save();
 

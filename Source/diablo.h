@@ -105,15 +105,6 @@ extern bool gbForceWindowed;
 extern bool DebugDisableNetworkTimeout;
 #endif
 
-struct QuickMessage {
-	/** Config variable names for quick message */
-	const char *const key;
-	/** Default quick message */
-	const char *const message;
-};
-
-constexpr size_t QUICK_MESSAGE_OPTIONS = 4;
-extern QuickMessage QuickMessages[QUICK_MESSAGE_OPTIONS];
 extern bool gbFriendlyMode;
 /**
  * @brief Specifices what game logic step is currently executed

@@ -94,12 +94,6 @@ std::vector<std::string> DebugCmdsFromCommandLine;
 /** Specifies whether players are in non-PvP mode. */
 bool gbFriendlyMode = true;
 GameLogicStep gGameLogicStep = GameLogicStep::None;
-QuickMessage QuickMessages[QUICK_MESSAGE_OPTIONS] = {
-	{ "QuickMessage1", "I need help! Come Here!" },
-	{ "QuickMessage2", "Follow me." },
-	{ "QuickMessage3", "Here's something for you." },
-	{ "QuickMessage4", "Now you DIE!" }
-};
 
 /** This and the following mouse variables are for handling in-game click-and-hold actions */
 MouseActionType LastMouseButtonAction = MouseActionType::None;
@@ -361,14 +355,6 @@ void RightMouseDown()
 	}
 }
 
-bool PressSysKey(int wParam)
-{
-	if (gmenu_is_active() || wParam != DVL_VK_F10)
-		return false;
-	DiabloHotkeyMsg(1);
-	return true;
-}
-
 void ReleaseKey(int vkey)
 {
 	if (vkey == DVL_VK_SNAPSHOT)
@@ -569,10 +555,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 	case DVL_WM_CHAR:
 		PressChar((char)wParam);
 		return;
-	case DVL_WM_SYSKEYDOWN:
-		if (PressSysKey(wParam))
-			return;
-		break;
 	case DVL_WM_SYSCOMMAND:
 		if (wParam == DVL_SC_CLOSE) {
 			gbRunGame = false;
@@ -838,13 +820,6 @@ void DiabloInit()
 	was_archives_init = true;
 
 	SetApplicationVersions();
-
-	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++) {
-		if (strlen(sgOptions.Chat.szHotKeyMsgs[i]) != 0) {
-			continue;
-		}
-		strncpy(sgOptions.Chat.szHotKeyMsgs[i], QuickMessages[i].message, MAX_SEND_STR_LEN);
-	}
 
 	UiInitialize();
 	was_ui_init = true;
@@ -1253,13 +1228,7 @@ void InitKeymapActions()
 		    [&]() { return !IsPlayerDead(); },
 		});
 	}
-	for (int i = 0; i < 4; ++i) {
-		keymapper.AddAction({
-		    QuickMessages[i].key,
-		    DVL_VK_F9 + i,
-		    [i]() { DiabloHotkeyMsg(i); },
-		});
-	}
+
 	keymapper.AddAction({
 	    "DecreaseGamma",
 	    'G',
