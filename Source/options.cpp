@@ -204,7 +204,6 @@ void LoadOptions()
 	GetIniValue("Graphics", "Scaling Quality", sgOptions.Graphics.szScaleQuality, sizeof(sgOptions.Graphics.szScaleQuality), "2");
 	sgOptions.Graphics.bIntegerScaling = GetIniBool("Graphics", "Integer Scaling", false);
 	sgOptions.Graphics.bVSync = GetIniBool("Graphics", "Vertical Sync", true);
-	sgOptions.Graphics.bBlendedTransparancy = GetIniBool("Graphics", "Blended Transparency", true);
 	sgOptions.Graphics.nGammaCorrection = GetIniInt("Graphics", "Gamma Correction", 100);
 	sgOptions.Graphics.bHardwareCursor = GetIniBool("Graphics", "Hardware Cursor", HardwareCursorDefault());
 	sgOptions.Graphics.bHardwareCursorForItems = GetIniBool("Graphics", "Hardware Cursor For Items", false);
@@ -251,7 +250,6 @@ void SaveOptions()
 	SetIniValue("Graphics", "Scaling Quality", sgOptions.Graphics.szScaleQuality);
 	SetIniValue("Graphics", "Integer Scaling", sgOptions.Graphics.bIntegerScaling);
 	SetIniValue("Graphics", "Vertical Sync", sgOptions.Graphics.bVSync);
-	SetIniValue("Graphics", "Blended Transparency", sgOptions.Graphics.bBlendedTransparancy);
 	SetIniValue("Graphics", "Gamma Correction", sgOptions.Graphics.nGammaCorrection);
 	SetIniValue("Graphics", "Hardware Cursor", sgOptions.Graphics.bHardwareCursor);
 	SetIniValue("Graphics", "Hardware Cursor For Items", sgOptions.Graphics.bHardwareCursorForItems);

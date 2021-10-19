@@ -33,20 +33,6 @@ void DrawHalfTransparentBlendedRectTo(const Surface &out, int sx, int sy, int wi
 		pix += out.pitch() - width;
 	}
 }
-
-void DrawHalfTransparentStippledRectTo(const Surface &out, int sx, int sy, int width, int height)
-{
-	BYTE *pix = out.at(sx, sy);
-
-	for (int row = 0; row < height; row++) {
-		for (int col = 0; col < width; col++) {
-			if (((row & 1) != 0 && (col & 1) != 0) || ((row & 1) == 0 && (col & 1) == 0))
-				*pix = 0;
-			pix++;
-		}
-		pix += out.pitch() - width;
-	}
-}
 } // namespace
 
 void DrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t colorIndex)
@@ -115,11 +101,7 @@ void DrawHalfTransparentRectTo(const Surface &out, int sx, int sy, int width, in
 		height = out.h() - sy;
 	}
 
-	if (sgOptions.Graphics.bBlendedTransparancy) {
-		DrawHalfTransparentBlendedRectTo(out, sx, sy, width, height);
-	} else {
-		DrawHalfTransparentStippledRectTo(out, sx, sy, width, height);
-	}
+	DrawHalfTransparentBlendedRectTo(out, sx, sy, width, height);
 }
 
 /**

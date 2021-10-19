@@ -50,8 +50,6 @@ struct GraphicsOptions {
 	bool bIntegerScaling;
 	/** @brief Enable vsync on the output. */
 	bool bVSync;
-	/** @brief Use blended transparency rather than stippled. */
-	bool bBlendedTransparancy;
 	/** @brief Gamma correction level. */
 	int nGammaCorrection;
 	/** @brief Use a hardware cursor (SDL2 only). */
