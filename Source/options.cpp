@@ -221,7 +221,6 @@ void LoadOptions()
 	sgOptions.Gameplay.bFriendlyFire = GetIniBool("Game", "Friendly Fire", true);
 	sgOptions.Gameplay.bTestBard = GetIniBool("Game", "Test Bard", false);
 	sgOptions.Gameplay.bTestBarbarian = GetIniBool("Game", "Test Barbarian", false);
-	sgOptions.Gameplay.bExperienceBar = GetIniBool("Game", "Experience Bar", false);
 	sgOptions.Gameplay.bEnemyHealthBar = GetIniBool("Game", "Enemy Health Bar", false);
 	sgOptions.Gameplay.bAutoGoldPickup = GetIniBool("Game", "Auto Gold Pickup", false);
 	sgOptions.Gameplay.bAutoEquipWeapons = GetIniBool("Game", "Auto Equip Weapons", true);
@@ -275,7 +274,6 @@ void SaveOptions()
 	SetIniValue("Game", "Friendly Fire", sgOptions.Gameplay.bFriendlyFire);
 	SetIniValue("Game", "Test Bard", sgOptions.Gameplay.bTestBard);
 	SetIniValue("Game", "Test Barbarian", sgOptions.Gameplay.bTestBarbarian);
-	SetIniValue("Game", "Experience Bar", sgOptions.Gameplay.bExperienceBar);
 	SetIniValue("Game", "Enemy Health Bar", sgOptions.Gameplay.bEnemyHealthBar);
 	SetIniValue("Game", "Auto Gold Pickup", sgOptions.Gameplay.bAutoGoldPickup);
 	SetIniValue("Game", "Auto Equip Weapons", sgOptions.Gameplay.bAutoEquipWeapons);

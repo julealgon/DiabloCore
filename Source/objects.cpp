@@ -3267,8 +3267,7 @@ bool OperateShrineGlowing(int pnum)
 	else
 		myPlayer._pExperience = 0;
 
-	if (sgOptions.Gameplay.bExperienceBar)
-		force_redraw = 255;
+	force_redraw = 255;
 
 	CheckStats(Players[pnum]);
 

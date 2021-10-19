@@ -48,14 +48,12 @@ void DrawEndCap(const Surface &out, Point point, int idx, const ColorGradient &g
 
 void InitXPBar()
 {
-	if (sgOptions.Gameplay.bExperienceBar) {
-		LoadMaskedArt("data\\xpbar.pcx", &xpbarArt, 1, 1);
+	LoadMaskedArt("data\\xpbar.pcx", &xpbarArt, 1, 1);
 
-		if (xpbarArt.surface == nullptr) {
-			app_fatal("%s", "Failed to load UI resources.\n"
-			                  "\n"
-			                  "Make sure devilutionx.mpq is in the game folder and that it is up to date.");
-		}
+	if (xpbarArt.surface == nullptr) {
+		app_fatal("%s", "Failed to load UI resources.\n"
+			                "\n"
+			                "Make sure devilutionx.mpq is in the game folder and that it is up to date.");
 	}
 }
 
@@ -66,7 +64,7 @@ void FreeXPBar()
 
 void DrawXPBar(const Surface &out)
 {
-	if (!sgOptions.Gameplay.bExperienceBar || talkflag)
+	if (talkflag)
 		return;
 
 	const auto &player = Players[MyPlayerId];
@@ -108,9 +106,6 @@ void DrawXPBar(const Surface &out)
 
 bool CheckXPBarInfo()
 {
-	if (!sgOptions.Gameplay.bExperienceBar)
-		return false;
-
 	const int backX = PANEL_LEFT + PANEL_WIDTH / 2 - 155;
 	const int backY = PANEL_TOP + PANEL_HEIGHT - 11;
 

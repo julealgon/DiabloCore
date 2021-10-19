@@ -85,8 +85,6 @@ struct GameplayOptions {
 	bool bTestBard;
 	/** @brief Enable the babarian hero class. */
 	bool bTestBarbarian;
-	/** @brief Show the current level progress. */
-	bool bExperienceBar;
 	/** @brief Show enemy health at the top of the screen. */
 	bool bEnemyHealthBar;
 	/** @brief Automatically pick up gold when walking over it. */
