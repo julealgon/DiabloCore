@@ -54,8 +54,6 @@ struct GraphicsOptions {
 	bool bBlendedTransparancy;
 	/** @brief Gamma correction level. */
 	int nGammaCorrection;
-	/** @brief Enable color cycling animations. */
-	bool bColorCycling;
 	/** @brief Use a hardware cursor (SDL2 only). */
 	bool bHardwareCursor;
 	/** @brief Use a hardware cursor for items. */

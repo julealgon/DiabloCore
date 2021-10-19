@@ -1905,9 +1905,6 @@ void game_loop(bool bStartup)
 
 void diablo_color_cyc_logic()
 {
-	if (!sgOptions.Graphics.bColorCycling)
-		return;
-
 	if (leveltype == DTYPE_HELL) {
 		lighting_color_cycling();
 	} else if (currlevel >= 21) {
