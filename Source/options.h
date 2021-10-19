@@ -79,8 +79,6 @@ struct GameplayOptions {
 	bool bTheoQuest;
 	/** @brief Enable the cow quest. */
 	bool bCowQuest;
-	/** @brief Enable the bard hero class. */
-	bool bTestBard;
 	/** @brief Enable the babarian hero class. */
 	bool bTestBarbarian;
 	/** @brief Show enemy health at the top of the screen. */
