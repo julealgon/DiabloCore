@@ -31,7 +31,6 @@ extern bool dropGoldFlag;
 extern bool chrbtn[4];
 extern bool lvlbtndown;
 extern int dropGoldValue;
-extern bool drawmanaflag;
 extern bool chrbtnactive;
 extern int pnumlines;
 extern UiFlags InfoColor;

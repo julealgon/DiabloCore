@@ -179,7 +179,6 @@ void UseMana(int id, spell_id sn)
 		ma = GetManaAmount(myPlayer, sn);
 		myPlayer._pMana -= ma;
 		myPlayer._pManaBase -= ma;
-		drawmanaflag = true;
 		break;
 	}
 }
@@ -260,7 +259,6 @@ void DoResurrect(int pnum, uint16_t rid)
 	if (rid == MyPlayerId) {
 		MyPlayerIsDead = false;
 		gamemenu_off();
-		drawmanaflag = true;
 	}
 
 	ClrPlrPath(target);

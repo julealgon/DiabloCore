@@ -841,11 +841,9 @@ int SaveItemPower(Item &item, const ItemPower &power)
 		break;
 	case IPL_MANA:
 		item._iPLMana += r << 6;
-		drawmanaflag = true;
 		break;
 	case IPL_MANA_CURSE:
 		item._iPLMana -= r << 6;
-		drawmanaflag = true;
 		break;
 	case IPL_DUR: {
 		int bonus = r * item._iMaxDur / 100;
@@ -895,7 +893,6 @@ int SaveItemPower(Item &item, const ItemPower &power)
 		break;
 	case IPL_NOMANA:
 		item._iFlags |= ISPL_NOMANA;
-		drawmanaflag = true;
 		break;
 	case IPL_NOHEALPLR:
 		item._iFlags |= ISPL_NOHEALPLR;
@@ -920,7 +917,6 @@ int SaveItemPower(Item &item, const ItemPower &power)
 			item._iFlags |= ISPL_STEALMANA_3;
 		if (power.param1 == 5)
 			item._iFlags |= ISPL_STEALMANA_5;
-		drawmanaflag = true;
 		break;
 	case IPL_STEALLIFE:
 		if (power.param1 == 3)
@@ -2775,8 +2771,6 @@ void CalcPlrItemVals(Player &player, bool loadgfx)
 	} else {
 		MaxGold = GOLD_MAX_LIMIT * 2;
 	}
-
-	drawmanaflag = true;
 }
 
 void CalcPlrInv(Player &player, bool loadgfx)
@@ -4020,14 +4014,12 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = std::min(player._pMana + l, player._pMaxMana);
 			player._pManaBase = std::min(player._pManaBase + l, player._pMaxManaBase);
-			drawmanaflag = true;
 		}
 	} break;
 	case IMISC_FULLMANA:
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = player._pMaxMana;
 			player._pManaBase = player._pMaxManaBase;
-			drawmanaflag = true;
 		}
 		break;
 	case IMISC_ELIXSTR:
@@ -4060,7 +4052,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = std::min(player._pMana + l, player._pMaxMana);
 			player._pManaBase = std::min(player._pManaBase + l, player._pMaxManaBase);
-			drawmanaflag = true;
 		}
 	} break;
 	case IMISC_FULLREJUV:
@@ -4069,7 +4060,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = player._pMaxMana;
 			player._pManaBase = player._pMaxManaBase;
-			drawmanaflag = true;
 		}
 		break;
 	case IMISC_SCROLL:
@@ -4116,7 +4106,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		}
 		if (p == MyPlayerId)
 			CalcPlrBookVals(player);
-		drawmanaflag = true;
 		break;
 	case IMISC_MAPOFDOOM:
 		doom_init();

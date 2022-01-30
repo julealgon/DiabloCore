@@ -1007,7 +1007,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pManaBase > player._pMaxManaBase) {
 			player._pManaBase = player._pMaxManaBase;
 		}
-		drawmanaflag = true;
 	}
 	if ((player._pIFlags & (ISPL_STEALLIFE_3 | ISPL_STEALLIFE_5)) != 0) {
 		if ((player._pIFlags & ISPL_STEALLIFE_3) != 0) {
@@ -2517,10 +2516,6 @@ void NextPlrLevel(int pnum)
 		player._pManaBase = player._pMaxManaBase;
 	}
 
-	if (pnum == MyPlayerId) {
-		drawmanaflag = true;
-	}
-
 	CalcPlrInv(player, true);
 }
 
@@ -2984,8 +2979,7 @@ void ApplyPlrDamage(int pnum, int dam, int minHP /*= 0*/, int frac /*= 0*/, int 
 		if (manaShieldLevel > 0) {
 			totalDamage += totalDamage / -3;
 		}
-		if (pnum == MyPlayerId)
-			drawmanaflag = true;
+
 		if (player._pMana >= totalDamage) {
 			player._pMana -= totalDamage;
 			player._pManaBase -= totalDamage;
@@ -3184,7 +3178,6 @@ void ProcessPlayers()
 				if ((player._pIFlags & ISPL_NOMANA) != 0 && player._pManaBase > 0) {
 					player._pManaBase -= player._pMana;
 					player._pMana = 0;
-					drawmanaflag = true;
 				}
 			}
 

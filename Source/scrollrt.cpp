@@ -1336,11 +1336,10 @@ void DoBlitScreen(Sint16 dwX, Sint16 dwY, Uint16 dwWdt, Uint16 dwHgt)
  * @brief Check render pipeline and blit individual screen parts
  * @param dwHgt Section of screen to update from top to bottom
  * @param draw_desc Render info box
- * @param draw_mana Render mana bar
  * @param draw_sbar Render belt
  * @param draw_btn Render panel buttons
  */
-void DrawMain(int dwHgt, bool drawDesc, bool drawMana, bool drawSbar, bool drawBtn)
+void DrawMain(int dwHgt, bool drawDesc, bool drawSbar, bool drawBtn)
 {
 	if (!gbActive || RenderDirectlyToOutputSurface) {
 		return;
@@ -1358,11 +1357,9 @@ void DrawMain(int dwHgt, bool drawDesc, bool drawMana, bool drawSbar, bool drawB
 		if (drawDesc) {
 			DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
 		}
-		if (drawMana) {
-			DoBlitScreen(PANEL_LEFT + 460, PANEL_TOP, 88, 72);
-			DoBlitScreen(PANEL_LEFT + 564, PANEL_TOP + 64, 56, 56);
-		}
 
+		DoBlitScreen(PANEL_LEFT + 460, PANEL_TOP, 88, 72);
+		DoBlitScreen(PANEL_LEFT + 564, PANEL_TOP + 64, 56, 56);
 		DoBlitScreen(PANEL_LEFT + 96, PANEL_TOP, 88, 72);
 		if (drawBtn) {
 			DoBlitScreen(PANEL_LEFT + 8, PANEL_TOP + 5, 72, 119);
@@ -1634,7 +1631,7 @@ void scrollrt_draw_game_screen()
 		unlock_buf(0);
 	}
 
-	DrawMain(hgt, false, false, false, false);
+	DrawMain(hgt, false, false, false);
 
 	RenderPresent();
 
@@ -1656,7 +1653,6 @@ void DrawAndBlit()
 	bool ctrlPan = false;
 
 	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
-		drawmanaflag = true;
 		drawbtnflag = true;
 		drawsbarflag = true;
 		ddsdesc = false;
@@ -1682,11 +1678,9 @@ void DrawAndBlit()
 	}
 
 	DrawLifeFlaskLower(out);
-	if (drawmanaflag) {
-		DrawManaFlaskLower(out);
+	DrawManaFlaskLower(out);
+	DrawSpell(out);
 
-		DrawSpell(out);
-	}
 	if (drawbtnflag) {
 		DrawCtrlBtns(out);
 	}
@@ -1709,11 +1703,10 @@ void DrawAndBlit()
 
 	unlock_buf(0);
 
-	DrawMain(hgt, ddsdesc, drawmanaflag, drawsbarflag, drawbtnflag);
+	DrawMain(hgt, ddsdesc, drawsbarflag, drawbtnflag);
 
 	RenderPresent();
 
-	drawmanaflag = false;
 	drawbtnflag = false;
 	drawsbarflag = false;
 }

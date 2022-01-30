@@ -1530,7 +1530,6 @@ void AddManaTrap(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			player._pMana = 0;
 			player._pManaBase = player._pMana + player._pMaxManaBase - player._pMaxMana;
 			CalcPlrInv(player, false);
-			drawmanaflag = true;
 			PlaySfxLoc(TSFX_COW7, target);
 		}
 	}
@@ -1684,7 +1683,6 @@ void AddMana(Missile &missile, Point /*dst*/, Direction /*midir*/)
 		player._pManaBase = player._pMaxManaBase;
 	UseMana(missile._misource, SPL_MANA);
 	missile._miDelFlag = true;
-	drawmanaflag = true;
 }
 
 void AddMagi(Missile &missile, Point /*dst*/, Direction /*midir*/)
@@ -1695,7 +1693,6 @@ void AddMagi(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	player._pManaBase = player._pMaxManaBase;
 	UseMana(missile._misource, SPL_MAGI);
 	missile._miDelFlag = true;
-	drawmanaflag = true;
 }
 
 void AddRing(Missile &missile, Point /*dst*/, Direction /*midir*/)

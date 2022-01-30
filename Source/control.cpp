@@ -46,10 +46,6 @@ bool dropGoldFlag;
 bool chrbtn[4];
 bool lvlbtndown;
 int dropGoldValue;
-/**
- * @brief Set if the mana flask needs to be redrawn during the next frame
- */
-bool drawmanaflag;
 bool chrbtnactive;
 int pnumlines;
 UiFlags InfoColor;
@@ -940,7 +936,6 @@ void InitControlPan()
 	pDurIcons = LoadCel("Items\\DurIcons.CEL", 32);
 	strcpy(infostr, "");
 	ClearPanel();
-	drawmanaflag = true;
 	chrflag = false;
 	spselflag = false;
 	pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
