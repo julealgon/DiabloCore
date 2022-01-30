@@ -952,7 +952,6 @@ void HealPlayer()
 	}
 	myPlayer._pHitPoints = myPlayer._pMaxHP;
 	myPlayer._pHPBase = myPlayer._pMaxHPBase;
-	drawhpflag = true;
 }
 
 void StartHealer()

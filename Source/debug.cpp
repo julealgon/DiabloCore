@@ -409,7 +409,6 @@ std::string DebugCmdRefillHealthMana(const std::string_view parameter)
 	myPlayer._pManaBase = myPlayer._pMaxManaBase;
 	myPlayer._pHitPoints = myPlayer._pMaxHP;
 	myPlayer._pHPBase = myPlayer._pMaxHPBase;
-	drawhpflag = true;
 	drawmanaflag = true;
 
 	return "Ready for more.";

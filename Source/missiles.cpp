@@ -2411,7 +2411,6 @@ void AddHeal(Missile &missile, Point /*dst*/, Direction /*midir*/)
 
 	UseMana(missile._misource, SPL_HEAL);
 	missile._miDelFlag = true;
-	drawhpflag = true;
 }
 
 void AddHealOther(Missile &missile, Point /*dst*/, Direction /*midir*/)

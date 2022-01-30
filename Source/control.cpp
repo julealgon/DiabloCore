@@ -41,10 +41,7 @@
 #endif
 
 namespace devilution {
-/**
- * @brief Set if the life flask needs to be redrawn during next frame
- */
-bool drawhpflag;
+
 bool dropGoldFlag;
 bool chrbtn[4];
 bool lvlbtndown;
@@ -943,7 +940,6 @@ void InitControlPan()
 	pDurIcons = LoadCel("Items\\DurIcons.CEL", 32);
 	strcpy(infostr, "");
 	ClearPanel();
-	drawhpflag = true;
 	drawmanaflag = true;
 	chrflag = false;
 	spselflag = false;

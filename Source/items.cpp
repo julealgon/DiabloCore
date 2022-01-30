@@ -927,7 +927,6 @@ int SaveItemPower(Item &item, const ItemPower &power)
 			item._iFlags |= ISPL_STEALLIFE_3;
 		if (power.param1 == 5)
 			item._iFlags |= ISPL_STEALLIFE_5;
-		drawhpflag = true;
 		break;
 	case IPL_TARGAC:
 		item._iPLEnAc = power.param1;
@@ -2778,7 +2777,6 @@ void CalcPlrItemVals(Player &player, bool loadgfx)
 	}
 
 	drawmanaflag = true;
-	drawhpflag = true;
 }
 
 void CalcPlrInv(Player &player, bool loadgfx)
@@ -4007,12 +4005,10 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 			l += l / 2;
 		player._pHitPoints = std::min(player._pHitPoints + l, player._pMaxHP);
 		player._pHPBase = std::min(player._pHPBase + l, player._pMaxHPBase);
-		drawhpflag = true;
 	} break;
 	case IMISC_FULLHEAL:
 		player._pHitPoints = player._pMaxHP;
 		player._pHPBase = player._pMaxHPBase;
-		drawhpflag = true;
 		break;
 	case IMISC_MANA: {
 		int j = player._pMaxMana >> 8;
@@ -4055,7 +4051,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 			l += l / 2;
 		player._pHitPoints = std::min(player._pHitPoints + l, player._pMaxHP);
 		player._pHPBase = std::min(player._pHPBase + l, player._pMaxHPBase);
-		drawhpflag = true;
 		j = player._pMaxMana >> 8;
 		l = ((j / 2) + GenerateRnd(j)) << 6;
 		if (player._pClass == HeroClass::Sorcerer)
@@ -4071,7 +4066,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 	case IMISC_FULLREJUV:
 		player._pHitPoints = player._pMaxHP;
 		player._pHPBase = player._pMaxHPBase;
-		drawhpflag = true;
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = player._pMaxMana;
 			player._pManaBase = player._pMaxManaBase;

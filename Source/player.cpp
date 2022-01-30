@@ -991,7 +991,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pHPBase > player._pMaxHPBase) {
 			player._pHPBase = player._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if ((player._pIFlags & (ISPL_STEALMANA_3 | ISPL_STEALMANA_5)) != 0 && (player._pIFlags & ISPL_NOMANA) == 0) {
 		if ((player._pIFlags & ISPL_STEALMANA_3) != 0) {
@@ -1025,7 +1024,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pHPBase > player._pMaxHPBase) {
 			player._pHPBase = player._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if ((player._pIFlags & ISPL_NOHEALPLR) != 0) {
 		monster._mFlags |= MFLAG_NOHEAL;
@@ -1120,7 +1118,6 @@ bool PlrHitPlr(int pnum, int8_t p)
 		if (attacker._pHPBase > attacker._pMaxHPBase) {
 			attacker._pHPBase = attacker._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if (pnum == MyPlayerId) {
 		NetSendCmdDamage(true, p, skdam);
@@ -2505,10 +2502,6 @@ void NextPlrLevel(int pnum)
 	player._pMaxHPBase += hp;
 	player._pHPBase = player._pMaxHPBase;
 
-	if (pnum == MyPlayerId) {
-		drawhpflag = true;
-	}
-
 	int mana = 128;
 	if (player._pClass == HeroClass::Warrior)
 		mana = 64;
@@ -2830,7 +2823,6 @@ void StartPlrHit(int pnum, int dam, bool forcehit)
 
 	player.Say(HeroSpeech::ArghClang);
 
-	drawhpflag = true;
 	if (player._pClass == HeroClass::Barbarian) {
 		if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
 			return;
@@ -2910,7 +2902,6 @@ StartPlayerKill(int pnum, int earflag)
 		SetPlayerOld(player);
 
 		if (pnum == MyPlayerId) {
-			drawhpflag = true;
 			deathdelay = 30;
 
 			if (pcurs >= CURSOR_FIRSTITEM) {
@@ -3013,7 +3004,6 @@ void ApplyPlrDamage(int pnum, int dam, int minHP /*= 0*/, int frac /*= 0*/, int 
 	if (totalDamage == 0)
 		return;
 
-	drawhpflag = true;
 	player._pHitPoints -= totalDamage;
 	player._pHPBase -= totalDamage;
 	if (player._pHitPoints > player._pMaxHP) {
@@ -3646,10 +3636,6 @@ void SetPlayerHitPoints(Player &player, int val)
 {
 	player._pHitPoints = val;
 	player._pHPBase = val + player._pMaxHPBase - player._pMaxHP;
-
-	if (&player == &Players[MyPlayerId]) {
-		drawhpflag = true;
-	}
 }
 
 void SetPlrStr(Player &player, int v)

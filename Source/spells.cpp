@@ -260,7 +260,6 @@ void DoResurrect(int pnum, uint16_t rid)
 	if (rid == MyPlayerId) {
 		MyPlayerIsDead = false;
 		gamemenu_off();
-		drawhpflag = true;
 		drawmanaflag = true;
 	}
 
@@ -322,10 +321,6 @@ void DoHealOther(int pnum, uint16_t rid)
 
 	target._pHitPoints = std::min(target._pHitPoints + hp, target._pMaxHP);
 	target._pHPBase = std::min(target._pHPBase + hp, target._pMaxHPBase);
-
-	if (rid == MyPlayerId) {
-		drawhpflag = true;
-	}
 }
 
 int GetSpellBookLevel(spell_id s)

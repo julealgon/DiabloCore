@@ -27,7 +27,6 @@ namespace devilution {
 #define SPANEL_WIDTH 320
 #define SPANEL_HEIGHT 352
 
-extern bool drawhpflag;
 extern bool dropGoldFlag;
 extern bool chrbtn[4];
 extern bool lvlbtndown;
