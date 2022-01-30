@@ -39,15 +39,6 @@ Size ScaledSize(Size size)
 	return size;
 }
 
-bool IsCursorSizeAllowed(Size size)
-{
-	if (sgOptions.Graphics.nHardwareCursorMaxSize <= 0)
-		return true;
-	size = ScaledSize(size);
-	return size.width <= sgOptions.Graphics.nHardwareCursorMaxSize
-	    && size.height <= sgOptions.Graphics.nHardwareCursorMaxSize;
-}
-
 Point GetHotpointPosition(const SDL_Surface &surface, HotpointPosition position)
 {
 	switch (position) {
@@ -96,17 +87,11 @@ bool SetHardwareCursor(SDL_Surface *surface, HotpointPosition hotpointPosition)
 bool SetHardwareCursorFromSprite(int pcurs)
 {
 	const bool isItem = IsItemSprite(pcurs);
-	if (isItem && !sgOptions.Graphics.bHardwareCursorForItems)
-		return false;
-
 	const int outlineWidth = isItem ? 1 : 0;
 
 	auto size = GetInvItemSize(pcurs);
 	size.width += 2 * outlineWidth;
 	size.height += 2 * outlineWidth;
-
-	if (!IsCursorSizeAllowed(size))
-		return false;
 
 	OwnedSurface out { size };
 	SDL_SetSurfacePalette(out.surface, Palette.get());
@@ -141,8 +126,7 @@ void SetHardwareCursor(CursorInfo cursorInfo)
 		// called via palette fade from ShowProgress.
 		if (ArtCursor.surface != nullptr) {
 			CurrentCursorInfo.SetEnabled(
-			    IsCursorSizeAllowed(Size { ArtCursor.surface->w, ArtCursor.surface->h })
-			    && SetHardwareCursor(ArtCursor.surface.get(), HotpointPosition::TopLeft));
+			    SetHardwareCursor(ArtCursor.surface.get(), HotpointPosition::TopLeft));
 		}
 		break;
 	case CursorType::Unknown:

@@ -41,10 +41,11 @@ std::optional<Aulib::Stream> music;
 
 void LoadMusic(HANDLE handle)
 {
+	const int resamplingQuality = 5;
 	SDL_RWops *musicRw = SFileRw_FromStormHandle(handle);
 
 	music.emplace(musicRw, std::make_unique<Aulib::DecoderDrwav>(),
-	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/true);
+	    std::make_unique<Aulib::ResamplerSpeex>(resamplingQuality), /*closeRw=*/true);
 }
 
 void CleanupMusic()
@@ -169,7 +170,7 @@ void snd_init()
 	// Initialize the SDL_audiolib library. Set the output sample rate to
 	// 22kHz, the audio format to 16-bit signed, use 2 output channels
 	// (stereo), and a 2KiB output buffer.
-	if (!Aulib::init(sgOptions.Audio.nSampleRate, AUDIO_S16, sgOptions.Audio.nChannels, sgOptions.Audio.nBufferSize)) {
+	if (!Aulib::init(22050, AUDIO_S16, 2, 2048)) {
 		LogError(LogCategory::Audio, "Failed to initialize audio (Aulib::init): {}", SDL_GetError());
 		return;
 	}

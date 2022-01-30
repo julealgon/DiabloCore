@@ -116,8 +116,9 @@ int SoundSample::SetChunkStream(std::string filePath)
 		return -1;
 	}
 
+	const int resamplingQuality = 5;
 	stream_ = std::make_unique<Aulib::Stream>(SFileRw_FromStormHandle(handle), std::make_unique<Aulib::DecoderDrwav>(),
-	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/true);
+	    std::make_unique<Aulib::ResamplerSpeex>(resamplingQuality), /*closeRw=*/true);
 	if (!stream_->open()) {
 		stream_ = nullptr;
 		LogError(LogCategory::Audio, "Aulib::Stream::open (from SoundSample::SetChunkStream): {}", SDL_GetError());
@@ -135,8 +136,9 @@ int SoundSample::SetChunk(std::shared_ptr<std::uint8_t[]> fileData, std::size_t 
 		return -1;
 	}
 
+	const int resamplingQuality = 5;
 	stream_ = std::make_unique<Aulib::Stream>(buf, std::make_unique<Aulib::DecoderDrwav>(),
-	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/true);
+	    std::make_unique<Aulib::ResamplerSpeex>(resamplingQuality), /*closeRw=*/true);
 	if (!stream_->open()) {
 		stream_ = nullptr;
 		file_data_ = nullptr;

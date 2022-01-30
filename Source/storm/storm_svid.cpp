@@ -114,8 +114,10 @@ bool SVidPlayBegin(const char *filename, int flags)
 		SVidAudioDepth = depth[0];
 		auto decoder = std::make_unique<PushAulibDecoder>(channels[0], rate[0]);
 		SVidAudioDecoder = decoder.get();
+
+		const int resamplingQuality = 5;
 		SVidAudioStream.emplace(/*rwops=*/nullptr, std::move(decoder),
-		    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/false);
+		    std::make_unique<Aulib::ResamplerSpeex>(resamplingQuality), /*closeRw=*/false);
 		const float volume = static_cast<float>(sgOptions.Audio.nSoundVolume - VOLUME_MIN) / -VOLUME_MIN;
 		SVidAudioStream->setVolume(volume);
 		if (!SVidAudioStream->open()) {

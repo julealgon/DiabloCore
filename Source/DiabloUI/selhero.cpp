@@ -159,19 +159,13 @@ void SelheroListSelect(int value)
 		vecSelDlgItems.push_back(std::make_unique<UiArtText>("Choose Class", rect1, UiFlags::AlignCenter | UiFlags::FontSize30 | UiFlags::ColorUiSilver, 3));
 
 		vecSelHeroDlgItems.clear();
-		int itemH = 33;
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Warrior", static_cast<int>(HeroClass::Warrior)));
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Rogue", static_cast<int>(HeroClass::Rogue)));
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Sorcerer", static_cast<int>(HeroClass::Sorcerer)));
 		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Monk", static_cast<int>(HeroClass::Monk)));
-		if (sgOptions.Gameplay.bTestBard) {
-			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Bard", static_cast<int>(HeroClass::Bard)));
-		}
-		if (sgOptions.Gameplay.bTestBarbarian) {
-			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Barbarian", static_cast<int>(HeroClass::Barbarian)));
-		}
-		if (vecSelHeroDlgItems.size() > 4)
-			itemH = 26;
+		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Bard", static_cast<int>(HeroClass::Bard)));
+		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>("Barbarian", static_cast<int>(HeroClass::Barbarian)));
+		int	itemH = 26;
 		int itemY = 246 + (176 - vecSelHeroDlgItems.size() * itemH) / 2;
 		vecSelDlgItems.push_back(std::make_unique<UiList>(vecSelHeroDlgItems, PANEL_LEFT + 264, (UI_OFFSET_Y + itemY), 320, itemH, UiFlags::AlignCenter | UiFlags::FontSize24 | UiFlags::ColorUiGold));
 

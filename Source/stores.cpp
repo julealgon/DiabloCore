@@ -579,24 +579,8 @@ void StartSmithRepair()
 	OffsetSTextY(22, 6);
 }
 
-void FillManaPlayer()
-{
-	if (!sgOptions.Gameplay.bAdriaRefillsMana)
-		return;
-
-	auto &myPlayer = Players[MyPlayerId];
-
-	if (myPlayer._pMana != myPlayer._pMaxMana) {
-		PlaySFX(IS_CAST8);
-	}
-	myPlayer._pMana = myPlayer._pMaxMana;
-	myPlayer._pManaBase = myPlayer._pMaxManaBase;
-	drawmanaflag = true;
-}
-
 void StartWitch()
 {
-	FillManaPlayer();
 	stextsize = false;
 	stextscrl = false;
 	AddSText(0, 2, "Witch's shack", UiFlags::ColorWhitegold | UiFlags::AlignCenter, false);

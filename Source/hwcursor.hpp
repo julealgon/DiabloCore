@@ -7,12 +7,6 @@
 
 namespace devilution {
 
-// Whether the hardware cursor is enabled in settings.
-inline bool IsHardwareCursorEnabled()
-{
-	return sgOptions.Graphics.bHardwareCursor;
-}
-
 /**
  * @return Whether the cursor was previously visible.
  */

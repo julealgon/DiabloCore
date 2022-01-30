@@ -23,7 +23,6 @@
 #include "missiles.h"
 #include "options.h"
 #include "player.h"
-#include "qol/autopickup.h"
 #include "spells.h"
 #include "stores.h"
 #include "storm/storm.h"
@@ -698,7 +697,7 @@ bool DoWalk(int pnum, int variant)
 	auto &player = Players[pnum];
 
 	//Play walking sound effect on certain animation frames
-	if (sgOptions.Audio.bWalkingSound && (currlevel != 0 || sgGameInitInfo.bRunInTown == 0)) {
+	if (currlevel != 0 || sgGameInitInfo.bRunInTown == 0) {
 		if (player.AnimInfo.CurrentFrame == 1
 		    || player.AnimInfo.CurrentFrame == 5) {
 			PlaySfxLoc(PS_WALK1, player.position.tile);
@@ -750,7 +749,6 @@ bool DoWalk(int pnum, int variant)
 			ChangeLightOffset(player._plid, { 0, 0 });
 		}
 
-		AutoGoldPickup(pnum);
 		return true;
 	} //We didn't reach new tile so update player's "sub-tile" position
 	ChangeOffset(pnum);
@@ -1197,7 +1195,7 @@ bool DoAttack(int pnum)
 				m = -(dMonster[dx][dy] + 1);
 			}
 			didhit = PlrHitMonst(pnum, m);
-		} else if (dPlayer[dx][dy] != 0 && (!gbFriendlyMode || sgGameInitInfo.bFriendlyFire != 0)) {
+		} else if (dPlayer[dx][dy] != 0) {
 			BYTE p = dPlayer[dx][dy];
 			if (dPlayer[dx][dy] > 0) {
 				p = dPlayer[dx][dy] - 1;
@@ -1812,9 +1810,7 @@ void ValidatePlayer()
 		myPlayer._pLevel = MAXCHARLEVEL - 1;
 	if (myPlayer._pExperience > myPlayer._pNextExper) {
 		myPlayer._pExperience = myPlayer._pNextExper;
-		if (sgOptions.Gameplay.bExperienceBar) {
-			force_redraw = 255;
-		}
+		force_redraw = 255;
 	}
 
 	int gt = 0;
@@ -2558,9 +2554,7 @@ void AddPlrExperience(int pnum, int lvl, int exp)
 	// Overflow is only possible if a kill grants more than (2^32-1 - MaxExperience) XP in one go, which doesn't happen in normal gameplay
 	player._pExperience = std::min(player._pExperience + clampedExp, MaxExperience);
 
-	if (sgOptions.Gameplay.bExperienceBar) {
-		force_redraw = 255;
-	}
+	force_redraw = 255;
 
 	if (player._pExperience >= ExpLvlsTbl[49]) {
 		player._pLevel = 50;

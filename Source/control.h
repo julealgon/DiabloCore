@@ -52,7 +52,7 @@ extern Rectangle MainPanel;
 extern Rectangle LeftPanel;
 extern Rectangle RightPanel;
 extern std::optional<OwnedSurface> pBtmBuff;
-extern SDL_Rect PanBtnPos[8];
+extern SDL_Rect PanBtnPos[7];
 
 bool IsChatAvailable();
 /**
@@ -177,7 +177,6 @@ void control_type_message();
 void control_reset_talk();
 bool control_talk_last_key(char vkey);
 bool control_presskeys(int vkey);
-void DiabloHotkeyMsg(uint32_t dwMsg);
 
 extern Rectangle ChrBtnsRect[4];
 

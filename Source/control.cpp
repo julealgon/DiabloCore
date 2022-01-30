@@ -84,7 +84,7 @@ Rectangle ChrBtnsRect[4] = {
 };
 
 /** Positions of panel buttons. */
-SDL_Rect PanBtnPos[8] = {
+SDL_Rect PanBtnPos[7] = {
 	// clang-format off
 	{   9,   9, 71, 19 }, // char button
 	{   9,  35, 71, 19 }, // quests button
@@ -93,7 +93,6 @@ SDL_Rect PanBtnPos[8] = {
 	{ 560,   9, 71, 19 }, // inv button
 	{ 560,  35, 71, 19 }, // spells button
 	{  87,  91, 33, 32 }, // chat button
-	{ 527,  91, 33, 32 }, // friendly fire button
 	// clang-format on
 };
 
@@ -111,7 +110,7 @@ std::optional<CelSprite> pSBkIconCels;
 std::optional<CelSprite> pSpellBkCel;
 std::optional<CelSprite> pSpellCels;
 
-bool PanelButtons[8];
+bool PanelButtons[7];
 int PanelButtonIndex;
 char TalkSave[8][80];
 uint8_t TalkSaveIndex;
@@ -187,7 +186,6 @@ enum panel_button_id {
 	PanelButtonInventory,
 	PanelButtonSpellbook,
 	PanelButtonSendmsg,
-	PanelButtonFriendly,
 };
 
 /** Maps from panel_button_id to hotkey name. */
@@ -937,7 +935,7 @@ void InitControlPan()
 	if (!IsChatAvailable())
 		PanelButtonIndex = 6;
 	else
-		PanelButtonIndex = 8;
+		PanelButtonIndex = 7;
 	pChrButtons = LoadCel("Data\\CharBut.CEL", 41);
 	for (bool &buttonEnabled : chrbtn)
 		buttonEnabled = false;
@@ -999,12 +997,8 @@ void DrawCtrlBtns(const Surface &out)
 			DrawArt(out, position + Displacement { 4, -18 }, &PanelButtonDown, i);
 		}
 	}
-	if (PanelButtonIndex == 8) {
+	if (PanelButtonIndex == 7) {
 		CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
-		if (gbFriendlyMode)
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
-		else
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
 	}
 }
 
@@ -1138,12 +1132,8 @@ void CheckPanelInfo()
 		if (MousePosition.x >= PanBtnPos[i].x + PANEL_LEFT && MousePosition.x <= xend && MousePosition.y >= PanBtnPos[i].y + PANEL_TOP && MousePosition.y <= yend) {
 			if (i != 7) {
 				strcpy(infostr, PanBtnStr[i]);
-			} else {
-				if (gbFriendlyMode)
-					strcpy(infostr, "Player friendly");
-				else
-					strcpy(infostr, "Player attack");
 			}
+
 			if (PanBtnHotKey[i] != nullptr) {
 				strcpy(tempstr, fmt::format("Hotkey: {:s}", PanBtnHotKey[i]).c_str());
 				AddPanelString(tempstr);
@@ -1222,7 +1212,7 @@ void CheckBtnUp()
 	drawbtnflag = true;
 	panbtndown = false;
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 7; i++) {
 		if (!PanelButtons[i]) {
 			continue;
 		}
@@ -1277,9 +1267,6 @@ void CheckBtnUp()
 				control_reset_talk();
 			else
 				control_type_message();
-			break;
-		case PanelButtonFriendly:
-			gbFriendlyMode = !gbFriendlyMode;
 			break;
 		}
 	}
@@ -1821,22 +1808,6 @@ bool control_presskeys(int vkey)
 	}
 
 	return true;
-}
-
-void DiabloHotkeyMsg(uint32_t dwMsg)
-{
-	if (!IsChatAvailable()) {
-		return;
-	}
-
-	assert(dwMsg < QUICK_MESSAGE_OPTIONS);
-
-#ifdef _DEBUG
-	if (CheckDebugTextCommand(sgOptions.Chat.szHotKeyMsgs[dwMsg]))
-		return;
-#endif
-
-	NetSendCmdString(0xFFFFFF, sgOptions.Chat.szHotKeyMsgs[dwMsg]);
 }
 
 } // namespace devilution

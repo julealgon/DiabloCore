@@ -167,7 +167,7 @@ void NewCursor(int cursId)
 	pcurs = cursId;
 	cursSize = GetInvItemSize(cursId);
 	SetICursor(cursId);
-	if (IsHardwareCursorEnabled() && GetCurrentCursorInfo() != CursorInfo::GameCursor(cursId) && cursId != CURSOR_NONE) {
+	if (GetCurrentCursorInfo() != CursorInfo::GameCursor(cursId) && cursId != CURSOR_NONE) {
 		SetHardwareCursor(CursorInfo::GameCursor(cursId));
 	}
 }

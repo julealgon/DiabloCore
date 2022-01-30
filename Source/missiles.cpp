@@ -320,9 +320,6 @@ bool MonsterMHit(int pnum, int m, Damage damage, int dist, missile_id t, bool sh
 
 bool Plr2PlrMHit(int pnum, int p, Damage damage, int dist, missile_id mtype, bool shift, bool *blocked)
 {
-	if (sgGameInitInfo.bFriendlyFire == 0 && gbFriendlyMode)
-		return false;
-
 	*blocked = false;
 
 	auto &player = Players[pnum];

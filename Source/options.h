@@ -18,19 +18,6 @@ struct AudioOptions {
 	int nSoundVolume;
 	/** @brief Music volume. */
 	int nMusicVolume;
-	/** @brief Player emits sound when walking. */
-	bool bWalkingSound;
-	/** @brief Automatically equipping items on pickup emits the equipment sound. */
-	bool bAutoEquipSound;
-
-	/** @brief Output sample rate (Hz) */
-	std::uint32_t nSampleRate;
-	/** @brief The number of output channels (1 or 2) */
-	std::uint8_t nChannels;
-	/** @brief Buffer size (number of frames per channel) */
-	std::uint32_t nBufferSize;
-	/** @brief Quality of the resampler, from 0 (lowest) to 10 (highest) */
-	std::uint8_t nResamplingQuality;
 };
 
 struct GraphicsOptions {
@@ -50,18 +37,8 @@ struct GraphicsOptions {
 	bool bIntegerScaling;
 	/** @brief Enable vsync on the output. */
 	bool bVSync;
-	/** @brief Use blended transparency rather than stippled. */
-	bool bBlendedTransparancy;
 	/** @brief Gamma correction level. */
 	int nGammaCorrection;
-	/** @brief Enable color cycling animations. */
-	bool bColorCycling;
-	/** @brief Use a hardware cursor (SDL2 only). */
-	bool bHardwareCursor;
-	/** @brief Use a hardware cursor for items. */
-	bool bHardwareCursorForItems;
-	/** @brief Maximum width / height for the hardware cursor. Larger cursors fall back to software. */
-	int nHardwareCursorMaxSize;
 	/** @brief Enable FPS Limit. */
 	bool bFPSLimit;
 	/** @brief Show FPS, even without the -f command line flag. */
@@ -75,24 +52,8 @@ struct GameplayOptions {
 	bool bRunInTown;
 	/** @brief Do not let the mouse leave the application window. */
 	bool bGrabInput;
-	/** @brief Enable the Theo quest. */
-	bool bTheoQuest;
-	/** @brief Enable the cow quest. */
-	bool bCowQuest;
-	/** @brief Will players still damage other players in non-PvP mode. */
-	bool bFriendlyFire;
-	/** @brief Enable the bard hero class. */
-	bool bTestBard;
-	/** @brief Enable the babarian hero class. */
-	bool bTestBarbarian;
-	/** @brief Show the current level progress. */
-	bool bExperienceBar;
 	/** @brief Show enemy health at the top of the screen. */
 	bool bEnemyHealthBar;
-	/** @brief Automatically pick up gold when walking over it. */
-	bool bAutoGoldPickup;
-	/** @brief Recover mana when talking to Adria. */
-	bool bAdriaRefillsMana;
 	/** @brief Automatically attempt to equip weapon-type items when picking them up. */
 	bool bAutoEquipWeapons;
 	/** @brief Automatically attempt to equip armor-type items when picking them up. */
@@ -103,26 +64,8 @@ struct GameplayOptions {
 	bool bAutoEquipShields;
 	/** @brief Automatically attempt to equip jewelry-type items when picking them up. */
 	bool bAutoEquipJewelry;
-	/** @brief Only enable 2/3 quests in each game session */
-	bool bRandomizeQuests;
 	/** @brief Indicates whether or not monster type (Animal, Demon, Undead) is shown along with other monster information. */
 	bool bShowMonsterType;
-	/** @brief Locally disable clicking on shrines which permanently cripple character. */
-	bool bDisableCripplingShrines;
-};
-
-struct NetworkOptions {
-	/** @brief Optionally bind to a specific network interface. */
-	char szBindAddress[129];
-	/** @brief Most recently entered Hostname in join dialog. */
-	char szPreviousHost[129];
-	/** @brief What network port to use. */
-	uint16_t nPort;
-};
-
-struct ChatOptions {
-	/** @brief Quick chat messages. */
-	char szHotKeyMsgs[QUICK_MESSAGE_OPTIONS][MAX_SEND_STR_LEN];
 };
 
 struct Options {
@@ -130,8 +73,6 @@ struct Options {
 	AudioOptions Audio;
 	GameplayOptions Gameplay;
 	GraphicsOptions Graphics;
-	NetworkOptions Network;
-	ChatOptions Chat;
 };
 
 bool GetIniValue(const char *sectionName, const char *keyName, char *string, int stringSize, const char *defaultString = "");

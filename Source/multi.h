@@ -20,9 +20,6 @@ struct GameData {
 	uint32_t dwSeed;
 	uint8_t nTickRate;
 	uint8_t bRunInTown;
-	uint8_t bTheoQuest;
-	uint8_t bCowQuest;
-	uint8_t bFriendlyFire;
 };
 
 extern bool gbSomebodyWonGameKludge;

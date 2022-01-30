@@ -488,7 +488,6 @@ DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void ForEachSetBit(std::uint32_t mask, const
 enum class TransparencyType {
 	Solid,
 	Blended,
-	Stippled,
 };
 
 enum class LightType {
@@ -555,22 +554,6 @@ DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLineBlended(std::uint8_t *dst, co
 #endif
 }
 
-template <LightType Light>
-DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLineStippled(std::uint8_t *dst, const std::uint8_t *src, const std::uint8_t *tbl, std::uint32_t mask)
-{
-	if (Light == LightType::FullyDark) {
-		ForEachSetBit(mask, [=](int i) { dst[i] = 0; });
-	} else if (Light == LightType::FullyLit) {
-#ifndef DEBUG_RENDER_COLOR
-		ForEachSetBit(mask, [=](int i) { dst[i] = src[i]; });
-#else
-		ForEachSetBit(mask, [=](int i) { dst[i] = DBGCOLOR; });
-#endif
-	} else { // Partially lit
-		ForEachSetBit(mask, [=](int i) { dst[i] = tbl[src[i]]; });
-	}
-}
-
 template <TransparencyType Transparency, LightType Light>
 DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLine(std::uint8_t *dst, const std::uint8_t *src, std::uint_fast8_t n, const std::uint8_t *tbl, std::uint32_t mask)
 {
@@ -588,8 +571,6 @@ DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLine(std::uint8_t *dst, const std
 			RenderLineOpaque<Light>(dst, src, n, tbl);
 		} else if (Transparency == TransparencyType::Blended) {
 			RenderLineBlended<Light>(dst, src, n, tbl, mask);
-		} else {
-			RenderLineStippled<Light>(dst, src, tbl, mask);
 		}
 	}
 }
@@ -1249,24 +1230,18 @@ const std::uint32_t *GetMask(TileType tile)
 
 	if (cel_transparency_active) {
 		if (arch_draw_type == 0) {
-			if (sgOptions.Graphics.bBlendedTransparancy) // Use a fully transparent mask
-				return &WallMaskFullyTrasparent[TILE_HEIGHT - 1];
-			return &WallMask[TILE_HEIGHT - 1];
+			return &WallMaskFullyTrasparent[TILE_HEIGHT - 1];
 		}
 		if (arch_draw_type == 1 && tile != TileType::LeftTriangle) {
 			const auto c = block_lvid[level_piece_id];
 			if (c == 1 || c == 3) {
-				if (sgOptions.Graphics.bBlendedTransparancy) // Use a fully transparent mask
-					return &LeftMaskTransparent[TILE_HEIGHT - 1];
-				return &LeftMask[TILE_HEIGHT - 1];
+				return &LeftMaskTransparent[TILE_HEIGHT - 1];
 			}
 		}
 		if (arch_draw_type == 2 && tile != TileType::RightTriangle) {
 			const auto c = block_lvid[level_piece_id];
 			if (c == 2 || c == 3) {
-				if (sgOptions.Graphics.bBlendedTransparancy) // Use a fully transparent mask
-					return &RightMaskTransparent[TILE_HEIGHT - 1];
-				return &RightMask[TILE_HEIGHT - 1];
+				return &RightMaskTransparent[TILE_HEIGHT - 1];
 			}
 		}
 	} else if (arch_draw_type != 0 && cel_foliage_active) {
@@ -1409,22 +1384,12 @@ void RenderTile(const Surface &out, Point position)
 		}
 	} else {
 		mask -= clip.bottom;
-		if (sgOptions.Graphics.bBlendedTransparancy) {
-			if (LightTableIndex == LightsMax) {
-				RenderTileType<TransparencyType::Blended, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else if (LightTableIndex == 0) {
-				RenderTileType<TransparencyType::Blended, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else {
-				RenderTileType<TransparencyType::Blended, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			}
+		if (LightTableIndex == LightsMax) {
+			RenderTileType<TransparencyType::Blended, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
+		} else if (LightTableIndex == 0) {
+			RenderTileType<TransparencyType::Blended, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
 		} else {
-			if (LightTableIndex == LightsMax) {
-				RenderTileType<TransparencyType::Stippled, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else if (LightTableIndex == 0) {
-				RenderTileType<TransparencyType::Stippled, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else {
-				RenderTileType<TransparencyType::Stippled, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			}
+			RenderTileType<TransparencyType::Blended, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
 		}
 	}
 }

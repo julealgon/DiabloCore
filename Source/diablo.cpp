@@ -91,15 +91,8 @@ bool gbForceWindowed = false;
 bool DebugDisableNetworkTimeout = false;
 std::vector<std::string> DebugCmdsFromCommandLine;
 #endif
-/** Specifies whether players are in non-PvP mode. */
-bool gbFriendlyMode = true;
+
 GameLogicStep gGameLogicStep = GameLogicStep::None;
-QuickMessage QuickMessages[QUICK_MESSAGE_OPTIONS] = {
-	{ "QuickMessage1", "I need help! Come Here!" },
-	{ "QuickMessage2", "Follow me." },
-	{ "QuickMessage3", "Here's something for you." },
-	{ "QuickMessage4", "Now you DIE!" }
-};
 
 /** This and the following mouse variables are for handling in-game click-and-hold actions */
 MouseActionType LastMouseButtonAction = MouseActionType::None;
@@ -198,7 +191,7 @@ void LeftMouseCmd(bool bShift)
 	bNear = myPlayer.position.tile.WalkingDistance(cursPosition) < 2;
 	if (pcursitem != -1 && pcurs == CURSOR_HAND && !bShift) {
 		NetSendCmdLocParam1(true, invflag ? CMD_GOTOGETITEM : CMD_GOTOAGETITEM, cursPosition, pcursitem);
-	} else if (pcursobj != -1 && (!objectIsDisabled(pcursobj)) && (!bShift || (bNear && Objects[pcursobj]._oBreak == 1))) {
+	} else if (pcursobj != -1 && (!bShift || (bNear && Objects[pcursobj]._oBreak == 1))) {
 		LastMouseButtonAction = MouseActionType::OperateObject;
 		NetSendCmdLocParam1(true, pcurs == CURSOR_DISARM ? CMD_DISARMXY : CMD_OPOBJXY, cursPosition, pcursobj);
 	} else if (myPlayer.UsesRangedWeapon()) {
@@ -212,7 +205,7 @@ void LeftMouseCmd(bool bShift)
 				LastMouseButtonAction = MouseActionType::AttackMonsterTarget;
 				NetSendCmdParam1(true, CMD_RATTACKID, pcursmonst);
 			}
-		} else if (pcursplr != -1 && !gbFriendlyMode) {
+		} else if (pcursplr != -1) {
 			LastMouseButtonAction = MouseActionType::AttackPlayerTarget;
 			NetSendCmdParam1(true, CMD_RATTACKPID, pcursplr);
 		}
@@ -232,7 +225,7 @@ void LeftMouseCmd(bool bShift)
 		} else if (pcursmonst != -1) {
 			LastMouseButtonAction = MouseActionType::AttackMonsterTarget;
 			NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
-		} else if (pcursplr != -1 && !gbFriendlyMode) {
+		} else if (pcursplr != -1) {
 			LastMouseButtonAction = MouseActionType::AttackPlayerTarget;
 			NetSendCmdParam1(true, CMD_ATTACKPID, pcursplr);
 		}
@@ -359,14 +352,6 @@ void RightMouseDown()
 			NewCursor(CURSOR_HAND);
 		}
 	}
-}
-
-bool PressSysKey(int wParam)
-{
-	if (gmenu_is_active() || wParam != DVL_VK_F10)
-		return false;
-	DiabloHotkeyMsg(1);
-	return true;
 }
 
 void ReleaseKey(int vkey)
@@ -569,10 +554,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 	case DVL_WM_CHAR:
 		PressChar((char)wParam);
 		return;
-	case DVL_WM_SYSKEYDOWN:
-		if (PressSysKey(wParam))
-			return;
-		break;
 	case DVL_WM_SYSCOMMAND:
 		if (wParam == DVL_SC_CLOSE) {
 			gbRunGame = false;
@@ -838,13 +819,6 @@ void DiabloInit()
 	was_archives_init = true;
 
 	SetApplicationVersions();
-
-	for (size_t i = 0; i < QUICK_MESSAGE_OPTIONS; i++) {
-		if (strlen(sgOptions.Chat.szHotKeyMsgs[i]) != 0) {
-			continue;
-		}
-		strncpy(sgOptions.Chat.szHotKeyMsgs[i], QuickMessages[i].message, MAX_SEND_STR_LEN);
-	}
 
 	UiInitialize();
 	was_ui_init = true;
@@ -1253,13 +1227,7 @@ void InitKeymapActions()
 		    [&]() { return !IsPlayerDead(); },
 		});
 	}
-	for (int i = 0; i < 4; ++i) {
-		keymapper.AddAction({
-		    QuickMessages[i].key,
-		    DVL_VK_F9 + i,
-		    [i]() { DiabloHotkeyMsg(i); },
-		});
-	}
+
 	keymapper.AddAction({
 	    "DecreaseGamma",
 	    'G',
@@ -1937,9 +1905,6 @@ void game_loop(bool bStartup)
 
 void diablo_color_cyc_logic()
 {
-	if (!sgOptions.Graphics.bColorCycling)
-		return;
-
 	if (leveltype == DTYPE_HELL) {
 		lighting_color_cycling();
 	} else if (currlevel >= 21) {
