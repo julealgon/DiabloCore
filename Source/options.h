@@ -52,12 +52,6 @@ struct GraphicsOptions {
 	bool bVSync;
 	/** @brief Gamma correction level. */
 	int nGammaCorrection;
-	/** @brief Use a hardware cursor (SDL2 only). */
-	bool bHardwareCursor;
-	/** @brief Use a hardware cursor for items. */
-	bool bHardwareCursorForItems;
-	/** @brief Maximum width / height for the hardware cursor. Larger cursors fall back to software. */
-	int nHardwareCursorMaxSize;
 	/** @brief Enable FPS Limit. */
 	bool bFPSLimit;
 	/** @brief Show FPS, even without the -f command line flag. */
