@@ -176,7 +176,6 @@ void LoadOptions()
 
 	sgOptions.Audio.nSoundVolume = GetIniInt("Audio", "Sound Volume", VOLUME_MAX);
 	sgOptions.Audio.nMusicVolume = GetIniInt("Audio", "Music Volume", VOLUME_MAX);
-	sgOptions.Audio.bAutoEquipSound = GetIniBool("Audio", "Auto Equip Sound", false);
 
 	sgOptions.Graphics.nWidth = GetIniInt("Graphics", "Width", DEFAULT_WIDTH);
 	sgOptions.Graphics.nHeight = GetIniInt("Graphics", "Height", DEFAULT_HEIGHT);
@@ -214,7 +213,6 @@ void SaveOptions()
 
 	SetIniValue("Audio", "Sound Volume", sgOptions.Audio.nSoundVolume);
 	SetIniValue("Audio", "Music Volume", sgOptions.Audio.nMusicVolume);
-	SetIniValue("Audio", "Auto Equip Sound", sgOptions.Audio.bAutoEquipSound);
 
 	SetIniValue("Graphics", "Width", sgOptions.Graphics.nWidth);
 	SetIniValue("Graphics", "Height", sgOptions.Graphics.nHeight);

@@ -18,8 +18,6 @@ struct AudioOptions {
 	int nSoundVolume;
 	/** @brief Music volume. */
 	int nMusicVolume;
-	/** @brief Automatically equipping items on pickup emits the equipment sound. */
-	bool bAutoEquipSound;
 };
 
 struct GraphicsOptions {
