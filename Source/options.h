@@ -20,9 +20,6 @@ struct AudioOptions {
 	int nMusicVolume;
 	/** @brief Automatically equipping items on pickup emits the equipment sound. */
 	bool bAutoEquipSound;
-
-	/** @brief Quality of the resampler, from 0 (lowest) to 10 (highest) */
-	std::uint8_t nResamplingQuality;
 };
 
 struct GraphicsOptions {

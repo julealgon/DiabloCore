@@ -41,10 +41,11 @@ std::optional<Aulib::Stream> music;
 
 void LoadMusic(HANDLE handle)
 {
+	const int resamplingQuality = 5;
 	SDL_RWops *musicRw = SFileRw_FromStormHandle(handle);
 
 	music.emplace(musicRw, std::make_unique<Aulib::DecoderDrwav>(),
-	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/true);
+	    std::make_unique<Aulib::ResamplerSpeex>(resamplingQuality), /*closeRw=*/true);
 }
 
 void CleanupMusic()
