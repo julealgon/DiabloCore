@@ -23,7 +23,6 @@
 #include "missiles.h"
 #include "options.h"
 #include "player.h"
-#include "qol/autopickup.h"
 #include "spells.h"
 #include "stores.h"
 #include "storm/storm.h"
@@ -750,7 +749,6 @@ bool DoWalk(int pnum, int variant)
 			ChangeLightOffset(player._plid, { 0, 0 });
 		}
 
-		AutoGoldPickup(pnum);
 		return true;
 	} //We didn't reach new tile so update player's "sub-tile" position
 	ChangeOffset(pnum);

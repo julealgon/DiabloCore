@@ -193,7 +193,6 @@ void LoadOptions()
 	sgOptions.Gameplay.bRunInTown = GetIniBool("Game", "Run in Town", false);
 	sgOptions.Gameplay.bGrabInput = GetIniBool("Game", "Grab Input", false);
 	sgOptions.Gameplay.bEnemyHealthBar = GetIniBool("Game", "Enemy Health Bar", false);
-	sgOptions.Gameplay.bAutoGoldPickup = GetIniBool("Game", "Auto Gold Pickup", false);
 	sgOptions.Gameplay.bAutoEquipWeapons = GetIniBool("Game", "Auto Equip Weapons", true);
 	sgOptions.Gameplay.bAutoEquipArmor = GetIniBool("Game", "Auto Equip Armor", false);
 	sgOptions.Gameplay.bAutoEquipHelms = GetIniBool("Game", "Auto Equip Helms", false);
@@ -230,7 +229,6 @@ void SaveOptions()
 	SetIniValue("Game", "Run in Town", sgOptions.Gameplay.bRunInTown);
 	SetIniValue("Game", "Grab Input", sgOptions.Gameplay.bGrabInput);
 	SetIniValue("Game", "Enemy Health Bar", sgOptions.Gameplay.bEnemyHealthBar);
-	SetIniValue("Game", "Auto Gold Pickup", sgOptions.Gameplay.bAutoGoldPickup);
 	SetIniValue("Game", "Auto Equip Weapons", sgOptions.Gameplay.bAutoEquipWeapons);
 	SetIniValue("Game", "Auto Equip Armor", sgOptions.Gameplay.bAutoEquipArmor);
 	SetIniValue("Game", "Auto Equip Helms", sgOptions.Gameplay.bAutoEquipHelms);

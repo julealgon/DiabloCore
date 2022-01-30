@@ -54,8 +54,6 @@ struct GameplayOptions {
 	bool bGrabInput;
 	/** @brief Show enemy health at the top of the screen. */
 	bool bEnemyHealthBar;
-	/** @brief Automatically pick up gold when walking over it. */
-	bool bAutoGoldPickup;
 	/** @brief Automatically attempt to equip weapon-type items when picking them up. */
 	bool bAutoEquipWeapons;
 	/** @brief Automatically attempt to equip armor-type items when picking them up. */
