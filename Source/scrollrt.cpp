@@ -1644,15 +1644,12 @@ void DrawAndBlit()
 
 	int hgt = 0;
 	bool ddsdesc = false;
-	bool ctrlPan = false;
 
 	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
 		ddsdesc = false;
-		ctrlPan = true;
 		hgt = gnScreenHeight;
 	} else if (force_redraw == 1) {
 		ddsdesc = true;
-		ctrlPan = false;
 		hgt = gnViewportHeight;
 	}
 
@@ -1665,10 +1662,7 @@ void DrawAndBlit()
 	nthread_UpdateProgressToNextGameTick();
 
 	DrawView(out, ViewPosition);
-	if (ctrlPan) {
-		DrawCtrlPan(out);
-	}
-
+	DrawCtrlPan(out);
 	DrawLifeFlaskLower(out);
 	DrawManaFlaskLower(out);
 	DrawSpell(out);
