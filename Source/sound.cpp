@@ -169,7 +169,7 @@ void snd_init()
 	// Initialize the SDL_audiolib library. Set the output sample rate to
 	// 22kHz, the audio format to 16-bit signed, use 2 output channels
 	// (stereo), and a 2KiB output buffer.
-	if (!Aulib::init(22050, AUDIO_S16, sgOptions.Audio.nChannels, sgOptions.Audio.nBufferSize)) {
+	if (!Aulib::init(22050, AUDIO_S16, 2, sgOptions.Audio.nBufferSize)) {
 		LogError(LogCategory::Audio, "Failed to initialize audio (Aulib::init): {}", SDL_GetError());
 		return;
 	}

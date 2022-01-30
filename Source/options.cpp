@@ -24,9 +24,6 @@ namespace devilution {
 #ifndef DEFAULT_HEIGHT
 #define DEFAULT_HEIGHT 480
 #endif
-#ifndef DEFAULT_AUDIO_CHANNELS
-#define DEFAULT_AUDIO_CHANNELS 2
-#endif
 #ifndef DEFAULT_AUDIO_BUFFER_SIZE
 #define DEFAULT_AUDIO_BUFFER_SIZE 2048
 #endif
@@ -187,7 +184,6 @@ void LoadOptions()
 	sgOptions.Audio.nMusicVolume = GetIniInt("Audio", "Music Volume", VOLUME_MAX);
 	sgOptions.Audio.bAutoEquipSound = GetIniBool("Audio", "Auto Equip Sound", false);
 
-	sgOptions.Audio.nChannels = GetIniInt("Audio", "Channels", DEFAULT_AUDIO_CHANNELS);
 	sgOptions.Audio.nBufferSize = GetIniInt("Audio", "Buffer Size", DEFAULT_AUDIO_BUFFER_SIZE);
 	sgOptions.Audio.nResamplingQuality = GetIniInt("Audio", "Resampling Quality", DEFAULT_AUDIO_RESAMPLING_QUALITY);
 
@@ -229,7 +225,6 @@ void SaveOptions()
 	SetIniValue("Audio", "Music Volume", sgOptions.Audio.nMusicVolume);
 	SetIniValue("Audio", "Auto Equip Sound", sgOptions.Audio.bAutoEquipSound);
 
-	SetIniValue("Audio", "Channels", sgOptions.Audio.nChannels);
 	SetIniValue("Audio", "Buffer Size", sgOptions.Audio.nBufferSize);
 	SetIniValue("Audio", "Resampling Quality", sgOptions.Audio.nResamplingQuality);
 	SetIniValue("Graphics", "Width", sgOptions.Graphics.nWidth);
