@@ -21,8 +21,6 @@ struct AudioOptions {
 	/** @brief Automatically equipping items on pickup emits the equipment sound. */
 	bool bAutoEquipSound;
 
-	/** @brief Buffer size (number of frames per channel) */
-	std::uint32_t nBufferSize;
 	/** @brief Quality of the resampler, from 0 (lowest) to 10 (highest) */
 	std::uint8_t nResamplingQuality;
 };
