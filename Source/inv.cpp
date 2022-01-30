@@ -25,7 +25,6 @@
 namespace devilution {
 
 bool invflag;
-bool drawsbarflag;
 
 /**
  * Maps from inventory slot to screen position. The inventory slots are
@@ -654,7 +653,6 @@ void CheckInvPaste(int pnum, Point cursorPosition)
 			if (player.HoldItem._itype == ItemType::Gold)
 				player._pGold = CalculateGold(player);
 		}
-		drawsbarflag = true;
 	} break;
 	case ILOC_NONE:
 	case ILOC_INVALID:
@@ -843,7 +841,6 @@ void CheckInvCut(int pnum, Point cursorPosition, bool automaticMove)
 
 			if (!automaticMove || automaticallyMoved) {
 				beltItem._itype = ItemType::None;
-				drawsbarflag = true;
 			}
 		}
 	}
@@ -1100,7 +1097,6 @@ void InitInv()
 	}
 
 	invflag = false;
-	drawsbarflag = false;
 }
 
 void DrawInv(const Surface &out)
@@ -1261,7 +1257,6 @@ bool AutoPlaceItemInBelt(Player &player, const Item &item, bool persistItem)
 			if (persistItem) {
 				beltItem = item;
 				player.CalcScrolls();
-				drawsbarflag = true;
 			}
 
 			return true;
@@ -1867,7 +1862,6 @@ int8_t CheckInvHLight()
 		pi = &myPlayer.InvList[ii];
 	} else if (r >= SLOTXY_BELT_FIRST) {
 		r -= SLOTXY_BELT_FIRST;
-		drawsbarflag = true;
 		pi = &myPlayer.SpdList[r];
 		if (pi->isEmpty())
 			return -1;

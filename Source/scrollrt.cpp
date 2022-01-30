@@ -1336,9 +1336,8 @@ void DoBlitScreen(Sint16 dwX, Sint16 dwY, Uint16 dwWdt, Uint16 dwHgt)
  * @brief Check render pipeline and blit individual screen parts
  * @param dwHgt Section of screen to update from top to bottom
  * @param draw_desc Render info box
- * @param draw_sbar Render belt
  */
-void DrawMain(int dwHgt, bool drawDesc, bool drawSbar)
+void DrawMain(int dwHgt, bool drawDesc)
 {
 	if (!gbActive || RenderDirectlyToOutputSurface) {
 		return;
@@ -1350,9 +1349,7 @@ void DrawMain(int dwHgt, bool drawDesc, bool drawSbar)
 		DoBlitScreen(0, 0, gnScreenWidth, dwHgt);
 	}
 	if (dwHgt < gnScreenHeight) {
-		if (drawSbar) {
-			DoBlitScreen(PANEL_LEFT + 204, PANEL_TOP + 5, 232, 28);
-		}
+		DoBlitScreen(PANEL_LEFT + 204, PANEL_TOP + 5, 232, 28);
 		if (drawDesc) {
 			DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
 		}
@@ -1628,7 +1625,7 @@ void scrollrt_draw_game_screen()
 		unlock_buf(0);
 	}
 
-	DrawMain(hgt, false, false);
+	DrawMain(hgt, false);
 
 	RenderPresent();
 
@@ -1650,7 +1647,6 @@ void DrawAndBlit()
 	bool ctrlPan = false;
 
 	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
-		drawsbarflag = true;
 		ddsdesc = false;
 		ctrlPan = true;
 		hgt = gnScreenHeight;
@@ -1677,9 +1673,7 @@ void DrawAndBlit()
 	DrawManaFlaskLower(out);
 	DrawSpell(out);
 	DrawCtrlBtns(out);
-	if (drawsbarflag) {
-		DrawInvBelt(out);
-	}
+	DrawInvBelt(out);
 	if (talkflag) {
 		DrawTalkPan(out);
 		hgt = gnScreenHeight;
@@ -1696,11 +1690,9 @@ void DrawAndBlit()
 
 	unlock_buf(0);
 
-	DrawMain(hgt, ddsdesc, drawsbarflag);
+	DrawMain(hgt, ddsdesc);
 
 	RenderPresent();
-
-	drawsbarflag = false;
 }
 
 } // namespace devilution

@@ -359,9 +359,6 @@ void CheckCursMove()
 	pcursmonst = -1;
 	pcursobj = -1;
 	pcursitem = -1;
-	if (pcursinvitem != -1) {
-		drawsbarflag = true;
-	}
 	pcursinvitem = -1;
 	pcursplr = -1;
 	ShowUniqueItemInfoBox = false;
