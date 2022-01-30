@@ -76,7 +76,6 @@ bool zoomflag;
 bool gbProcessPlayers;
 bool gbLoadGame;
 bool cineflag;
-int force_redraw;
 int PauseMode;
 bool gbNestArt;
 bool gbQuietMode = false;
@@ -157,7 +156,6 @@ bool ProcessInput()
 	}
 
 	if (gmenu_is_active()) {
-		force_redraw |= 1;
 		return false;
 	}
 
@@ -613,7 +611,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 		LastMouseButtonAction = MouseActionType::None;
 		sgbMouseDown = CLICK_NONE;
 		ShowProgress((interface_mode)uMsg);
-		force_redraw = 255;
 		DrawAndBlit();
 		LoadPWaterPalette();
 		if (gbRunGame)
@@ -638,11 +635,9 @@ void RunGameLoop(interface_mode uMsg)
 	gbRunGame = true;
 	gbProcessPlayers = true;
 	gbRunGameResult = true;
-	force_redraw = 255;
 	DrawAndBlit();
 	LoadPWaterPalette();
 	PaletteFadeIn(8);
-	force_redraw = 255;
 	gbGameLoopStartup = true;
 	nthread_ignore_mutex(false);
 
@@ -677,7 +672,6 @@ void RunGameLoop(interface_mode uMsg)
 				ProcessInput();
 			if (!drawGame)
 				continue;
-			force_redraw |= 1;
 			DrawAndBlit();
 			continue;
 		}
@@ -693,7 +687,6 @@ void RunGameLoop(interface_mode uMsg)
 	PaletteFadeOut(8);
 	NewCursor(CURSOR_NONE);
 	ClearScreenBuffer();
-	force_redraw = 255;
 	scrollrt_draw_game_screen();
 	saveProc = SetWindowProc(saveProc);
 	assert(saveProc == GameEventHandler);
@@ -1052,7 +1045,6 @@ void GameLogic()
 	ClearPlrMsg();
 	CheckTriggers();
 	CheckQuests();
-	force_redraw |= 1;
 	pfile_update(false);
 }
 
@@ -1066,14 +1058,12 @@ void TimeoutCursor(bool bTimeout)
 			AddPanelString("-- Network timeout --");
 			AddPanelString("-- Waiting for players --");
 			NewCursor(CURSOR_HOURGLASS);
-			force_redraw = 255;
 		}
 		scrollrt_draw_game_screen();
 	} else if (sgnTimeoutCurs != CURSOR_NONE) {
 		NewCursor(sgnTimeoutCurs);
 		sgnTimeoutCurs = CURSOR_NONE;
 		ClearPanel();
-		force_redraw = 255;
 	}
 }
 
@@ -1514,8 +1504,6 @@ void diablo_pause_game()
 		sound_stop();
 		LastMouseButtonAction = MouseActionType::None;
 	}
-
-	force_redraw = 255;
 }
 
 bool GameWasAlreadyPaused = false;

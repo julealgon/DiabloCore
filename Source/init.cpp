@@ -158,9 +158,6 @@ void init_create_window()
 void MainWndProc(uint32_t msg)
 {
 	switch (msg) {
-	case DVL_WM_PAINT:
-		force_redraw = 255;
-		break;
 	case DVL_WM_QUERYENDSESSION:
 		diablo_quit(0);
 	}

@@ -1505,7 +1505,6 @@ void AddStealPotions(Missile &missile, Point /*dst*/, Direction /*midir*/)
 					hasPlayedSFX = true;
 				}
 			}
-			force_redraw = 255;
 		}
 	}
 	missile._miDelFlag = true;
@@ -2539,7 +2538,6 @@ void AddBlodboil(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	int lvl = player._pLevel * 2;
 	missile._mirange = lvl + 10 * missile._mispllvl + 245;
 	CalcPlrItemVals(player, true);
-	force_redraw = 255;
 	player.Say(HeroSpeech::Aaaaargh);
 }
 
@@ -3876,7 +3874,6 @@ void MI_Blodboil(Missile &missile)
 
 	CalcPlrItemVals(player, true);
 	ApplyPlrDamage(id, 0, 1, hpdif);
-	force_redraw = 255;
 	player.Say(HeroSpeech::HeavyBreathing);
 }
 

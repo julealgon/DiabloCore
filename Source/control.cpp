@@ -768,8 +768,6 @@ void SetSpell()
 	auto &myPlayer = Players[MyPlayerId];
 	myPlayer._pRSpell = pSpell;
 	myPlayer._pRSplType = pSplType;
-
-	force_redraw = 255;
 }
 
 void SetSpeedSpell(int slot)
@@ -819,7 +817,6 @@ void ToggleSpell(int slot)
 	if ((spells & GetSpellBitmask(myPlayer._pSplHotKey[slot])) != 0) {
 		myPlayer._pRSpell = myPlayer._pSplHotKey[slot];
 		myPlayer._pRSplType = myPlayer._pSplTHotKey[slot];
-		force_redraw = 255;
 	}
 }
 
@@ -1069,7 +1066,6 @@ void DoPanBtn()
 			auto &myPlayer = Players[MyPlayerId];
 			myPlayer._pRSpell = SPL_INVALID;
 			myPlayer._pRSplType = RSPLTYPE_INVALID;
-			force_redraw = 255;
 			return;
 		}
 		DoSpeedBook();
@@ -1545,7 +1541,6 @@ void CheckSBook()
 			}
 			myPlayer._pRSpell = sn;
 			myPlayer._pRSplType = st;
-			force_redraw = 255;
 		}
 	}
 	if (tabArea.Contains(MousePosition)) {
@@ -1740,7 +1735,6 @@ void control_type_message()
 		talkButtonDown = false;
 	}
 	sgbPlrTalkTbl = PANEL_HEIGHT + 16;
-	force_redraw = 255;
 	TalkSaveIndex = NextTalkSave;
 }
 
@@ -1748,7 +1742,6 @@ void control_reset_talk()
 {
 	talkflag = false;
 	sgbPlrTalkTbl = 0;
-	force_redraw = 255;
 }
 
 bool control_talk_last_key(char vkey)

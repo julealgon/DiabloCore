@@ -1189,8 +1189,6 @@ void DrawView(const Surface &out, Point startPosition)
 #ifdef _DEBUG
 	bool debugGridTextNeeded = IsDebugGridTextNeeded();
 	if (debugGridTextNeeded || DebugGrid) {
-		// force redrawing or debug stuff stays on panel on 640x480 resolution
-		force_redraw = 255;
 		char debugGridTextBuffer[10];
 		for (auto m : DebugCoordsMap) {
 			Point dunCoords = { m.first % MAXDUNX, m.first / MAXDUNX };
@@ -1606,12 +1604,7 @@ void EnableFrameCount()
 
 void scrollrt_draw_game_screen()
 {
-	int hgt = 0;
-
-	if (force_redraw == 255) {
-		force_redraw = 0;
-		hgt = gnScreenHeight;
-	}
+	int hgt = gnScreenHeight;
 
 	if (IsHardwareCursor()) {
 		SetHardwareCursorVisible(ShouldShowCursor());
@@ -1638,15 +1631,7 @@ void DrawAndBlit()
 		return;
 	}
 
-	int hgt = 0;
-
-	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
-		hgt = gnScreenHeight;
-	} else if (force_redraw == 1) {
-		hgt = gnViewportHeight;
-	}
-
-	force_redraw = 0;
+	int hgt = gnScreenHeight;
 
 	lock_buf(0);
 	const Surface &out = GlobalBackBuffer();

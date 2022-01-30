@@ -55,12 +55,10 @@ void ClearReadiedSpell(Player &player)
 {
 	if (player._pRSpell != SPL_INVALID) {
 		player._pRSpell = SPL_INVALID;
-		force_redraw = 255;
 	}
 
 	if (player._pRSplType != RSPLTYPE_INVALID) {
 		player._pRSplType = RSPLTYPE_INVALID;
-		force_redraw = 255;
 	}
 }
 

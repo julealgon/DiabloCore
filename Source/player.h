@@ -523,7 +523,6 @@ struct Player {
 		if (item._itype == ItemType::Staff && item._iSpell != SPL_NULL && item._iCharges > 0) {
 			_pRSpell = item._iSpell;
 			_pRSplType = RSPLTYPE_CHARGES;
-			force_redraw = 255;
 		}
 	}
 
