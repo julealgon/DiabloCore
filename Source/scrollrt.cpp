@@ -183,20 +183,14 @@ void UpdateMissilesRendererData()
 	}
 }
 
-uint32_t sgdwCursWdtOld;
 int sgdwCursX;
 int sgdwCursY;
 /**
  * Lower bound of back buffer.
  */
 uint32_t sgdwCursHgt;
-
-int sgdwCursXOld;
-int sgdwCursYOld;
-
 uint32_t sgdwCursWdt;
 BYTE sgSaveBack[8192];
-uint32_t sgdwCursHgtOld;
 
 bool dRendered[MAXDUNX][MAXDUNY];
 
@@ -238,10 +232,6 @@ void UndrawCursor(const Surface &out)
 
 	BlitCursor(out.at(sgdwCursX, sgdwCursY), out.pitch(), sgSaveBack, sgdwCursWdt);
 
-	sgdwCursXOld = sgdwCursX;
-	sgdwCursYOld = sgdwCursY;
-	sgdwCursWdtOld = sgdwCursWdt;
-	sgdwCursHgtOld = sgdwCursHgt;
 	sgdwCursWdt = 0;
 }
 
@@ -1332,34 +1322,14 @@ void DoBlitScreen(Sint16 dwX, Sint16 dwY, Uint16 dwWdt, Uint16 dwHgt)
 
 /**
  * @brief Check render pipeline and blit individual screen parts
- * @param dwHgt Section of screen to update from top to bottom
  */
-void DrawMain(int dwHgt)
+void DrawMain()
 {
 	if (!gbActive || RenderDirectlyToOutputSurface) {
 		return;
 	}
 
-	assert(dwHgt >= 0 && dwHgt <= gnScreenHeight);
-
-	if (dwHgt > 0) {
-		DoBlitScreen(0, 0, gnScreenWidth, dwHgt);
-	}
-	if (dwHgt < gnScreenHeight) {
-		DoBlitScreen(PANEL_LEFT + 204, PANEL_TOP + 5, 232, 28);
-		DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
-		DoBlitScreen(PANEL_LEFT + 460, PANEL_TOP, 88, 72);
-		DoBlitScreen(PANEL_LEFT + 564, PANEL_TOP + 64, 56, 56);
-		DoBlitScreen(PANEL_LEFT + 96, PANEL_TOP, 88, 72);
-		DoBlitScreen(PANEL_LEFT + 8, PANEL_TOP + 5, 72, 119);
-		DoBlitScreen(PANEL_LEFT + 556, PANEL_TOP + 5, 72, 48);
-		if (sgdwCursWdtOld != 0) {
-			DoBlitScreen(sgdwCursXOld, sgdwCursYOld, sgdwCursWdtOld, sgdwCursHgtOld);
-		}
-		if (sgdwCursWdt != 0) {
-			DoBlitScreen(sgdwCursX, sgdwCursY, sgdwCursWdt, sgdwCursHgt);
-		}
-	}
+	DoBlitScreen(0, 0, gnScreenWidth, gnScreenHeight);
 }
 
 } // namespace
@@ -1388,7 +1358,6 @@ Displacement GetOffsetForWalking(const AnimationInfo &animationInfo, const Direc
 void ClearCursor() // CODE_FIX: this was supposed to be in cursor.cpp
 {
 	sgdwCursWdt = 0;
-	sgdwCursWdtOld = 0;
 }
 
 void ShiftGrid(int *x, int *y, int horizontal, int vertical)
@@ -1604,8 +1573,6 @@ void EnableFrameCount()
 
 void scrollrt_draw_game_screen()
 {
-	int hgt = gnScreenHeight;
-
 	if (IsHardwareCursor()) {
 		SetHardwareCursorVisible(ShouldShowCursor());
 	} else {
@@ -1614,7 +1581,7 @@ void scrollrt_draw_game_screen()
 		unlock_buf(0);
 	}
 
-	DrawMain(hgt);
+	DrawMain();
 
 	RenderPresent();
 
@@ -1631,8 +1598,6 @@ void DrawAndBlit()
 		return;
 	}
 
-	int hgt = gnScreenHeight;
-
 	lock_buf(0);
 	const Surface &out = GlobalBackBuffer();
 	UndrawCursor(out);
@@ -1648,7 +1613,6 @@ void DrawAndBlit()
 	DrawInvBelt(out);
 	if (talkflag) {
 		DrawTalkPan(out);
-		hgt = gnScreenHeight;
 	}
 	DrawXPBar(out);
 
@@ -1662,7 +1626,7 @@ void DrawAndBlit()
 
 	unlock_buf(0);
 
-	DrawMain(hgt);
+	DrawMain();
 
 	RenderPresent();
 }
