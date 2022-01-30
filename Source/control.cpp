@@ -55,7 +55,6 @@ int8_t initialDropGoldIndex;
 bool talkflag;
 bool sbookflag;
 bool chrflag;
-bool drawbtnflag;
 char infostr[64];
 bool panelflag;
 int initialDropGoldValue;
@@ -382,7 +381,6 @@ void DrawFlaskLower(const Surface &out, const Surface &sourceBuffer, int offset,
 void SetButtonStateDown(int btnId)
 {
 	PanelButtons[btnId] = true;
-	drawbtnflag = true;
 	panbtndown = true;
 }
 
@@ -1051,7 +1049,6 @@ void ClearPanBtn()
 {
 	for (bool &panelButton : PanelButtons)
 		panelButton = false;
-	drawbtnflag = true;
 	panbtndown = false;
 }
 
@@ -1063,7 +1060,6 @@ void DoPanBtn()
 		if (MousePosition.x >= PanBtnPos[i].x + PANEL_LEFT && MousePosition.x <= x) {
 			if (MousePosition.y >= PanBtnPos[i].y + PANEL_TOP && MousePosition.y <= y) {
 				PanelButtons[i] = true;
-				drawbtnflag = true;
 				panbtndown = true;
 			}
 		}
@@ -1200,7 +1196,6 @@ void CheckPanelInfo()
 void CheckBtnUp()
 {
 	bool gamemenuOff = true;
-	drawbtnflag = true;
 	panbtndown = false;
 
 	for (int i = 0; i < 7; i++) {
