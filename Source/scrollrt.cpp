@@ -1335,9 +1335,8 @@ void DoBlitScreen(Sint16 dwX, Sint16 dwY, Uint16 dwWdt, Uint16 dwHgt)
 /**
  * @brief Check render pipeline and blit individual screen parts
  * @param dwHgt Section of screen to update from top to bottom
- * @param draw_desc Render info box
  */
-void DrawMain(int dwHgt, bool drawDesc)
+void DrawMain(int dwHgt)
 {
 	if (!gbActive || RenderDirectlyToOutputSurface) {
 		return;
@@ -1350,10 +1349,7 @@ void DrawMain(int dwHgt, bool drawDesc)
 	}
 	if (dwHgt < gnScreenHeight) {
 		DoBlitScreen(PANEL_LEFT + 204, PANEL_TOP + 5, 232, 28);
-		if (drawDesc) {
-			DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
-		}
-
+		DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
 		DoBlitScreen(PANEL_LEFT + 460, PANEL_TOP, 88, 72);
 		DoBlitScreen(PANEL_LEFT + 564, PANEL_TOP + 64, 56, 56);
 		DoBlitScreen(PANEL_LEFT + 96, PANEL_TOP, 88, 72);
@@ -1625,7 +1621,7 @@ void scrollrt_draw_game_screen()
 		unlock_buf(0);
 	}
 
-	DrawMain(hgt, false);
+	DrawMain(hgt);
 
 	RenderPresent();
 
@@ -1643,13 +1639,10 @@ void DrawAndBlit()
 	}
 
 	int hgt = 0;
-	bool ddsdesc = false;
 
 	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
-		ddsdesc = false;
 		hgt = gnScreenHeight;
 	} else if (force_redraw == 1) {
-		ddsdesc = true;
 		hgt = gnViewportHeight;
 	}
 
@@ -1684,7 +1677,7 @@ void DrawAndBlit()
 
 	unlock_buf(0);
 
-	DrawMain(hgt, ddsdesc);
+	DrawMain(hgt);
 
 	RenderPresent();
 }
