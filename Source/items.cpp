@@ -841,11 +841,9 @@ int SaveItemPower(Item &item, const ItemPower &power)
 		break;
 	case IPL_MANA:
 		item._iPLMana += r << 6;
-		drawmanaflag = true;
 		break;
 	case IPL_MANA_CURSE:
 		item._iPLMana -= r << 6;
-		drawmanaflag = true;
 		break;
 	case IPL_DUR: {
 		int bonus = r * item._iMaxDur / 100;
@@ -895,7 +893,6 @@ int SaveItemPower(Item &item, const ItemPower &power)
 		break;
 	case IPL_NOMANA:
 		item._iFlags |= ISPL_NOMANA;
-		drawmanaflag = true;
 		break;
 	case IPL_NOHEALPLR:
 		item._iFlags |= ISPL_NOHEALPLR;
@@ -920,14 +917,12 @@ int SaveItemPower(Item &item, const ItemPower &power)
 			item._iFlags |= ISPL_STEALMANA_3;
 		if (power.param1 == 5)
 			item._iFlags |= ISPL_STEALMANA_5;
-		drawmanaflag = true;
 		break;
 	case IPL_STEALLIFE:
 		if (power.param1 == 3)
 			item._iFlags |= ISPL_STEALLIFE_3;
 		if (power.param1 == 5)
 			item._iFlags |= ISPL_STEALLIFE_5;
-		drawhpflag = true;
 		break;
 	case IPL_TARGAC:
 		item._iPLEnAc = power.param1;
@@ -2776,9 +2771,6 @@ void CalcPlrItemVals(Player &player, bool loadgfx)
 	} else {
 		MaxGold = GOLD_MAX_LIMIT * 2;
 	}
-
-	drawmanaflag = true;
-	drawhpflag = true;
 }
 
 void CalcPlrInv(Player &player, bool loadgfx)
@@ -4007,12 +3999,10 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 			l += l / 2;
 		player._pHitPoints = std::min(player._pHitPoints + l, player._pMaxHP);
 		player._pHPBase = std::min(player._pHPBase + l, player._pMaxHPBase);
-		drawhpflag = true;
 	} break;
 	case IMISC_FULLHEAL:
 		player._pHitPoints = player._pMaxHP;
 		player._pHPBase = player._pMaxHPBase;
-		drawhpflag = true;
 		break;
 	case IMISC_MANA: {
 		int j = player._pMaxMana >> 8;
@@ -4024,14 +4014,12 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = std::min(player._pMana + l, player._pMaxMana);
 			player._pManaBase = std::min(player._pManaBase + l, player._pMaxManaBase);
-			drawmanaflag = true;
 		}
 	} break;
 	case IMISC_FULLMANA:
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = player._pMaxMana;
 			player._pManaBase = player._pMaxManaBase;
-			drawmanaflag = true;
 		}
 		break;
 	case IMISC_ELIXSTR:
@@ -4055,7 +4043,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 			l += l / 2;
 		player._pHitPoints = std::min(player._pHitPoints + l, player._pMaxHP);
 		player._pHPBase = std::min(player._pHPBase + l, player._pMaxHPBase);
-		drawhpflag = true;
 		j = player._pMaxMana >> 8;
 		l = ((j / 2) + GenerateRnd(j)) << 6;
 		if (player._pClass == HeroClass::Sorcerer)
@@ -4065,17 +4052,14 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = std::min(player._pMana + l, player._pMaxMana);
 			player._pManaBase = std::min(player._pManaBase + l, player._pMaxManaBase);
-			drawmanaflag = true;
 		}
 	} break;
 	case IMISC_FULLREJUV:
 		player._pHitPoints = player._pMaxHP;
 		player._pHPBase = player._pMaxHPBase;
-		drawhpflag = true;
 		if ((player._pIFlags & ISPL_NOMANA) == 0) {
 			player._pMana = player._pMaxMana;
 			player._pManaBase = player._pMaxManaBase;
-			drawmanaflag = true;
 		}
 		break;
 	case IMISC_SCROLL:
@@ -4122,7 +4106,6 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		}
 		if (p == MyPlayerId)
 			CalcPlrBookVals(player);
-		drawmanaflag = true;
 		break;
 	case IMISC_MAPOFDOOM:
 		doom_init();

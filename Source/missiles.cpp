@@ -1505,7 +1505,6 @@ void AddStealPotions(Missile &missile, Point /*dst*/, Direction /*midir*/)
 					hasPlayedSFX = true;
 				}
 			}
-			force_redraw = 255;
 		}
 	}
 	missile._miDelFlag = true;
@@ -1530,7 +1529,6 @@ void AddManaTrap(Missile &missile, Point /*dst*/, Direction /*midir*/)
 			player._pMana = 0;
 			player._pManaBase = player._pMana + player._pMaxManaBase - player._pMaxMana;
 			CalcPlrInv(player, false);
-			drawmanaflag = true;
 			PlaySfxLoc(TSFX_COW7, target);
 		}
 	}
@@ -1684,7 +1682,6 @@ void AddMana(Missile &missile, Point /*dst*/, Direction /*midir*/)
 		player._pManaBase = player._pMaxManaBase;
 	UseMana(missile._misource, SPL_MANA);
 	missile._miDelFlag = true;
-	drawmanaflag = true;
 }
 
 void AddMagi(Missile &missile, Point /*dst*/, Direction /*midir*/)
@@ -1695,7 +1692,6 @@ void AddMagi(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	player._pManaBase = player._pMaxManaBase;
 	UseMana(missile._misource, SPL_MAGI);
 	missile._miDelFlag = true;
-	drawmanaflag = true;
 }
 
 void AddRing(Missile &missile, Point /*dst*/, Direction /*midir*/)
@@ -2411,7 +2407,6 @@ void AddHeal(Missile &missile, Point /*dst*/, Direction /*midir*/)
 
 	UseMana(missile._misource, SPL_HEAL);
 	missile._miDelFlag = true;
-	drawhpflag = true;
 }
 
 void AddHealOther(Missile &missile, Point /*dst*/, Direction /*midir*/)
@@ -2543,7 +2538,6 @@ void AddBlodboil(Missile &missile, Point /*dst*/, Direction /*midir*/)
 	int lvl = player._pLevel * 2;
 	missile._mirange = lvl + 10 * missile._mispllvl + 245;
 	CalcPlrItemVals(player, true);
-	force_redraw = 255;
 	player.Say(HeroSpeech::Aaaaargh);
 }
 
@@ -3880,7 +3874,6 @@ void MI_Blodboil(Missile &missile)
 
 	CalcPlrItemVals(player, true);
 	ApplyPlrDamage(id, 0, 1, hpdif);
-	force_redraw = 255;
 	player.Say(HeroSpeech::HeavyBreathing);
 }
 

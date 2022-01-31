@@ -991,7 +991,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pHPBase > player._pMaxHPBase) {
 			player._pHPBase = player._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if ((player._pIFlags & (ISPL_STEALMANA_3 | ISPL_STEALMANA_5)) != 0 && (player._pIFlags & ISPL_NOMANA) == 0) {
 		if ((player._pIFlags & ISPL_STEALMANA_3) != 0) {
@@ -1008,7 +1007,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pManaBase > player._pMaxManaBase) {
 			player._pManaBase = player._pMaxManaBase;
 		}
-		drawmanaflag = true;
 	}
 	if ((player._pIFlags & (ISPL_STEALLIFE_3 | ISPL_STEALLIFE_5)) != 0) {
 		if ((player._pIFlags & ISPL_STEALLIFE_3) != 0) {
@@ -1025,7 +1023,6 @@ bool PlrHitMonst(int pnum, int m)
 		if (player._pHPBase > player._pMaxHPBase) {
 			player._pHPBase = player._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if ((player._pIFlags & ISPL_NOHEALPLR) != 0) {
 		monster._mFlags |= MFLAG_NOHEAL;
@@ -1120,7 +1117,6 @@ bool PlrHitPlr(int pnum, int8_t p)
 		if (attacker._pHPBase > attacker._pMaxHPBase) {
 			attacker._pHPBase = attacker._pMaxHPBase;
 		}
-		drawhpflag = true;
 	}
 	if (pnum == MyPlayerId) {
 		NetSendCmdDamage(true, p, skdam);
@@ -1810,7 +1806,6 @@ void ValidatePlayer()
 		myPlayer._pLevel = MAXCHARLEVEL - 1;
 	if (myPlayer._pExperience > myPlayer._pNextExper) {
 		myPlayer._pExperience = myPlayer._pNextExper;
-		force_redraw = 255;
 	}
 
 	int gt = 0;
@@ -1959,7 +1954,6 @@ void Player::RemoveSpdBarItem(int iv)
 	SpdList[iv]._itype = ItemType::None;
 
 	CalcScrolls();
-	force_redraw = 255;
 }
 
 int Player::GetBaseAttributeValue(CharacterAttribute attribute) const
@@ -2505,10 +2499,6 @@ void NextPlrLevel(int pnum)
 	player._pMaxHPBase += hp;
 	player._pHPBase = player._pMaxHPBase;
 
-	if (pnum == MyPlayerId) {
-		drawhpflag = true;
-	}
-
 	int mana = 128;
 	if (player._pClass == HeroClass::Warrior)
 		mana = 64;
@@ -2522,10 +2512,6 @@ void NextPlrLevel(int pnum)
 	if ((player._pIFlags & ISPL_NOMANA) == 0) {
 		player._pMana = player._pMaxMana;
 		player._pManaBase = player._pMaxManaBase;
-	}
-
-	if (pnum == MyPlayerId) {
-		drawmanaflag = true;
 	}
 
 	CalcPlrInv(player, true);
@@ -2553,8 +2539,6 @@ void AddPlrExperience(int pnum, int lvl, int exp)
 
 	// Overflow is only possible if a kill grants more than (2^32-1 - MaxExperience) XP in one go, which doesn't happen in normal gameplay
 	player._pExperience = std::min(player._pExperience + clampedExp, MaxExperience);
-
-	force_redraw = 255;
 
 	if (player._pExperience >= ExpLvlsTbl[49]) {
 		player._pLevel = 50;
@@ -2830,7 +2814,6 @@ void StartPlrHit(int pnum, int dam, bool forcehit)
 
 	player.Say(HeroSpeech::ArghClang);
 
-	drawhpflag = true;
 	if (player._pClass == HeroClass::Barbarian) {
 		if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
 			return;
@@ -2910,7 +2893,6 @@ StartPlayerKill(int pnum, int earflag)
 		SetPlayerOld(player);
 
 		if (pnum == MyPlayerId) {
-			drawhpflag = true;
 			deathdelay = 30;
 
 			if (pcurs >= CURSOR_FIRSTITEM) {
@@ -2993,8 +2975,7 @@ void ApplyPlrDamage(int pnum, int dam, int minHP /*= 0*/, int frac /*= 0*/, int 
 		if (manaShieldLevel > 0) {
 			totalDamage += totalDamage / -3;
 		}
-		if (pnum == MyPlayerId)
-			drawmanaflag = true;
+
 		if (player._pMana >= totalDamage) {
 			player._pMana -= totalDamage;
 			player._pManaBase -= totalDamage;
@@ -3013,7 +2994,6 @@ void ApplyPlrDamage(int pnum, int dam, int minHP /*= 0*/, int frac /*= 0*/, int 
 	if (totalDamage == 0)
 		return;
 
-	drawhpflag = true;
 	player._pHitPoints -= totalDamage;
 	player._pHPBase -= totalDamage;
 	if (player._pHitPoints > player._pMaxHP) {
@@ -3194,7 +3174,6 @@ void ProcessPlayers()
 				if ((player._pIFlags & ISPL_NOMANA) != 0 && player._pManaBase > 0) {
 					player._pManaBase -= player._pMana;
 					player._pMana = 0;
-					drawmanaflag = true;
 				}
 			}
 
@@ -3646,10 +3625,6 @@ void SetPlayerHitPoints(Player &player, int val)
 {
 	player._pHitPoints = val;
 	player._pHPBase = val + player._pMaxHPBase - player._pMaxHP;
-
-	if (&player == &Players[MyPlayerId]) {
-		drawhpflag = true;
-	}
 }
 
 void SetPlrStr(Player &player, int v)

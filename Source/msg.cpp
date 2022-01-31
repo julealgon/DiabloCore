@@ -1599,7 +1599,6 @@ DWORD OnCheatExperience(TCmd *pCmd, int pnum) // NOLINT(misc-unused-parameters)
 		SendPacket(pnum, pCmd, sizeof(*pCmd));
 	else if (Players[pnum]._pLevel < MAXCHARLEVEL - 1) {
 		Players[pnum]._pExperience = Players[pnum]._pNextExper;
-		force_redraw = 255;
 		NextPlrLevel(pnum);
 	}
 #endif

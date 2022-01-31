@@ -55,12 +55,10 @@ void ClearReadiedSpell(Player &player)
 {
 	if (player._pRSpell != SPL_INVALID) {
 		player._pRSpell = SPL_INVALID;
-		force_redraw = 255;
 	}
 
 	if (player._pRSplType != RSPLTYPE_INVALID) {
 		player._pRSplType = RSPLTYPE_INVALID;
-		force_redraw = 255;
 	}
 }
 
@@ -179,7 +177,6 @@ void UseMana(int id, spell_id sn)
 		ma = GetManaAmount(myPlayer, sn);
 		myPlayer._pMana -= ma;
 		myPlayer._pManaBase -= ma;
-		drawmanaflag = true;
 		break;
 	}
 }
@@ -260,8 +257,6 @@ void DoResurrect(int pnum, uint16_t rid)
 	if (rid == MyPlayerId) {
 		MyPlayerIsDead = false;
 		gamemenu_off();
-		drawhpflag = true;
-		drawmanaflag = true;
 	}
 
 	ClrPlrPath(target);
@@ -322,10 +317,6 @@ void DoHealOther(int pnum, uint16_t rid)
 
 	target._pHitPoints = std::min(target._pHitPoints + hp, target._pMaxHP);
 	target._pHPBase = std::min(target._pHPBase + hp, target._pMaxHPBase);
-
-	if (rid == MyPlayerId) {
-		drawhpflag = true;
-	}
 }
 
 int GetSpellBookLevel(spell_id s)

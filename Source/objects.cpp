@@ -3267,8 +3267,6 @@ bool OperateShrineGlowing(int pnum)
 	else
 		myPlayer._pExperience = 0;
 
-	force_redraw = 255;
-
 	CheckStats(Players[pnum]);
 
 	InitDiabloMsg(EMSG_SHRINE_GLOWING);
@@ -3579,7 +3577,6 @@ void OperateShrine(int pnum, int i, _sfx_id sType)
 	}
 
 	CalcPlrInv(Players[pnum], true);
-	force_redraw = 255;
 
 	if (pnum == MyPlayerId)
 		NetSendCmdParam2(false, CMD_PLROPOBJ, pnum, i);
@@ -3693,7 +3690,6 @@ void OperateGoatShrine(int pnum, int i, _sfx_id sType)
 	Objects[i]._oVar1 = FindValidShrine();
 	OperateShrine(pnum, i, sType);
 	Objects[i]._oAnimDelay = 2;
-	force_redraw = 255;
 }
 
 void OperateCauldron(int pnum, int i, _sfx_id sType)
@@ -3703,7 +3699,6 @@ void OperateCauldron(int pnum, int i, _sfx_id sType)
 	OperateShrine(pnum, i, sType);
 	Objects[i]._oAnimFrame = 3;
 	Objects[i]._oAnimFlag = 0;
-	force_redraw = 255;
 }
 
 bool OperateFountains(int pnum, int i)
@@ -3803,7 +3798,6 @@ bool OperateFountains(int pnum, int i)
 	default:
 		break;
 	}
-	force_redraw = 255;
 	return applied;
 }
 

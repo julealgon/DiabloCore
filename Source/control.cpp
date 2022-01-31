@@ -41,18 +41,11 @@
 #endif
 
 namespace devilution {
-/**
- * @brief Set if the life flask needs to be redrawn during next frame
- */
-bool drawhpflag;
+
 bool dropGoldFlag;
 bool chrbtn[4];
 bool lvlbtndown;
 int dropGoldValue;
-/**
- * @brief Set if the mana flask needs to be redrawn during the next frame
- */
-bool drawmanaflag;
 bool chrbtnactive;
 int pnumlines;
 UiFlags InfoColor;
@@ -62,7 +55,6 @@ int8_t initialDropGoldIndex;
 bool talkflag;
 bool sbookflag;
 bool chrflag;
-bool drawbtnflag;
 char infostr[64];
 bool panelflag;
 int initialDropGoldValue;
@@ -389,7 +381,6 @@ void DrawFlaskLower(const Surface &out, const Surface &sourceBuffer, int offset,
 void SetButtonStateDown(int btnId)
 {
 	PanelButtons[btnId] = true;
-	drawbtnflag = true;
 	panbtndown = true;
 }
 
@@ -777,8 +768,6 @@ void SetSpell()
 	auto &myPlayer = Players[MyPlayerId];
 	myPlayer._pRSpell = pSpell;
 	myPlayer._pRSplType = pSplType;
-
-	force_redraw = 255;
 }
 
 void SetSpeedSpell(int slot)
@@ -828,7 +817,6 @@ void ToggleSpell(int slot)
 	if ((spells & GetSpellBitmask(myPlayer._pSplHotKey[slot])) != 0) {
 		myPlayer._pRSpell = myPlayer._pSplHotKey[slot];
 		myPlayer._pRSplType = myPlayer._pSplTHotKey[slot];
-		force_redraw = 255;
 	}
 }
 
@@ -943,8 +931,6 @@ void InitControlPan()
 	pDurIcons = LoadCel("Items\\DurIcons.CEL", 32);
 	strcpy(infostr, "");
 	ClearPanel();
-	drawhpflag = true;
-	drawmanaflag = true;
 	chrflag = false;
 	spselflag = false;
 	pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
@@ -1060,7 +1046,6 @@ void ClearPanBtn()
 {
 	for (bool &panelButton : PanelButtons)
 		panelButton = false;
-	drawbtnflag = true;
 	panbtndown = false;
 }
 
@@ -1072,7 +1057,6 @@ void DoPanBtn()
 		if (MousePosition.x >= PanBtnPos[i].x + PANEL_LEFT && MousePosition.x <= x) {
 			if (MousePosition.y >= PanBtnPos[i].y + PANEL_TOP && MousePosition.y <= y) {
 				PanelButtons[i] = true;
-				drawbtnflag = true;
 				panbtndown = true;
 			}
 		}
@@ -1082,7 +1066,6 @@ void DoPanBtn()
 			auto &myPlayer = Players[MyPlayerId];
 			myPlayer._pRSpell = SPL_INVALID;
 			myPlayer._pRSplType = RSPLTYPE_INVALID;
-			force_redraw = 255;
 			return;
 		}
 		DoSpeedBook();
@@ -1209,7 +1192,6 @@ void CheckPanelInfo()
 void CheckBtnUp()
 {
 	bool gamemenuOff = true;
-	drawbtnflag = true;
 	panbtndown = false;
 
 	for (int i = 0; i < 7; i++) {
@@ -1559,7 +1541,6 @@ void CheckSBook()
 			}
 			myPlayer._pRSpell = sn;
 			myPlayer._pRSplType = st;
-			force_redraw = 255;
 		}
 	}
 	if (tabArea.Contains(MousePosition)) {
@@ -1754,7 +1735,6 @@ void control_type_message()
 		talkButtonDown = false;
 	}
 	sgbPlrTalkTbl = PANEL_HEIGHT + 16;
-	force_redraw = 255;
 	TalkSaveIndex = NextTalkSave;
 }
 
@@ -1762,7 +1742,6 @@ void control_reset_talk()
 {
 	talkflag = false;
 	sgbPlrTalkTbl = 0;
-	force_redraw = 255;
 }
 
 bool control_talk_last_key(char vkey)

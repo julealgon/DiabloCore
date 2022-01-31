@@ -84,7 +84,6 @@ void GamemenuNewGame(bool /*bActivate*/)
 	}
 
 	MyPlayerIsDead = false;
-	force_redraw = 255;
 	scrollrt_draw_game_screen();
 	CornerStone.activated = false;
 	gbRunGame = false;
@@ -273,14 +272,12 @@ void gamemenu_load_game(bool /*bActivate*/)
 	gamemenu_off();
 	NewCursor(CURSOR_NONE);
 	InitDiabloMsg(EMSG_LOADING);
-	force_redraw = 255;
 	DrawAndBlit();
 	LoadGame(false);
 	ClrDiabloMsg();
 	CornerStone.activated = false;
 	PaletteFadeOut(8);
 	MyPlayerIsDead = false;
-	force_redraw = 255;
 	DrawAndBlit();
 	LoadPWaterPalette();
 	PaletteFadeIn(8);
@@ -304,11 +301,9 @@ void gamemenu_save_game(bool /*bActivate*/)
 	NewCursor(CURSOR_NONE);
 	gamemenu_off();
 	InitDiabloMsg(EMSG_SAVING);
-	force_redraw = 255;
 	DrawAndBlit();
 	SaveGame();
 	ClrDiabloMsg();
-	force_redraw = 255;
 	NewCursor(CURSOR_HAND);
 	if (CornerStone.activated) {
 		CornerstoneSave();

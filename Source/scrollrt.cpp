@@ -183,20 +183,14 @@ void UpdateMissilesRendererData()
 	}
 }
 
-uint32_t sgdwCursWdtOld;
 int sgdwCursX;
 int sgdwCursY;
 /**
  * Lower bound of back buffer.
  */
 uint32_t sgdwCursHgt;
-
-int sgdwCursXOld;
-int sgdwCursYOld;
-
 uint32_t sgdwCursWdt;
 BYTE sgSaveBack[8192];
-uint32_t sgdwCursHgtOld;
 
 bool dRendered[MAXDUNX][MAXDUNY];
 
@@ -238,10 +232,6 @@ void UndrawCursor(const Surface &out)
 
 	BlitCursor(out.at(sgdwCursX, sgdwCursY), out.pitch(), sgSaveBack, sgdwCursWdt);
 
-	sgdwCursXOld = sgdwCursX;
-	sgdwCursYOld = sgdwCursY;
-	sgdwCursWdtOld = sgdwCursWdt;
-	sgdwCursHgtOld = sgdwCursHgt;
 	sgdwCursWdt = 0;
 }
 
@@ -1189,8 +1179,6 @@ void DrawView(const Surface &out, Point startPosition)
 #ifdef _DEBUG
 	bool debugGridTextNeeded = IsDebugGridTextNeeded();
 	if (debugGridTextNeeded || DebugGrid) {
-		// force redrawing or debug stuff stays on panel on 640x480 resolution
-		force_redraw = 255;
 		char debugGridTextBuffer[10];
 		for (auto m : DebugCoordsMap) {
 			Point dunCoords = { m.first % MAXDUNX, m.first / MAXDUNX };
@@ -1334,49 +1322,14 @@ void DoBlitScreen(Sint16 dwX, Sint16 dwY, Uint16 dwWdt, Uint16 dwHgt)
 
 /**
  * @brief Check render pipeline and blit individual screen parts
- * @param dwHgt Section of screen to update from top to bottom
- * @param draw_desc Render info box
- * @param draw_hp Render health bar
- * @param draw_mana Render mana bar
- * @param draw_sbar Render belt
- * @param draw_btn Render panel buttons
  */
-void DrawMain(int dwHgt, bool drawDesc, bool drawHp, bool drawMana, bool drawSbar, bool drawBtn)
+void DrawMain()
 {
 	if (!gbActive || RenderDirectlyToOutputSurface) {
 		return;
 	}
 
-	assert(dwHgt >= 0 && dwHgt <= gnScreenHeight);
-
-	if (dwHgt > 0) {
-		DoBlitScreen(0, 0, gnScreenWidth, dwHgt);
-	}
-	if (dwHgt < gnScreenHeight) {
-		if (drawSbar) {
-			DoBlitScreen(PANEL_LEFT + 204, PANEL_TOP + 5, 232, 28);
-		}
-		if (drawDesc) {
-			DoBlitScreen(PANEL_LEFT + 176, PANEL_TOP + 46, 288, 60);
-		}
-		if (drawMana) {
-			DoBlitScreen(PANEL_LEFT + 460, PANEL_TOP, 88, 72);
-			DoBlitScreen(PANEL_LEFT + 564, PANEL_TOP + 64, 56, 56);
-		}
-		if (drawHp) {
-			DoBlitScreen(PANEL_LEFT + 96, PANEL_TOP, 88, 72);
-		}
-		if (drawBtn) {
-			DoBlitScreen(PANEL_LEFT + 8, PANEL_TOP + 5, 72, 119);
-			DoBlitScreen(PANEL_LEFT + 556, PANEL_TOP + 5, 72, 48);
-		}
-		if (sgdwCursWdtOld != 0) {
-			DoBlitScreen(sgdwCursXOld, sgdwCursYOld, sgdwCursWdtOld, sgdwCursHgtOld);
-		}
-		if (sgdwCursWdt != 0) {
-			DoBlitScreen(sgdwCursX, sgdwCursY, sgdwCursWdt, sgdwCursHgt);
-		}
-	}
+	DoBlitScreen(0, 0, gnScreenWidth, gnScreenHeight);
 }
 
 } // namespace
@@ -1405,7 +1358,6 @@ Displacement GetOffsetForWalking(const AnimationInfo &animationInfo, const Direc
 void ClearCursor() // CODE_FIX: this was supposed to be in cursor.cpp
 {
 	sgdwCursWdt = 0;
-	sgdwCursWdtOld = 0;
 }
 
 void ShiftGrid(int *x, int *y, int horizontal, int vertical)
@@ -1621,13 +1573,6 @@ void EnableFrameCount()
 
 void scrollrt_draw_game_screen()
 {
-	int hgt = 0;
-
-	if (force_redraw == 255) {
-		force_redraw = 0;
-		hgt = gnScreenHeight;
-	}
-
 	if (IsHardwareCursor()) {
 		SetHardwareCursorVisible(ShouldShowCursor());
 	} else {
@@ -1636,7 +1581,7 @@ void scrollrt_draw_game_screen()
 		unlock_buf(0);
 	}
 
-	DrawMain(hgt, false, false, false, false, false);
+	DrawMain();
 
 	RenderPresent();
 
@@ -1653,26 +1598,6 @@ void DrawAndBlit()
 		return;
 	}
 
-	int hgt = 0;
-	bool ddsdesc = false;
-	bool ctrlPan = false;
-
-	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
-		drawhpflag = true;
-		drawmanaflag = true;
-		drawbtnflag = true;
-		drawsbarflag = true;
-		ddsdesc = false;
-		ctrlPan = true;
-		hgt = gnScreenHeight;
-	} else if (force_redraw == 1) {
-		ddsdesc = true;
-		ctrlPan = false;
-		hgt = gnViewportHeight;
-	}
-
-	force_redraw = 0;
-
 	lock_buf(0);
 	const Surface &out = GlobalBackBuffer();
 	UndrawCursor(out);
@@ -1680,26 +1605,14 @@ void DrawAndBlit()
 	nthread_UpdateProgressToNextGameTick();
 
 	DrawView(out, ViewPosition);
-	if (ctrlPan) {
-		DrawCtrlPan(out);
-	}
-	if (drawhpflag) {
-		DrawLifeFlaskLower(out);
-	}
-	if (drawmanaflag) {
-		DrawManaFlaskLower(out);
-
-		DrawSpell(out);
-	}
-	if (drawbtnflag) {
-		DrawCtrlBtns(out);
-	}
-	if (drawsbarflag) {
-		DrawInvBelt(out);
-	}
+	DrawCtrlPan(out);
+	DrawLifeFlaskLower(out);
+	DrawManaFlaskLower(out);
+	DrawSpell(out);
+	DrawCtrlBtns(out);
+	DrawInvBelt(out);
 	if (talkflag) {
 		DrawTalkPan(out);
-		hgt = gnScreenHeight;
 	}
 	DrawXPBar(out);
 
@@ -1713,14 +1626,9 @@ void DrawAndBlit()
 
 	unlock_buf(0);
 
-	DrawMain(hgt, ddsdesc, drawhpflag, drawmanaflag, drawsbarflag, drawbtnflag);
+	DrawMain();
 
 	RenderPresent();
-
-	drawhpflag = false;
-	drawmanaflag = false;
-	drawbtnflag = false;
-	drawsbarflag = false;
 }
 
 } // namespace devilution

@@ -172,7 +172,6 @@ void ApplyGamma(SDL_Color *dst, const SDL_Color *src, int n)
 		dst[i].g = static_cast<Uint8>(pow(src[i].g / 256.0, g) * 256.0);
 		dst[i].b = static_cast<Uint8>(pow(src[i].b / 256.0, g) * 256.0);
 	}
-	force_redraw = 255;
 }
 
 void palette_init()

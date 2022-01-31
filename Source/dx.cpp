@@ -189,7 +189,6 @@ void dx_reinit()
 	if (SDL_SetWindowFullscreen(ghMainWnd, flags) != 0) {
 		ErrSdl();
 	}
-	force_redraw = 255;
 }
 
 void InitPalette()

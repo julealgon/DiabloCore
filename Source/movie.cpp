@@ -63,10 +63,8 @@ void PlayInGameMovie(const char *pszMovie)
 	PaletteFadeOut(8);
 	play_movie(pszMovie, false);
 	ClearScreenBuffer();
-	force_redraw = 255;
 	scrollrt_draw_game_screen();
 	PaletteFadeIn(8);
-	force_redraw = 255;
 }
 
 } // namespace devilution

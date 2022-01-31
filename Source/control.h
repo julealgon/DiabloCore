@@ -27,12 +27,10 @@ namespace devilution {
 #define SPANEL_WIDTH 320
 #define SPANEL_HEIGHT 352
 
-extern bool drawhpflag;
 extern bool dropGoldFlag;
 extern bool chrbtn[4];
 extern bool lvlbtndown;
 extern int dropGoldValue;
-extern bool drawmanaflag;
 extern bool chrbtnactive;
 extern int pnumlines;
 extern UiFlags InfoColor;
@@ -42,7 +40,6 @@ extern int8_t initialDropGoldIndex;
 extern bool talkflag;
 extern bool sbookflag;
 extern bool chrflag;
-extern bool drawbtnflag;
 extern char infostr[64];
 extern bool panelflag;
 extern int initialDropGoldValue;
