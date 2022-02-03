@@ -278,7 +278,7 @@ set(libdevilutionx_SRCS
   Source/tmsg.cpp
   Source/town.cpp
   Source/towners.cpp
-  Source/track.cpp
+  
   Source/trigs.cpp
   Source/controls/menu_controls.cpp
   Source/controls/keymapper.cpp

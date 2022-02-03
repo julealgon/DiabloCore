@@ -533,21 +533,6 @@ struct Player {
 	{
 		return static_cast<PlayerWeaponGraphic>(_pgfxnum & 0xF) == PlayerWeaponGraphic::Bow;
 	}
-
-	bool CanChangeAction()
-	{
-		if (_pmode == PM_STAND)
-			return true;
-		if (_pmode == PM_ATTACK && AnimInfo.CurrentFrame > _pAFNum)
-			return true;
-		if (_pmode == PM_RATTACK && AnimInfo.CurrentFrame > _pAFNum)
-			return true;
-		if (_pmode == PM_SPELL && AnimInfo.CurrentFrame > _pSFNum)
-			return true;
-		if (IsWalking() && AnimInfo.CurrentFrame == AnimInfo.NumberOfFrames)
-			return true;
-		return false;
-	}
 };
 
 extern int MyPlayerId;
