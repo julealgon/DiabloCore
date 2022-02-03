@@ -41,18 +41,6 @@ enum class GameLogicStep {
 	ProcessMissilesTown,
 };
 
-enum class MouseActionType : int {
-	None,
-	Walk,
-	Spell,
-	SpellMonsterTarget,
-	SpellPlayerTarget,
-	Attack,
-	AttackMonsterTarget,
-	AttackPlayerTarget,
-	OperateObject,
-};
-
 extern SDL_Window *ghMainWnd;
 extern uint32_t glSeedTbl[NUMLEVELS];
 extern dungeon_type gnLevelTypeTbl[NUMLEVELS];
@@ -75,8 +63,6 @@ extern bool gbQuietMode;
 extern clicktype sgbMouseDown;
 extern uint16_t gnTickDelay;
 extern char gszProductName[64];
-
-extern MouseActionType LastMouseButtonAction;
 
 void FreeGameMem();
 bool StartGame(bool bNewGame);

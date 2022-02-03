@@ -58,7 +58,6 @@
 #include "themes.h"
 #include "town.h"
 #include "towners.h"
-#include "track.h"
 #include "trigs.h"
 #include "utils/console.h"
 #include "utils/paths.h"
@@ -93,9 +92,6 @@ std::vector<std::string> DebugCmdsFromCommandLine;
 
 GameLogicStep gGameLogicStep = GameLogicStep::None;
 
-/** This and the following mouse variables are for handling in-game click-and-hold actions */
-MouseActionType LastMouseButtonAction = MouseActionType::None;
-
 namespace {
 
 char gszVersionNumber[64] = "internal version unknown";
@@ -127,7 +123,6 @@ void StartGame(interface_mode uMsg)
 	InitLevelCursor();
 	sgnTimeoutCurs = CURSOR_NONE;
 	sgbMouseDown = CLICK_NONE;
-	LastMouseButtonAction = MouseActionType::None;
 }
 
 void FreeGame()
@@ -161,7 +156,6 @@ bool ProcessInput()
 
 	if (!gmenu_is_active() && sgnTimeoutCurs == CURSOR_NONE) {
 		CheckCursMove();
-		RepeatMouseAction();
 	}
 
 	return true;
@@ -179,7 +173,6 @@ void LeftMouseCmd(bool bShift)
 		if (pcursmonst != -1)
 			NetSendCmdLocParam1(true, CMD_TALKXY, cursPosition, pcursmonst);
 		if (pcursitem == -1 && pcursmonst == -1 && pcursplr == -1) {
-			LastMouseButtonAction = MouseActionType::Walk;
 			NetSendCmdLoc(MyPlayerId, true, CMD_WALKXY, cursPosition);
 		}
 		return;
@@ -190,21 +183,17 @@ void LeftMouseCmd(bool bShift)
 	if (pcursitem != -1 && pcurs == CURSOR_HAND && !bShift) {
 		NetSendCmdLocParam1(true, invflag ? CMD_GOTOGETITEM : CMD_GOTOAGETITEM, cursPosition, pcursitem);
 	} else if (pcursobj != -1 && (!bShift || (bNear && Objects[pcursobj]._oBreak == 1))) {
-		LastMouseButtonAction = MouseActionType::OperateObject;
 		NetSendCmdLocParam1(true, pcurs == CURSOR_DISARM ? CMD_DISARMXY : CMD_OPOBJXY, cursPosition, pcursobj);
 	} else if (myPlayer.UsesRangedWeapon()) {
 		if (bShift) {
-			LastMouseButtonAction = MouseActionType::Attack;
 			NetSendCmdLoc(MyPlayerId, true, CMD_RATTACKXY, cursPosition);
 		} else if (pcursmonst != -1) {
 			if (CanTalkToMonst(Monsters[pcursmonst])) {
 				NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
 			} else {
-				LastMouseButtonAction = MouseActionType::AttackMonsterTarget;
 				NetSendCmdParam1(true, CMD_RATTACKID, pcursmonst);
 			}
 		} else if (pcursplr != -1) {
-			LastMouseButtonAction = MouseActionType::AttackPlayerTarget;
 			NetSendCmdParam1(true, CMD_RATTACKPID, pcursplr);
 		}
 	} else {
@@ -213,31 +202,24 @@ void LeftMouseCmd(bool bShift)
 				if (CanTalkToMonst(Monsters[pcursmonst])) {
 					NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
 				} else {
-					LastMouseButtonAction = MouseActionType::Attack;
 					NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
 				}
 			} else {
-				LastMouseButtonAction = MouseActionType::Attack;
 				NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
 			}
 		} else if (pcursmonst != -1) {
-			LastMouseButtonAction = MouseActionType::AttackMonsterTarget;
 			NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
 		} else if (pcursplr != -1) {
-			LastMouseButtonAction = MouseActionType::AttackPlayerTarget;
 			NetSendCmdParam1(true, CMD_ATTACKPID, pcursplr);
 		}
 	}
 	if (!bShift && pcursitem == -1 && pcursobj == -1 && pcursmonst == -1 && pcursplr == -1) {
-		LastMouseButtonAction = MouseActionType::Walk;
 		NetSendCmdLoc(MyPlayerId, true, CMD_WALKXY, cursPosition);
 	}
 }
 
 void LeftMouseDown(int wParam)
 {
-	LastMouseButtonAction = MouseActionType::None;
-
 	if (gmenu_left_mouse(true))
 		return;
 
@@ -324,8 +306,6 @@ void LeftMouseUp(int wParam)
 
 void RightMouseDown()
 {
-	LastMouseButtonAction = MouseActionType::None;
-
 	if (gmenu_is_active() || sgnTimeoutCurs != CURSOR_NONE || PauseMode == 2 || Players[MyPlayerId]._pInvincible) {
 		return;
 	}
@@ -403,7 +383,6 @@ void PressKey(int vkey)
 	}
 	if (vkey == DVL_VK_ESCAPE) {
 		if (!PressEscKey()) {
-			LastMouseButtonAction = MouseActionType::None;
 			gamemenu_on();
 		}
 		return;
@@ -573,7 +552,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 	case DVL_WM_LBUTTONUP:
 		GetMousePos(lParam);
 		if (sgbMouseDown == CLICK_LEFT) {
-			LastMouseButtonAction = MouseActionType::None;
 			sgbMouseDown = CLICK_NONE;
 			LeftMouseUp(wParam);
 		}
@@ -588,13 +566,11 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 	case DVL_WM_RBUTTONUP:
 		GetMousePos(lParam);
 		if (sgbMouseDown == CLICK_RIGHT) {
-			LastMouseButtonAction = MouseActionType::None;
 			sgbMouseDown = CLICK_NONE;
 		}
 		return;
 	case DVL_WM_CAPTURECHANGED:
 		sgbMouseDown = CLICK_NONE;
-		LastMouseButtonAction = MouseActionType::None;
 		break;
 	case WM_DIABNEXTLVL:
 	case WM_DIABPREVLVL:
@@ -608,7 +584,6 @@ void GameEventHandler(uint32_t uMsg, int32_t wParam, int32_t lParam)
 		PaletteFadeOut(8);
 		sound_stop();
 		music_stop();
-		LastMouseButtonAction = MouseActionType::None;
 		sgbMouseDown = CLICK_NONE;
 		ShowProgress((interface_mode)uMsg);
 		DrawAndBlit();
@@ -1075,7 +1050,6 @@ void HelpKeyPressed()
 		ClearPanel();
 		AddPanelString("No help available"); /// BUGFIX: message isn't displayed
 		AddPanelString("while in stores");
-		LastMouseButtonAction = MouseActionType::None;
 	} else {
 		invflag = false;
 		chrflag = false;
@@ -1168,7 +1142,6 @@ void DisplaySpellsKeyPressed()
 	} else {
 		spselflag = false;
 	}
-	LastMouseButtonAction = MouseActionType::None;
 }
 
 void SpellBookKeyPressed()
@@ -1502,7 +1475,6 @@ void diablo_pause_game()
 	} else {
 		PauseMode = 2;
 		sound_stop();
-		LastMouseButtonAction = MouseActionType::None;
 	}
 }
 
@@ -1520,7 +1492,6 @@ void diablo_focus_pause()
 	if (!GameWasAlreadyPaused) {
 		PauseMode = 2;
 		sound_stop();
-		LastMouseButtonAction = MouseActionType::None;
 	}
 
 	music_mute();
@@ -1865,13 +1836,6 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 
 	if (setlevel && setlvlnum == SL_SKELKING && Quests[Q_SKELKING]._qactive == QUEST_ACTIVE)
 		PlaySFX(USFX_SKING1);
-
-	// Reset mouse selection of entities
-	pcursmonst = -1;
-	pcursobj = -1;
-	pcursitem = -1;
-	pcursinvitem = -1;
-	pcursplr = -1;
 }
 
 void game_loop(bool bStartup)

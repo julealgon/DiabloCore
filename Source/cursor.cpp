@@ -18,7 +18,6 @@
 #include "missiles.h"
 #include "qol/itemlabels.h"
 #include "towners.h"
-#include "track.h"
 #include "trigs.h"
 
 namespace devilution {
@@ -251,7 +250,7 @@ void CheckCursMove()
 			sx += gnScreenWidth / 4;
 		}
 	}
-	if (sy > PANEL_TOP - 1 && MousePosition.x >= PANEL_LEFT && MousePosition.x < PANEL_LEFT + PANEL_WIDTH && track_isscrolling()) {
+	if (sy > PANEL_TOP - 1 && MousePosition.x >= PANEL_LEFT && MousePosition.x < PANEL_LEFT + PANEL_WIDTH) {
 		sy = PANEL_TOP - 1;
 	}
 
@@ -326,32 +325,6 @@ void CheckCursMove()
 
 	mx = std::clamp(mx, 0, MAXDUNX - 1);
 	my = std::clamp(my, 0, MAXDUNY - 1);
-
-	// While holding the button down we should retain target (but potentially lose it if it dies, goes out of view, etc)
-	if (sgbMouseDown != CLICK_NONE && pcursinvitem == -1) {
-		if (pcursmonst != -1) {
-			if (Monsters[pcursmonst]._mDelFlag || Monsters[pcursmonst]._mhitpoints >> 6 <= 0
-			    || ((dFlags[Monsters[pcursmonst].position.tile.x][Monsters[pcursmonst].position.tile.y] & BFLAG_VISIBLE) == 0))
-				pcursmonst = -1;
-		} else if (pcursobj != -1) {
-			if (Objects[pcursobj]._oSelFlag < 1)
-				pcursobj = -1;
-		} else if (pcursplr != -1) {
-			auto &targetPlayer = Players[pcursplr];
-			if (targetPlayer._pmode == PM_DEATH || targetPlayer._pmode == PM_QUIT || !targetPlayer.plractive
-			    || currlevel != targetPlayer.plrlevel || targetPlayer._pHitPoints >> 6 <= 0
-			    || ((dFlags[targetPlayer.position.tile.x][targetPlayer.position.tile.y] & BFLAG_VISIBLE) == 0))
-				pcursplr = -1;
-		}
-
-		if (pcursmonst == -1 && pcursobj == -1 && pcursitem == -1 && pcursinvitem == -1 && pcursplr == -1) {
-			cursPosition = { mx, my };
-			CheckTrigForce();
-			CheckTown();
-			CheckRportal();
-		}
-		return;
-	}
 
 	bool flipflag = (flipy && flipx) || ((flipy || flipx) && px < TILE_WIDTH / 2);
 

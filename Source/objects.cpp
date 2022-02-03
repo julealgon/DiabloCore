@@ -27,7 +27,6 @@
 #include "stores.h"
 #include "themes.h"
 #include "towners.h"
-#include "track.h"
 #include "utils/log.hpp"
 
 namespace devilution {
@@ -1060,8 +1059,6 @@ void DeleteObject(int oi, int i)
 	dObject[ox][oy] = 0;
 	AvailableObjects[-ActiveObjectCount + MAXOBJECTS] = oi;
 	ActiveObjectCount--;
-	if (pcursobj == oi) // Unselect object if this was highlighted by player
-		pcursobj = -1;
 	if (ActiveObjectCount > 0 && i != ActiveObjectCount)
 		ActiveObjects[i] = ActiveObjects[ActiveObjectCount];
 }
@@ -1471,7 +1468,6 @@ void UpdateCircle(int i)
 		if (Quests[Q_BETRAYER]._qactive == QUEST_ACTIVE && Quests[Q_BETRAYER]._qvar1 <= 4) // BUGFIX stepping on the circle again will break the quest state (fixed)
 			Quests[Q_BETRAYER]._qvar1 = 4;
 		AddMissile(myPlayer.position.tile, { 35, 46 }, Direction::South, MIS_RNDTELEPORT, TARGET_BOTH, MyPlayerId, 0, 0);
-		LastMouseButtonAction = MouseActionType::None;
 		sgbMouseDown = CLICK_NONE;
 		ClrPlrPath(myPlayer);
 		StartStand(MyPlayerId, Direction::South);
