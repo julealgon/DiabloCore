@@ -1071,7 +1071,7 @@ void StartMonsterDeath(int i, int pnum, bool sendmsg)
 		AddMissile(monster.position.tile, { 0, 0 }, Direction::South, MIS_ACIDPUD, TARGET_PLAYERS, i, monster._mint + 1, 0);
 
 	auto &player = Players[MyPlayerId];
-	if (player.destAction != AnyOf(ACTION_ATTACKMON, ACTION_RATTACKMON, ACTION_SPELLMON) && player.destParam1 == i) {
+	if (player.destAction == AnyOf(ACTION_ATTACKMON, ACTION_RATTACKMON, ACTION_SPELLMON) && player.destParam1 == i) {
 		player.destAction = ACTION_NONE;
 	}
 }
