@@ -963,14 +963,24 @@ DWORD OnOperateObjectTelekinesis(TCmd *pCmd, Player &player)
 
 DWORD OnAttackMonster(TCmd *pCmd, Player &player)
 {
-	auto *p = (TCmdParam1 *)pCmd;
+	auto *p = (TCmdParam2 *)pCmd;
+	auto monsterIndex = p->wParam1;
+	auto holdPosition = p->wParam2;
+	auto &targetMonster = Monsters[monsterIndex];
 
 	if (gbBufferMsgs != 1 && currlevel == player.plrlevel) {
-		Point position = Monsters[p->wParam1].position.future;
-		if (player.position.tile.WalkingDistance(position) > 1)
-			MakePlrPath(player, position, false);
+		Point position = targetMonster.position.future;
+		if (player.position.tile.WalkingDistance(position) > 1) {
+			if (holdPosition) {
+				ClrPlrPath(player);
+			} else {
+				MakePlrPath(player, position, false);
+			}
+		}
+
 		player.destAction = ACTION_ATTACKMON;
-		player.destParam1 = p->wParam1;
+		player.destParam1 = monsterIndex;
+		player.destParam2 = holdPosition;
 	}
 
 	return sizeof(*p);

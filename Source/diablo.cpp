@@ -189,7 +189,7 @@ void LeftMouseCmd(bool bShift)
 			NetSendCmdLoc(MyPlayerId, true, CMD_RATTACKXY, cursPosition);
 		} else if (pcursmonst != -1) {
 			if (CanTalkToMonst(Monsters[pcursmonst])) {
-				NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
+				NetSendCmdParam2(true, CMD_ATTACKID, pcursmonst, false);
 			} else {
 				NetSendCmdParam1(true, CMD_RATTACKID, pcursmonst);
 			}
@@ -200,7 +200,7 @@ void LeftMouseCmd(bool bShift)
 		if (bShift) {
 			if (pcursmonst != -1) {
 				if (CanTalkToMonst(Monsters[pcursmonst])) {
-					NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
+					NetSendCmdParam2(true, CMD_ATTACKID, pcursmonst, false);
 				} else {
 					NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
 				}
@@ -208,7 +208,7 @@ void LeftMouseCmd(bool bShift)
 				NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
 			}
 		} else if (pcursmonst != -1) {
-			NetSendCmdParam1(true, CMD_ATTACKID, pcursmonst);
+			NetSendCmdParam2(true, CMD_ATTACKID, pcursmonst, false);
 		} else if (pcursplr != -1) {
 			NetSendCmdParam1(true, CMD_ATTACKPID, pcursplr);
 		}

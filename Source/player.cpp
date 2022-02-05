@@ -1520,13 +1520,14 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 	Item *item;
 
 	int targetId = player.destParam1;
+	bool holdPosition = Players[pnum].destParam2;
 
 	switch (player.destAction) {
 	case ACTION_ATTACKMON:
 	case ACTION_RATTACKMON:
 	case ACTION_SPELLMON:
 		monster = &Monsters[targetId];
-		if (player.destAction == ACTION_ATTACKMON)
+		if (player.destAction == ACTION_ATTACKMON && !holdPosition)
 			MakePlrPath(player, monster->position.future, false);
 		break;
 	case ACTION_ATTACKPLR:
@@ -1564,7 +1565,7 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 						d = GetDirection(player.position.future, target->position.future);
 					}
 
-					if (x < 2 && y < 2) {
+					if ((x < 2 && y < 2) || holdPosition) {
 						ClrPlrPath(player);
 						if (player.destAction == ACTION_ATTACKMON && monster->mtalkmsg != TEXT_NONE && monster->mtalkmsg != TEXT_VILE14) {
 							TalktoMonster(*monster);
@@ -1639,7 +1640,7 @@ void CheckNewPath(int pnum, bool pmWillBeCalled)
 		case ACTION_ATTACKMON:
 			x = std::abs(player.position.tile.x - monster->position.future.x);
 			y = std::abs(player.position.tile.y - monster->position.future.y);
-			if (x <= 1 && y <= 1) {
+			if ((x <= 1 && y <= 1) || holdPosition) {
 				d = GetDirection(player.position.future, monster->position.future);
 				if (monster->mtalkmsg != TEXT_NONE && monster->mtalkmsg != TEXT_VILE14) {
 					TalktoMonster(*monster);
