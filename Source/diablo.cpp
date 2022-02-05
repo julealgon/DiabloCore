@@ -202,7 +202,7 @@ void LeftMouseCmd(bool bShift)
 				if (CanTalkToMonst(Monsters[pcursmonst])) {
 					NetSendCmdParam2(true, CMD_ATTACKID, pcursmonst, false);
 				} else {
-					NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
+					NetSendCmdParam2(true, CMD_ATTACKID, pcursmonst, true);
 				}
 			} else {
 				NetSendCmdLoc(MyPlayerId, true, CMD_SATTACKXY, cursPosition);
