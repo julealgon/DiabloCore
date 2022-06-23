@@ -8,6 +8,8 @@ Note that the changes described below are on top of DevilutionX's version 1.3.0.
 
 ## Unreleased
 
+## v0.1.0
+
 ### ✨ Features
 - Removed attack animation skipping: heroes now always attack using all animation frames. This makes the game substantially harder but results in a smoother and more consistent flow (#8)
 - Unified all Diablo and Hellfire behavior into a single consistent behavior (#19)
