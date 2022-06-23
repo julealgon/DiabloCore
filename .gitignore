@@ -427,6 +427,7 @@ DerivedData/
 
 # MPQ files
 *.mpq
+!diablocore.mpq
 
 # ddraw wrapper configuration file
 ddraw_settings.ini
