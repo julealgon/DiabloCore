@@ -610,7 +610,6 @@ if(CPACK)
     )
 
     # -G DEB
-    set(CPACK_PACKAGE_CONTACT "anders@jenbo.dk")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl2-2.0-0, libsdl2-ttf-2.0-0")
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 
