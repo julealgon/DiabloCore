@@ -8,7 +8,7 @@ Additionally, keep in mind that I'm not an artist myself, and since I'll be doin
 
 If you want to see what ideas I have in mind for the mod, check the [Diablo Core Idea index](https://github.com/julealgon/DiabloCore/issues/26) issue.
  
-For a full list of changes see the [changelog](docs/CHANGELOG.md).
+For a full list of changes see the [changelog](CHANGELOG.md).
 
 # Design Principles
 
