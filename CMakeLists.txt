@@ -41,17 +41,17 @@ if(NIGHTLY_BUILD OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
   set(CPACK ON)
 endif()
 
-option(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
-cmake_dependent_option(DEVILUTIONX_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
-                      "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
+option(DIABLOCORE_SYSTEM_SDL_AUDIOLIB "Use system-provided SDL_audiolib" OFF)
+cmake_dependent_option(DIABLOCORE_STATIC_SDL_AUDIOLIB "Link static SDL_audiolib" OFF
+                      "DIABLOCORE_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
 
-option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
-cmake_dependent_option(DEVILUTIONX_STATIC_LIBFMT "Link static libfmt" OFF
-                       "DEVILUTIONX_SYSTEM_LIBFMT AND NOT DIST" ON)
+option(DIABLOCORE_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
+cmake_dependent_option(DIABLOCORE_STATIC_LIBFMT "Link static libfmt" OFF
+                       "DIABLOCORE_SYSTEM_LIBFMT AND NOT DIST" ON)
 
-option(DEVILUTIONX_SYSTEM_LIBPNG "Use system-provided libpng" ON)
-cmake_dependent_option(DEVILUTIONX_STATIC_LIBPNG "Link static libpng" OFF
-                       "DEVILUTIONX_SYSTEM_LIBPNG AND NOT DIST" ON)
+option(DIABLOCORE_SYSTEM_LIBPNG "Use system-provided libpng" ON)
+cmake_dependent_option(DIABLOCORE_STATIC_LIBPNG "Link static libpng" OFF
+                       "DIABLOCORE_SYSTEM_LIBPNG AND NOT DIST" ON)
 
 if(NOT VERSION_NUM)
   include(CMake/git.cmake)
@@ -71,10 +71,10 @@ if(CCACHE_PROGRAM)
 endif()
 
 if(VERSION_NUM MATCHES untagged)
-  project(DevilutionX
+  project(DiabloCore
     LANGUAGES C CXX)
 else()
-  project(DevilutionX
+  project(DiabloCore
     VERSION ${VERSION_NUM}
     LANGUAGES C CXX)
 endif()
@@ -92,7 +92,7 @@ if(NOT DISABLE_LTO)
   endif()
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${DevilutionX_SOURCE_DIR}/CMake")
+list(APPEND CMAKE_MODULE_PATH "${DiabloCore_SOURCE_DIR}/CMake")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD|NetBSD|OpenBSD|DragonFly")
   if(${CMAKE_SYSTEM_NAME} MATCHES "NetBSD")
@@ -124,7 +124,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(Threads REQUIRED)
 
-if(DEVILUTIONX_SYSTEM_LIBFMT)
+if(DIABLOCORE_SYSTEM_LIBFMT)
   find_package(fmt 7.0.0 QUIET)
   if(fmt_FOUND)
     message("-- Found fmt ${fmt_VERSION}")
@@ -136,7 +136,7 @@ if(NOT fmt_FOUND)
   add_subdirectory(3rdParty/libfmt)
 endif()
 
-if(DEVILUTIONX_SYSTEM_LIBPNG)
+if(DIABLOCORE_SYSTEM_LIBPNG)
   find_package(PNG QUIET)
   if(PNG_FOUND)
     message("-- Found png ${PNG_VERSION_STRING}")
@@ -173,7 +173,7 @@ find_package(SDL2_ttf REQUIRED)
 
 add_subdirectory(3rdParty/SDL_image)
 
-if(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB)
+if(DIABLOCORE_SYSTEM_SDL_AUDIOLIB)
   find_package(SDL_audiolib REQUIRED)
 else()
   add_subdirectory(3rdParty/SDL_audiolib)
@@ -212,7 +212,7 @@ add_library(PKWare STATIC
   3rdParty/PKWare/implode.cpp)
 target_include_directories(PKWare PUBLIC 3rdParty/PKWare)
 
-set(libdevilutionx_SRCS
+set(libdiablocore_SRCS
   Source/appfat.cpp
   Source/automap.cpp
   Source/capture.cpp
@@ -338,33 +338,33 @@ set(libdevilutionx_SRCS
   Source/storm/storm_svid.cpp
   Source/miniwin/misc_msg.cpp)
 
-list(APPEND libdevilutionx_SRCS
+list(APPEND libdiablocore_SRCS
   Source/effects.cpp
   Source/sound.cpp
   Source/utils/push_aulib_decoder.cpp
   Source/utils/soundsample.cpp)
 
-set(BIN_TARGET devilutionx)
+set(BIN_TARGET diablocore)
 
-add_library(libdevilutionx OBJECT ${libdevilutionx_SRCS})
+add_library(libdiablocore OBJECT ${libdiablocore_SRCS})
 add_executable(${BIN_TARGET}
   WIN32
   Source/main.cpp
-  Source/devilutionx.exe.manifest
+  Source/diablocore.exe.manifest
   Packaging/resources/CharisSILB.ttf
-  Packaging/windows/devilutionx.rc)
-target_link_libraries(${BIN_TARGET} PRIVATE libdevilutionx)
+  Packaging/windows/diablocore.rc)
+target_link_libraries(${BIN_TARGET} PRIVATE libdiablocore)
 
-# Copy the font and devilutionx.mpq to the build directory to it works from the build directory
+# Copy the font and diablocore.mpq to the build directory to it works from the build directory
 file(COPY "Packaging/resources/CharisSILB.ttf" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "Packaging/resources/devilutionx.mpq" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "Packaging/resources/diablocore.mpq" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Use file GENERATE instead of configure_file because configure_file
 # does not support generator expressions.
 get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(is_multi_config)
   set(CONFIG_PATH $<CONFIG>/config.h)
-  target_include_directories(libdevilutionx PUBLIC ${CMAKE_BINARY_DIR}/$<CONFIG>)
+  target_include_directories(libdiablocore PUBLIC ${CMAKE_BINARY_DIR}/$<CONFIG>)
 else()
   set(CONFIG_PATH config.h)
 endif()
@@ -377,28 +377,28 @@ file(GENERATE OUTPUT ${CONFIG_PATH} CONTENT
 #define PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH}
 ")
 
-target_include_directories(libdevilutionx PUBLIC
+target_include_directories(libdiablocore PUBLIC
   Source
   ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(libdevilutionx PUBLIC
+target_link_libraries(libdiablocore PUBLIC
 Threads::Threads)
 
-target_link_libraries(libdevilutionx PUBLIC
+target_link_libraries(libdiablocore PUBLIC
   PKWare
   StormLib
   smacker
   simpleini)
 
 if(WIN32)
-  target_link_libraries(libdevilutionx PUBLIC find_steam_game)
+  target_link_libraries(libdiablocore PUBLIC find_steam_game)
 endif()
 
-target_link_libraries(libdevilutionx PUBLIC fmt::fmt)
-target_link_libraries(libdevilutionx PUBLIC PNG::PNG)
+target_link_libraries(libdiablocore PUBLIC fmt::fmt)
+target_link_libraries(libdiablocore PUBLIC PNG::PNG)
 
 genex_for_option(DEBUG)
-target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
+target_compile_definitions(libdiablocore PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
 
 # Defines with value
 foreach(
@@ -465,38 +465,38 @@ foreach(
 endforeach(def_name)
 
 genex_for_option(UBSAN)
-target_compile_options(libdevilutionx PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
-target_link_libraries(libdevilutionx PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
+target_compile_options(libdiablocore PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
+target_link_libraries(libdiablocore PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
 
 if(TSAN)
-  target_compile_options(libdevilutionx PUBLIC -fsanitize=thread)
-  target_link_libraries(libdevilutionx PUBLIC -fsanitize=thread)
+  target_compile_options(libdiablocore PUBLIC -fsanitize=thread)
+  target_link_libraries(libdiablocore PUBLIC -fsanitize=thread)
 else()
   genex_for_option(ASAN)
-  target_compile_options(libdevilutionx PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
-  target_link_libraries(libdevilutionx PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
+  target_compile_options(libdiablocore PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
+  target_link_libraries(libdiablocore PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
 endif()
 
-target_link_libraries(libdevilutionx PUBLIC
+target_link_libraries(libdiablocore PUBLIC
   SDL2::SDL2
   ${SDL2_MAIN}
   SDL2::SDL2_ttf)
 
-target_link_libraries(libdevilutionx PUBLIC SDL_image)
+target_link_libraries(libdiablocore PUBLIC SDL_image)
 
-target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)
+target_link_libraries(libdiablocore PUBLIC SDL_audiolib)
 
-target_compile_definitions(libdevilutionx PUBLIC ${def_list})
+target_compile_definitions(libdiablocore PUBLIC ${def_list})
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-  target_link_libraries(libdevilutionx PUBLIC "$<$<NOT:$<CONFIG:Debug>>:-static-libgcc;-static-libstdc++>")
+  target_link_libraries(libdiablocore PUBLIC "$<$<NOT:$<CONFIG:Debug>>:-static-libgcc;-static-libstdc++>")
 endif()
 
 if(WIN32)
-  target_link_libraries(libdevilutionx PUBLIC shlwapi wsock32 ws2_32 wininet)
+  target_link_libraries(libdiablocore PUBLIC shlwapi wsock32 ws2_32 wininet)
 
   if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(libdevilutionx PUBLIC $<$<CONFIG:Debug>:-gstabs>)
+    target_compile_options(libdiablocore PUBLIC $<$<CONFIG:Debug>:-gstabs>)
   endif()
 endif()
 
@@ -507,8 +507,8 @@ endif()
 
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   # Change __FILE__ to only show the path relative to the project folder
-  get_target_property(libdevilutionx_SRCS ${BIN_TARGET} SOURCES)
-  foreach(SOURCE_FILE ${libdevilutionx_SRCS})
+  get_target_property(libdiablocore_SRCS ${BIN_TARGET} SOURCES)
+  foreach(SOURCE_FILE ${libdiablocore_SRCS})
     set_source_files_properties(${SOURCE_FILE} PROPERTIES
       COMPILE_DEFINITIONS __FILE__="${SOURCE_FILE}"
     )
@@ -518,19 +518,19 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 
   # Note: For Valgrind support.
   genex_for_option(DEBUG)
-  target_compile_options(libdevilutionx PUBLIC $<${DEBUG_GENEX}:-fno-omit-frame-pointer>)
+  target_compile_options(libdiablocore PUBLIC $<${DEBUG_GENEX}:-fno-omit-frame-pointer>)
 
   # Warnings for devilutionX
-  target_compile_options(libdevilutionx PUBLIC -Wall -Wextra -Wno-unused-parameter)
+  target_compile_options(libdiablocore PUBLIC -Wall -Wextra -Wno-unused-parameter)
 
   # For ARM and other default unsigned char platforms
-  target_compile_options(libdevilutionx PUBLIC -fsigned-char)
+  target_compile_options(libdiablocore PUBLIC -fsigned-char)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  target_compile_options(libdevilutionx PUBLIC "/W3")
-  target_compile_definitions(libdevilutionx PUBLIC _CRT_SECURE_NO_WARNINGS)
-  target_compile_options(libdevilutionx PUBLIC "/Zc:__cplusplus")
+  target_compile_options(libdiablocore PUBLIC "/W3")
+  target_compile_definitions(libdiablocore PUBLIC _CRT_SECURE_NO_WARNINGS)
+  target_compile_options(libdiablocore PUBLIC "/Zc:__cplusplus")
 endif()
 
 if(CPACK)
@@ -550,7 +550,7 @@ if(CPACK)
       "${SDL2_WIN32_LICENSES_DIR}/LICENSE*.txt"
       "${SDL2_WIN32_LICENSES_DIR}/README*.txt")
 
-    set(CPACK_PACKAGE_FILE_NAME "devilutionx")
+    set(CPACK_PACKAGE_FILE_NAME "diablocore")
     set(CPACK_PACKAGE_NAME ${project_name})
     set(CPACK_GENERATOR "ZIP")
     set(CPACK_STRIP_FILES TRUE)
@@ -561,7 +561,7 @@ if(CPACK)
     install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/CharisSILB.ttf"
       DESTINATION "."
     )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/devilutionx.mpq"
+    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/diablocore.mpq"
       DESTINATION "."
     )
 
@@ -598,7 +598,7 @@ if(CPACK)
     install(FILES "${PROJECT_SOURCE_DIR}/Packaging/nix/README.txt"
       DESTINATION "share/diasurgical/${project_name}"
     )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/devilutionx.mpq"
+    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/diablocore.mpq"
       DESTINATION "share/diasurgical/${project_name}"
     )
     install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/icon.png"

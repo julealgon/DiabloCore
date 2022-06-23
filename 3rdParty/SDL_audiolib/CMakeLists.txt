@@ -1,6 +1,6 @@
 include(FetchContent_MakeAvailableExcludeFromAll)
 
-if(DEVILUTIONX_STATIC_SDL_AUDIOLIB)
+if(DIABLOCORE_STATIC_SDL_AUDIOLIB)
   set(BUILD_SHARED_LIBS OFF)
 else()
   set(BUILD_SHARED_LIBS ON)
