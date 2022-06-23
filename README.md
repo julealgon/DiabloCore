@@ -105,6 +105,14 @@ Once the game is fully refactored, I expect a significant portion of the logic t
 
 As part of this mod, I'll look into creating a dedicated "data-API" that can be used not only by the game itself, but also by websites/wikis/etc. I want to make it so that there is a single source-of-truth for game data that is consistently consumed by everything else that needs it.
 
+# Building and running
+
+Use Windows instructions from DevilutionX to build the project (this will be simplified in the future).
+
+Note that:
+- The folder where configuration (the `.ini` file) and saves are hosted has been moved from `diasurgical\Devilution` to `julealgon\DiabloCore`
+- Saves are **not** compatible with any other mod or version: don't try to reuse existing saves with this mod
+
 # Contributing
 
 I'm not accepting any contributions at this time as the mod is in its infancy. You are free to use GitHub's 'Discussions' feature to ask any questions however and I'll try my best to answer them.
