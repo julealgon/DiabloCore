@@ -61,7 +61,7 @@ const std::string &BasePath()
 const std::string &PrefPath()
 {
 	if (!prefPath) {
-		prefPath = FromSDL(SDL_GetPrefPath("diasurgical", "devilution"));
+		prefPath = FromSDL(SDL_GetPrefPath("julealgon", "diablocore"));
 		if (FileExistsAndIsWriteable("diablo.ini")) {
 			prefPath = std::string("./");
 		}
@@ -72,7 +72,7 @@ const std::string &PrefPath()
 const std::string &ConfigPath()
 {
 	if (!configPath) {
-		configPath = FromSDL(SDL_GetPrefPath("diasurgical", "devilution"));
+		configPath = FromSDL(SDL_GetPrefPath("julealgon", "diablocore"));
 		if (FileExistsAndIsWriteable("diablo.ini")) {
 			configPath = std::string("./");
 		}
