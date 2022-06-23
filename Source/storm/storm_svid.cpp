@@ -35,7 +35,7 @@ SDL_Color SVidPreviousPalette[256];
 SDLPaletteUniquePtr SVidPalette;
 SDLSurfaceUniquePtr SVidSurface;
 
-#ifndef DEVILUTIONX_STORM_FILE_WRAPPER_AVAILABLE
+#ifndef DIABLOCORE_STORM_FILE_WRAPPER_AVAILABLE
 std::unique_ptr<uint8_t[]> SVidBuffer;
 #endif
 
@@ -84,7 +84,7 @@ bool SVidPlayBegin(const char *filename, int flags)
 
 	HANDLE videoStream;
 	SFileOpenFile(filename, &videoStream);
-#ifdef DEVILUTIONX_STORM_FILE_WRAPPER_AVAILABLE
+#ifdef DIABLOCORE_STORM_FILE_WRAPPER_AVAILABLE
 	FILE *file = FILE_FromStormHandle(videoStream);
 	SVidSMK = smk_open_filepointer(file, SMK_MODE_DISK);
 #else
@@ -271,7 +271,7 @@ void SVidPlayEnd()
 	if (SVidSMK != nullptr)
 		smk_close(SVidSMK);
 
-#ifndef DEVILUTIONX_STORM_FILE_WRAPPER_AVAILABLE
+#ifndef DIABLOCORE_STORM_FILE_WRAPPER_AVAILABLE
 	SVidBuffer = nullptr;
 #endif
 

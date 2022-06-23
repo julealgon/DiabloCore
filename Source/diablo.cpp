@@ -80,7 +80,7 @@ bool gbNestArt;
 bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
-char gszProductName[64] = "DevilutionX vUnknown";
+char gszProductName[64] = "Diablo Core vUnknown";
 Keymapper keymapper;
 std::array<Keymapper::ActionIndex, 4> quickSpellActionIndexes;
 
@@ -693,7 +693,7 @@ void RunGameLoop(interface_mode uMsg)
 	printInConsole("    %-20s %-30s\n", "-i", "Ignore network timeout");
 	printInConsole("    %-20s %-30s\n", "+<internal command>", "Pass commands to the engine");
 #endif
-	printInConsole("%s", "\nReport bugs at https://github.com/diasurgical/devilutionX/\n");
+	printInConsole("%s", "\nReport bugs at https://github.com/julealgon/DiabloCore/\n");
 	diablo_quit(0);
 }
 

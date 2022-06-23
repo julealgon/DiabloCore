@@ -32,7 +32,7 @@ HANDLE patch_rt_mpq;
 HANDLE hfmonk_mpq;
 HANDLE hfmusic_mpq;
 HANDLE hfvoice_mpq;
-HANDLE devilutionx_mpq;
+HANDLE diablocore_mpq;
 
 namespace {
 
@@ -86,9 +86,9 @@ void init_cleanup()
 		SFileCloseArchive(hfvoice_mpq);
 		hfvoice_mpq = nullptr;
 	}
-	if (devilutionx_mpq != nullptr) {
-		SFileCloseArchive(devilutionx_mpq);
-		devilutionx_mpq = nullptr;
+	if (diablocore_mpq != nullptr) {
+		SFileCloseArchive(diablocore_mpq);
+		diablocore_mpq = nullptr;
 	}
 
 	NetClose();
@@ -143,7 +143,7 @@ void init_archives()
 	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
 	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
 
-	devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
+	diablocore_mpq = LoadMPQ(paths, "diablocore.mpq");
 }
 
 void init_create_window()

@@ -53,7 +53,7 @@ void InitXPBar()
 	if (xpbarArt.surface == nullptr) {
 		app_fatal("%s", "Failed to load UI resources.\n"
 			                "\n"
-			                "Make sure devilutionx.mpq is in the game folder and that it is up to date.");
+			                "Make sure diablocore.mpq is in the game folder and that it is up to date.");
 	}
 }
 

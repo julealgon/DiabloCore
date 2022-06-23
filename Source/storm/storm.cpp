@@ -81,8 +81,8 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 		result = SFileOpenFileEx((HANDLE) nullptr, path.c_str(), SFILE_OPEN_LOCAL_FILE, phFile);
 	}
 
-	if (!result && devilutionx_mpq != nullptr) {
-		result = SFileOpenFileEx((HANDLE)devilutionx_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
+	if (!result && diablocore_mpq != nullptr) {
+		result = SFileOpenFileEx((HANDLE)diablocore_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
 	if (!result && hfvoice_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)hfvoice_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
