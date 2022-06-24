@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Note that the changes described below are on top of DevilutionX's version 1.3.0. You can check [the original DevilutionX changelog](https://github.com/diasurgical/devilutionX/blob/master/docs/CHANGELOG.md) for changes done prior to this).
+Note that the changes described below are on top of DevilutionX's version 1.3.0. You can check [the original DevilutionX changelog](https://github.com/diasurgical/devilutionX/blob/master/docs/CHANGELOG.md#devilutionx-130) for changes done prior to this).
 
 ## Unreleased
 
