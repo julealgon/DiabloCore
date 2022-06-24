@@ -14,18 +14,14 @@ include(CMakeDependentOption)
 include(CMake/out_of_tree.cmake)
 include(CMake/genex.cmake)
 
-DEBUG_OPTION(ASAN "Enable address sanitizer")
-DEBUG_OPTION(UBSAN "Enable undefined behaviour sanitizer")
-option(TSAN "Enable thread sanitizer (not compatible with ASAN=ON)" OFF)
+option(TSAN "Enable thread sanitizer" OFF)
 DEBUG_OPTION(DEBUG "Enable debug mode in engine")
 option(DISABLE_LTO "Disable link-time optimization (by default enabled in release mode)" OFF)
 option(PIE "Generate position-independent code" OFF)
-option(DIST "Dynamically link only glibc and SDL2" OFF)
 option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 
 RELEASE_OPTION(CPACK "Configure CPack")
-
 
 if(BINARY_RELEASE OR CMAKE_BUILD_TYPE STREQUAL "Release")
   set(BINARY_RELEASE ON)
@@ -93,23 +89,6 @@ if(NOT DISABLE_LTO)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${DiabloCore_SOURCE_DIR}/CMake")
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD|NetBSD|OpenBSD|DragonFly")
-  if(${CMAKE_SYSTEM_NAME} MATCHES "NetBSD")
-    add_definitions(-D_NETBSD_SOURCE)
-  else()
-    add_definitions(-D_BSD_SOURCE)
-    set(UBSAN OFF)
-  endif()
-  set(ASAN OFF)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DO_LARGEFILE=0 -Dstat64=stat -Dlstat64=lstat -Dlseek64=lseek -Doff64_t=off_t -Dfstat64=fstat -Dftruncate64=ftruncate")
-endif()
-
-if(WIN32)
-  set(ASAN OFF)
-  set(UBSAN OFF)
-  set(DIST ON)
-endif()
 
 if(PIE)
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
@@ -183,10 +162,7 @@ add_library(smacker STATIC
   3rdParty/libsmacker/smacker.c)
 target_include_directories(smacker PUBLIC 3rdParty/libsmacker)
 
-if(WIN32)
 add_subdirectory(3rdParty/find_steam_game)
-endif()
-
 add_subdirectory(3rdParty/simpleini)
 
 add_library(StormLib STATIC
@@ -202,10 +178,8 @@ add_library(StormLib STATIC
   3rdParty/StormLib/src/SFileOpenFileEx.cpp
   3rdParty/StormLib/src/SFileReadFile.cpp)
 
-if(WIN32)
 # Enable Unicode for StormLib wchar_t* file APIs
 target_compile_definitions(StormLib PRIVATE -DUNICODE -D_UNICODE)
-endif()
 
 add_library(PKWare STATIC
   3rdParty/PKWare/explode.cpp
@@ -301,6 +275,11 @@ set(libdiablocore_SRCS
   Source/utils/display.cpp
   Source/utils/file_util.cpp
   
+  Source/effects.cpp
+  Source/sound.cpp
+  Source/utils/push_aulib_decoder.cpp
+  Source/utils/soundsample.cpp
+  
   Source/utils/paths.cpp
   Source/utils/sdl_bilinear_scale.cpp
   Source/utils/sdl_thread.cpp
@@ -317,7 +296,6 @@ set(libdiablocore_SRCS
   Source/DiabloUI/progress.cpp
   Source/DiabloUI/scrollbar.cpp
   
-  
   Source/DiabloUI/selhero.cpp
   Source/DiabloUI/selok.cpp
   Source/DiabloUI/selyesno.cpp
@@ -327,8 +305,7 @@ set(libdiablocore_SRCS
   Source/DiabloUI/ttf_render_wrapped.cpp
   Source/panels/charpanel.cpp
   Source/panels/mainpanel.cpp
-    
-  
+
   Source/dvlnet/loopback.cpp
     
   Source/storm/storm.cpp
@@ -337,12 +314,6 @@ set(libdiablocore_SRCS
   Source/storm/storm_sdl_rw.cpp
   Source/storm/storm_svid.cpp
   Source/miniwin/misc_msg.cpp)
-
-list(APPEND libdiablocore_SRCS
-  Source/effects.cpp
-  Source/sound.cpp
-  Source/utils/push_aulib_decoder.cpp
-  Source/utils/soundsample.cpp)
 
 set(BIN_TARGET diablocore)
 
@@ -390,9 +361,7 @@ target_link_libraries(libdiablocore PUBLIC
   smacker
   simpleini)
 
-if(WIN32)
-  target_link_libraries(libdiablocore PUBLIC find_steam_game)
-endif()
+target_link_libraries(libdiablocore PUBLIC find_steam_game)
 
 target_link_libraries(libdiablocore PUBLIC fmt::fmt)
 target_link_libraries(libdiablocore PUBLIC PNG::PNG)
@@ -405,58 +374,8 @@ foreach(
   def_name
   DEFAULT_WIDTH
   DEFAULT_HEIGHT
-  DEFAULT_AUDIO_SAMPLE_RATE
-  DEFAULT_AUDIO_CHANNELS
-  DEFAULT_AUDIO_BUFFER_SIZE
-  DEFAULT_AUDIO_RESAMPLING_QUALITY
-  MO_LANG_DIR
   TTF_FONT_DIR
   TTF_FONT_NAME
-  KBCTRL_BUTTON_DPAD_LEFT
-  KBCTRL_BUTTON_DPAD_RIGHT
-  KBCTRL_BUTTON_DPAD_UP
-  KBCTRL_BUTTON_DPAD_DOWN
-  KBCTRL_BUTTON_B
-  KBCTRL_BUTTON_A
-  KBCTRL_BUTTON_Y
-  KBCTRL_BUTTON_X
-  KBCTRL_BUTTON_LEFTSTICK
-  KBCTRL_BUTTON_RIGHTSTICK
-  KBCTRL_BUTTON_RIGHTSHOULDER
-  KBCTRL_BUTTON_LEFTSHOULDER
-  KBCTRL_BUTTON_TRIGGERLEFT
-  KBCTRL_BUTTON_TRIGGERRIGHT
-  KBCTRL_BUTTON_START
-  KBCTRL_BUTTON_BACK
-  KBCTRL_IGNORE_1
-  JOY_AXIS_LEFTX
-  JOY_AXIS_LEFTY
-  JOY_AXIS_RIGHTX
-  JOY_AXIS_RIGHTY
-  JOY_HAT_DPAD_UP_HAT
-  JOY_HAT_DPAD_UP
-  JOY_HAT_DPAD_DOWN_HAT
-  JOY_HAT_DPAD_DOWN
-  JOY_HAT_DPAD_LEFT_HAT
-  JOY_HAT_DPAD_LEFT
-  JOY_HAT_DPAD_RIGHT_HAT
-  JOY_HAT_DPAD_RIGHT
-  JOY_BUTTON_DPAD_LEFT
-  JOY_BUTTON_DPAD_RIGHT
-  JOY_BUTTON_DPAD_UP
-  JOY_BUTTON_DPAD_DOWN
-  JOY_BUTTON_B
-  JOY_BUTTON_A
-  JOY_BUTTON_Y
-  JOY_BUTTON_X
-  JOY_BUTTON_LEFTSTICK
-  JOY_BUTTON_RIGHTSTICK
-  JOY_BUTTON_RIGHTSHOULDER
-  JOY_BUTTON_LEFTSHOULDER
-  JOY_BUTTON_TRIGGERLEFT
-  JOY_BUTTON_TRIGGERRIGHT
-  JOY_BUTTON_START
-  JOY_BUTTON_BACK
   REMAP_KEYBOARD_KEYS
 )
   if(DEFINED ${def_name})
@@ -464,17 +383,9 @@ foreach(
   endif()
 endforeach(def_name)
 
-genex_for_option(UBSAN)
-target_compile_options(libdiablocore PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
-target_link_libraries(libdiablocore PUBLIC $<${UBSAN_GENEX}:-fsanitize=undefined>)
-
 if(TSAN)
   target_compile_options(libdiablocore PUBLIC -fsanitize=thread)
   target_link_libraries(libdiablocore PUBLIC -fsanitize=thread)
-else()
-  genex_for_option(ASAN)
-  target_compile_options(libdiablocore PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
-  target_link_libraries(libdiablocore PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
 endif()
 
 target_link_libraries(libdiablocore PUBLIC
@@ -492,17 +403,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   target_link_libraries(libdiablocore PUBLIC "$<$<NOT:$<CONFIG:Debug>>:-static-libgcc;-static-libstdc++>")
 endif()
 
-if(WIN32)
-  target_link_libraries(libdiablocore PUBLIC shlwapi wsock32 ws2_32 wininet)
+target_link_libraries(libdiablocore PUBLIC shlwapi wsock32 ws2_32 wininet)
 
-  if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(libdiablocore PUBLIC $<$<CONFIG:Debug>:-gstabs>)
-  endif()
-endif()
-
-if(NOT WIN32 AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL FreeBSD)
-  # Enable POSIX extensions such as `readlink` and `ftruncate`.
-  add_definitions(-D_POSIX_C_SOURCE=200809L)
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  target_compile_options(libdiablocore PUBLIC $<$<CONFIG:Debug>:-gstabs>)
 endif()
 
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
@@ -534,97 +438,47 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 endif()
 
 if(CPACK)
-  if(WIN32)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-      set(SDL2_WIN32_DLLS_DIR "${CMAKE_BINARY_DIR}")
-    else()
-      set(SDL2_WIN32_DLLS_DIR "${SDL2_EXEC_PREFIX}/bin")
-    endif()
-    set(SDL2_WIN32_LICENSES_DIR "${PROJECT_SOURCE_DIR}/Packaging/resources")
-
-    file(GLOB SDL2_WIN32_ALL_DLLS
-      LIST_DIRECTORIES false
-      "${SDL2_WIN32_DLLS_DIR}/*.dll")
-    file(GLOB SDL2_WIN32_ALL_LICENSES
-      LIST_DIRECTORIES false
-      "${SDL2_WIN32_LICENSES_DIR}/LICENSE*.txt"
-      "${SDL2_WIN32_LICENSES_DIR}/README*.txt")
-
-    set(CPACK_PACKAGE_FILE_NAME "diablocore")
-    set(CPACK_PACKAGE_NAME ${project_name})
-    set(CPACK_GENERATOR "ZIP")
-    set(CPACK_STRIP_FILES TRUE)
-    install(TARGETS ${BIN_TARGET} DESTINATION .)
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/windows/README.txt"
-      DESTINATION "."
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/CharisSILB.ttf"
-      DESTINATION "."
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/diablocore.mpq"
-      DESTINATION "."
-    )
-
-    foreach(_SDL2_WIN32_DLL_PATH ${SDL2_WIN32_ALL_DLLS})
-      install(FILES "${_SDL2_WIN32_DLL_PATH}"
-        DESTINATION "."
-      )
-    endforeach()
-
-    foreach(_SDL2_WIN32_LICENSE_PATH ${SDL2_WIN32_ALL_LICENSES})
-      install(FILES "${_SDL2_WIN32_LICENSE_PATH}"
-        DESTINATION "LICENSE"
-      )
-    endforeach()
-
-  elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    string(TOLOWER ${PROJECT_NAME} project_name)
-    set(CPACK_PACKAGE_NAME ${project_name})
-    set(CPACK_GENERATOR "7Z")
-    # Common *nix files
-    set(CPACK_STRIP_FILES TRUE)
-    install(TARGETS ${BIN_TARGET} DESTINATION bin)
-    set(desktop_file "${PROJECT_SOURCE_DIR}/Packaging/nix/${project_name}.desktop")
-
-    find_program(DFI desktop-file-install)
-    if(DFI)
-      execute_process(COMMAND ${DFI} --dir=${CMAKE_BINARY_DIR} ${desktop_file})
-      set(desktop_file "${CMAKE_BINARY_DIR}/${project_name}.desktop")
-    endif()
-
-    install(FILES "${desktop_file}"
-      DESTINATION "share/applications"
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/nix/README.txt"
-      DESTINATION "share/diasurgical/${project_name}"
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/diablocore.mpq"
-      DESTINATION "share/diasurgical/${project_name}"
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/icon.png"
-      DESTINATION "share/icons/hicolor/512x512/apps"
-      RENAME "${project_name}.png"
-    )
-    install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/CharisSILB.ttf"
-      DESTINATION "share/fonts/truetype"
-    )
-
-    # -G DEB
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libsdl2-2.0-0, libsdl2-ttf-2.0-0")
-    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
-
-    # -G RPM
-    set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
-
-    find_program(RPMBUILD rpmbuild)
-    if(RPMBUILD)
-      list(APPEND CPACK_GENERATOR "RPM")
-    endif()
-    find_program(DPKG dpkg)
-    if(DPKG)
-      list(APPEND CPACK_GENERATOR "DEB")
-    endif()
+  if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set(SDL2_WIN32_DLLS_DIR "${CMAKE_BINARY_DIR}")
+  else()
+    set(SDL2_WIN32_DLLS_DIR "${SDL2_EXEC_PREFIX}/bin")
   endif()
+  set(SDL2_WIN32_LICENSES_DIR "${PROJECT_SOURCE_DIR}/Packaging/resources")
+  
+  file(GLOB SDL2_WIN32_ALL_DLLS
+    LIST_DIRECTORIES false
+    "${SDL2_WIN32_DLLS_DIR}/*.dll")
+  file(GLOB SDL2_WIN32_ALL_LICENSES
+    LIST_DIRECTORIES false
+    "${SDL2_WIN32_LICENSES_DIR}/LICENSE*.txt"
+    "${SDL2_WIN32_LICENSES_DIR}/README*.txt")
+  
+  set(CPACK_PACKAGE_FILE_NAME "diablocore")
+  set(CPACK_PACKAGE_NAME ${project_name})
+  set(CPACK_GENERATOR "ZIP")
+  set(CPACK_STRIP_FILES TRUE)
+  install(TARGETS ${BIN_TARGET} DESTINATION .)
+  install(FILES "${PROJECT_SOURCE_DIR}/Packaging/windows/README.txt"
+    DESTINATION "."
+  )
+  install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/CharisSILB.ttf"
+    DESTINATION "."
+  )
+  install(FILES "${PROJECT_SOURCE_DIR}/Packaging/resources/diablocore.mpq"
+    DESTINATION "."
+  )
+  
+  foreach(_SDL2_WIN32_DLL_PATH ${SDL2_WIN32_ALL_DLLS})
+    install(FILES "${_SDL2_WIN32_DLL_PATH}"
+      DESTINATION "."
+    )
+  endforeach()
+  
+  foreach(_SDL2_WIN32_LICENSE_PATH ${SDL2_WIN32_ALL_LICENSES})
+    install(FILES "${_SDL2_WIN32_LICENSE_PATH}"
+      DESTINATION "LICENSE"
+    )
+  endforeach()
 
   set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
   set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
