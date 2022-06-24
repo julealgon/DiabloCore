@@ -49,10 +49,6 @@ option(DIABLOCORE_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
 cmake_dependent_option(DIABLOCORE_STATIC_LIBFMT "Link static libfmt" OFF
                        "DIABLOCORE_SYSTEM_LIBFMT AND NOT DIST" ON)
 
-option(DIABLOCORE_SYSTEM_LIBPNG "Use system-provided libpng" ON)
-cmake_dependent_option(DIABLOCORE_STATIC_LIBPNG "Link static libpng" OFF
-                       "DIABLOCORE_SYSTEM_LIBPNG AND NOT DIST" ON)
-
 if(NOT VERSION_NUM)
   include(CMake/git.cmake)
   get_git_tag(VERSION_NUM)
@@ -136,18 +132,6 @@ if(NOT fmt_FOUND)
   add_subdirectory(3rdParty/libfmt)
 endif()
 
-if(DIABLOCORE_SYSTEM_LIBPNG)
-  find_package(PNG QUIET)
-  if(PNG_FOUND)
-    message("-- Found png ${PNG_VERSION_STRING}")
-  else()
-    message("-- Suitable system png package not found, will use png from source")
-  endif()
-endif()
-if(NOT PNG_FOUND)
-  add_subdirectory(3rdParty/libpng)
-endif()
-
 find_package(SDL2 REQUIRED)
 if(TARGET SDL2::SDL2)
   set(SDL2_MAIN SDL2::SDL2main)
@@ -170,8 +154,6 @@ else()
   add_library(SDL2::SDL2 ALIAS SDL2_lib)
 endif()
 find_package(SDL2_ttf REQUIRED)
-
-add_subdirectory(3rdParty/SDL_image)
 
 if(DIABLOCORE_SYSTEM_SDL_AUDIOLIB)
   find_package(SDL_audiolib REQUIRED)
@@ -395,7 +377,6 @@ if(WIN32)
 endif()
 
 target_link_libraries(libdiablocore PUBLIC fmt::fmt)
-target_link_libraries(libdiablocore PUBLIC PNG::PNG)
 
 genex_for_option(DEBUG)
 target_compile_definitions(libdiablocore PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
@@ -481,8 +462,6 @@ target_link_libraries(libdiablocore PUBLIC
   SDL2::SDL2
   ${SDL2_MAIN}
   SDL2::SDL2_ttf)
-
-target_link_libraries(libdiablocore PUBLIC SDL_image)
 
 target_link_libraries(libdiablocore PUBLIC SDL_audiolib)
 
