@@ -32,6 +32,7 @@ Note that the changes described below are on top of DevilutionX's version 1.3.0.
   - Vitality and Magic elixirs will not heal HP or mana respectively
   - Griswold will always sell 6 Premium items
   - Items sold by Wirt will always cost 50% more than normal
+- Improve tracking on attacks against monsters by making shift-attack track the monster ID instead of the tile below the monster (#25)
 
 ### 💥 Breaking changes
 - Removed multiplatform support (#1)
